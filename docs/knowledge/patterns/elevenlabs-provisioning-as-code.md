@@ -1,6 +1,6 @@
 # ElevenLabs Agent Provisioning-as-Code (idempotent, repo = source of truth)
 
-One Python script (`projects/final/agent/provision_elevenlabs.py`) creates/updates the ENTIRE
+One Python script (`agent/provision_elevenlabs.py`) creates/updates the ENTIRE
 ElevenLabs agent via API: secrets, webhook tools, agent config, phone number, pronunciation
 dictionary. Re-run after every prompt tweak. Born from the failure mode of UI clicking: a previous
 session "configured" 6 tools in the EL UI and only 1 actually saved.

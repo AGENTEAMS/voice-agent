@@ -15,7 +15,7 @@ Postgres 16 + pgvector.
 
 ## Run (cloud project)
 ```bash
-cd projects/final/supabase
+cd supabase
 supabase link --project-ref <ref>        # one-time
 supabase db push                          # applies migrations
 psql "$SUPABASE_DB_URL" -f seed.sql       # load mock data

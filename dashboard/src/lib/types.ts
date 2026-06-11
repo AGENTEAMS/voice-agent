@@ -1,4 +1,4 @@
-// Shared types mirroring the Supabase schema (projects/final/supabase/migrations/0001_init.sql).
+// Shared types mirroring the Supabase schema (supabase/migrations/0001_init.sql).
 // Only the fields the dashboard renders are modelled.
 
 export type ReservationStatus =

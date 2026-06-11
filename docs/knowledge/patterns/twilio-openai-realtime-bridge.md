@@ -8,7 +8,7 @@ over a Media Stream WebSocket; a small persistent server relays it to OpenAI Rea
 ## Context
 The voice runtime for the Maître agent
 ([maitre-voice-agent-architecture](../decisions/maitre-voice-agent-architecture.md)). Implemented in
-`projects/final/agent/bridge.py` (FastAPI). The GA `gpt-realtime` schema differs from the 2024 beta — the
+`agent/bridge.py` (FastAPI). The GA `gpt-realtime` schema differs from the 2024 beta — the
 beta's `input_audio_format: "g711_ulaw"` is gone.
 
 ## GA API (verified 2026-06)

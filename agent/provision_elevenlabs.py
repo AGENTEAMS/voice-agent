@@ -19,7 +19,7 @@ Usage:
     python provision_elevenlabs.py --voices        # list female Hebrew voices to audition
     python provision_elevenlabs.py --adopt OWNER_ID:VOICE_ID   # add a library voice, print its new id
 
-Env (projects/final/.env): ELEVENLABS_API_KEY, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY,
+Env (.env (repo root)): ELEVENLABS_API_KEY, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY,
 TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER, HUMAN_TRANSFER_NUMBER,
 optional ELEVENLABS_VOICE_ID (defaults to premade "Sarah" until you pick a Hebrew voice).
 """
@@ -329,7 +329,7 @@ def agent_config(tool_ids: list[str], voice_id: str, transfer_number: str | None
 def client() -> httpx.Client:
     key = os.environ.get("ELEVENLABS_API_KEY")
     if not key:
-        sys.exit("ELEVENLABS_API_KEY missing in projects/final/.env")
+        sys.exit("ELEVENLABS_API_KEY missing in .env (repo root)")
     return httpx.Client(base_url=BASE, headers={"xi-api-key": key}, timeout=30)
 
 
@@ -466,7 +466,7 @@ def main():
 
     service_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
     if not service_key:
-        sys.exit("SUPABASE_SERVICE_ROLE_KEY missing in projects/final/.env")
+        sys.exit("SUPABASE_SERVICE_ROLE_KEY missing in .env (repo root)")
     if voice_id == DEFAULT_VOICE_ID:
         print("voice: Ava/אווה (repo default). Set a valid ELEVENLABS_VOICE_ID in .env to override.")
     if not transfer:

@@ -6,7 +6,7 @@ as dynamic variables, so the agent greets the right guest from the first word.
 
 SAFETY: the seed phone numbers are FAKE. ALWAYS pass --to with your own / consenting test number.
 
-Setup (.env at projects/final/): ELEVENLABS_API_KEY required. ELEVENLABS_AGENT_ID and
+Setup (.env at repo root): ELEVENLABS_API_KEY required. ELEVENLABS_AGENT_ID and
 ELEVENLABS_PHONE_NUMBER_ID are optional — they fall back to agent/.provisioned.json,
 which provision_elevenlabs.py writes.
 

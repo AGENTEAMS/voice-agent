@@ -45,7 +45,7 @@ scripts/seed-calls.mjs       seeds demo call history (service-role, no psql need
    SUPABASE_SERVICE_ROLE_KEY=...
    NEXT_PUBLIC_RESTAURANT_ID=11111111-1111-1111-1111-111111111111
    ```
-   These mirror the keys in `projects/final/.env`.
+   These mirror the keys in `.env (repo root)`.
 
 2. **Seed demo call history** (one-time; the schema + reservations come from `../supabase/seed.sql`):
    ```bash

@@ -18,13 +18,13 @@ Source of truth for the agent config (system prompt, first message, all 6 tools)
 
 ## Prerequisites
 - Supabase schema + seed loaded (migrations `0001`–`0003` + `seed.sql`).
-- `.env` in `projects/final/` filled with: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`,
+- `.env` at the repo root filled with: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`,
   `ELEVENLABS_API_KEY`, `ELEVENLABS_AGENT_ID`, `ELEVENLABS_PHONE_NUMBER_ID`.
 - A Twilio number imported into ElevenLabs (Phone Numbers → Import) and attached to the agent.
 
 ## Place a test call (use YOUR OWN number)
 ```bash
-cd projects/final/agent
+cd agent
 pip install -r requirements.txt
 
 python outbound_elevenlabs.py --list                                  # today's pending reservations

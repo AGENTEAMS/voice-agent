@@ -2,7 +2,7 @@
 
 GenAI course final project: a Hebrew-only voice agent for restaurants that **outbound**-calls today's
 reservations to confirm/cancel (updating a DB) and answers **inbound** FAQ (hours, cancellation,
-availability). Team: Re'i Biton, Haim Toledano, Tomer Elzam. Lives in `projects/final/`.
+availability). Team: Re'i Biton, Haim Toledano, Tomer Elzam. Lives at the repo root.
 
 ## Context
 Course assignment wants problem → discovery → GenAI architecture → implementation (50%) → pitch, POC-first.
@@ -54,7 +54,7 @@ Supabase project `ezxlnlpcppvqqmeqcswm` loaded (migration 0003, RPCs DB-tested).
 [runtime-fork-openai-vs-elevenlabs](runtime-fork-openai-vs-elevenlabs.md). Pending: **live voice test
 of the 6 functions**, n8n automation layer (guide written, not built), Twilio off Trial, deploy
 bridge → Fly/Render.
-The Next.js dashboard (`projects/final/dashboard/`, commits `d73beee`/`16ba107`) was **scrapped** —
+The Next.js dashboard (`dashboard/`, commits `d73beee`/`16ba107`) was **scrapped** —
 throwaway, will be redone from scratch; do not treat it as current direction.
 
 ## Open questions

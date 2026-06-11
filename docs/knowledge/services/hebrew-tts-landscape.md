@@ -37,7 +37,7 @@ learned to disambiguate from context, OR feed nikud-preprocessed text via **Dict
 ## How to choose (the gate)
 Synthesize ~10 real restaurant utterances (homographs, gender suffixes, foreign dish names, numbers/times)
 in each candidate → downsample to 8kHz μ-law → **blind MOS panel, 5+ native speakers, require mean ≥ 3.5**
-+ no catastrophic homograph/stress error. Harness built in `projects/final/eval/tts_audition/`.
++ no catastrophic homograph/stress error. Harness built in `eval/tts_audition/`.
 
 ## Related
 [hebrew-stt-landscape](hebrew-stt-landscape.md),

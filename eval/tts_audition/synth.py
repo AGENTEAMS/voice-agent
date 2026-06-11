@@ -28,16 +28,15 @@ Outputs (under ./out/):
 import argparse, base64, csv, json, os, random, subprocess, sys, urllib.request, urllib.error
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent          # .../projects/final/eval/tts_audition
-PROJECT_ROOT = HERE.parents[1]                   # .../projects/final
-REPO_ROOT = HERE.parents[3]                      # .../genai-course
+HERE = Path(__file__).resolve().parent          # .../eval/tts_audition
+PROJECT_ROOT = HERE.parents[1]                   # repo root
 OUT = HERE / "out"
 
 
 def load_env() -> dict:
-    """Minimal .env loader: project .env first, then repo-root .env, then os.environ."""
+    """Minimal .env loader: repo-root .env, then os.environ."""
     env = {}
-    for p in (PROJECT_ROOT / ".env", REPO_ROOT / ".env"):  # projects/final/.env, then repo root .env
+    for p in (PROJECT_ROOT / ".env",):
         if p.exists():
             for line in p.read_text().splitlines():
                 line = line.strip()
@@ -149,7 +148,7 @@ def main():
     active = [n for n in wanted if env.get(ENGINES[n][1])]
     skipped = [n for n in wanted if n not in active]
     if not active:
-        sys.exit("No engines have keys set. Fill projects/final/.env (at least ELEVENLABS_*).")
+        sys.exit("No engines have keys set. Fill .env (repo root) (at least ELEVENLABS_*).")
     print(f"Engines: active={active}  skipped(no key)={skipped}")
 
     (OUT / "clips").mkdir(parents=True, exist_ok=True)

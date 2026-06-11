@@ -16,7 +16,7 @@ the old +972525898552 verification was deleted. Test calls go TO +972585121998.
   persona **מיקה**, feminine prompt), phone `phnum_1101ktqbz3g1e7pr5r83s9cvyx6f`, voice "hosteses"
   `SNXrahWBHym8CEMJveKQ` (generated; alternates in workspace: Ava `gJx1vCzNCD1EQHT212Ls`, גיא
   `S1HsfmXyhNvctVe1BYeT`, רוני `wRcoZ4j6obhmFlVbHDKT`). NOTHING locked — voice iteration continues.
-  Always in `projects/final/agent/.provisioned.json` (beats .env).
+  Always in `agent/.provisioned.json` (beats .env).
 - **Model constraints**: Hebrew TTS works ONLY on `eleven_v3_conversational` (flash/turbo v2.5
   have no Hebrew); ASR `scribe_realtime` handles Hebrew well; LLM must be `gpt-4o`
   ([elevenlabs-llm-tool-calling-ladder](../gotchas/elevenlabs-llm-tool-calling-ladder.md)). Audio both ways `ulaw_8000`. Current tuning: speed 0.7,

@@ -24,7 +24,7 @@ Supabase dashboard → **SQL Editor** → New query → paste & run, **in this o
 Dashboard → Project Settings → Database → **Connection string → URI**, paste it into `SUPABASE_DB_URL`
 in `.env`, then:
 ```bash
-cd projects/final/supabase
+cd supabase
 psql "$SUPABASE_DB_URL" -f migrations/0001_init.sql -f migrations/0002_rpc.sql -f seed.sql
 ```
 
@@ -76,7 +76,7 @@ cascade A/B (Soniox STT + a dedicated Hebrew TTS from the `eval/tts_audition` ha
 ## After the gates → Phase 1 smoke test
 ```bash
 # terminal 1
-cd projects/final/agent && uvicorn bridge:app --port 5050
+cd agent && uvicorn bridge:app --port 5050
 # terminal 2
 ngrok http 5050     # copy host → PUBLIC_HOST in .env → restart uvicorn
 # terminal 3

@@ -49,7 +49,8 @@ PRONUNCIATION_DICT_NAME = "maitre-hebrew"
 # Latin "Kraytos" → English reading KRAY-tos. "Levonteen" still came out with wrong stress —
 # v3 responds to CAPS as emphasis, so capitalize the final syllable: levon-TEEN.
 PRONUNCIATION_RULES = [
-    {"string_to_replace": "לבונטין", "type": "alias", "alias": "levonTEEN"},
+    # 2026-06-11: restaurant renamed לבונטין → קיסו (levonTEEN stress never landed by ear)
+    {"string_to_replace": "קיסו", "type": "alias", "alias": "KEE-soo"},
     {"string_to_replace": "קראטוס", "type": "alias", "alias": "Kraytos"},
     {"string_to_replace": "מיקה", "type": "alias", "alias": "Meeka"},  # bare "Mika" came out "maka"
 ]
@@ -64,14 +65,14 @@ RPC = f"{SUPABASE_URL}/rest/v1/rpc"
 
 SYSTEM_PROMPT = """\
 # זהות
-את 'מיקה', המארחת הדיגיטלית של מסעדת לבונטין. את מתקשרת ללקוח כדי לאשר הזמנה להיום בערב. דברי תמיד בגוף ראשון, כאישה. הסגנון שלך רגוע ונינוח — מארחת ותיקה שכבר ראתה הכול, לא נציגת מכירות נלהבת. בלי התלהבות יתר, בלי סימני קריאה, בלי "מעולה!" על כל דבר.
+את 'מיקה', המארחת הדיגיטלית של מסעדת קיסו. את מתקשרת ללקוח כדי לאשר הזמנה להיום בערב. דברי תמיד בגוף ראשון, כאישה. הסגנון שלך רגוע ונינוח — מארחת ותיקה שכבר ראתה הכול, לא נציגת מכירות נלהבת. בלי התלהבות יתר, בלי סימני קריאה, בלי "מעולה!" על כל דבר.
 
 # פרטי ההזמנה
 שם הלקוח: {{customer_name}}. שעה: {{reservation_time}} (להגיד: "{{reservation_time_spoken}}"). סועדים: {{party_size}} (להגיד: "{{party_size_spoken}}").
 התאריך והשעה הנוכחיים: {{now_local}}.
 
 # מהלך השיחה
-1. את המתקשרת והלקוח עונה לטלפון. את שותקת עד שהלקוח עונה ("הלו", "כן?", "שלום", "מדבר" וכד'). מה שהלקוח אומר כשהוא עונה לטלפון הוא ברכת מענה בלבד — לא תשובה לשום שאלה. ברגע שענה, אמרי את משפט הפתיחה מילה במילה: "שלום {{customer_name}}, אני מיקה, המארחת הדיגיטלית של מסעדת לבונטין. יש לכם הזמנה להערב ב{{reservation_time_spoken}}, {{party_size_spoken}}. אתם עדיין מגיעים? ואם עכשיו לא נוח — תגידו מתי, ונחזור אליכם." אם הלקוח שותק — אמרי את משפט הפתיחה בכל מקרה. העדיפי תמיד "נחזור אליך/אליכם" על פני "נתקשר" — בכל משפט.
+1. את המתקשרת והלקוח עונה לטלפון. את שותקת עד שהלקוח עונה ("הלו", "כן?", "שלום", "מדבר" וכד'). מה שהלקוח אומר כשהוא עונה לטלפון הוא ברכת מענה בלבד — לא תשובה לשום שאלה. ברגע שענה, אמרי את משפט הפתיחה מילה במילה: "שלום {{customer_name}}, אני מיקה, המארחת הדיגיטלית של מסעדת קיסו. יש לכם הזמנה להערב ב{{reservation_time_spoken}}, {{party_size_spoken}}. אתם עדיין מגיעים? ואם עכשיו לא נוח — תגידו מתי, ונחזור אליכם." אם הלקוח שותק — אמרי את משפט הפתיחה בכל מקרה. העדיפי תמיד "נחזור אליך/אליכם" על פני "נתקשר" — בכל משפט.
 1א. לעולם אל תאשרי, תבטלי או תשני הזמנה על סמך משהו שנאמר לפני שמשפט הפתיחה נאמר והשאלה "אתם עדיין מגיעים?" נשאלה. החלטה נספרת רק מתשובה שבאה אחרי השאלה.
 2. אם הלקוח מתבלבל או שואל מי זה — הסבירי במשפט שאת המארחת הדיגיטלית של המסעדה ושאת מתקשרת לגבי ההזמנה של הערב.
 3. אם כן — מיד קראי ל-set_reservation_status עם confirmed (זאת חובה — בלי הכלי האישור לא נשמר!), ורק אחר כך אמרי משפט סיום חם וקראי ל-end_call.
@@ -306,7 +307,7 @@ def agent_config(tool_ids: list[str], voice_id: str, transfer_number: str | None
                 "provider": "scribe_realtime",
                 "quality": "high",
                 "user_input_audio_format": "ulaw_8000",
-                "keywords": ["לבונטין", "מאיה", "הזמנה", "סועדים", "לבטל", "לאשר"],
+                "keywords": ["קיסו", "מאיה", "הזמנה", "סועדים", "לבטל", "לאשר"],
             },
             # initial_wait_time: silence fallback — if no pickup speech, agent opens anyway after 4s
             # interruption_ignore_terms: repeated pickup greetings ("הלו? הלו?") must not cut the

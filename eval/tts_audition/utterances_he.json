@@ -1,0 +1,62 @@
+[
+  {
+    "id": "out_greeting",
+    "category": "outbound",
+    "text": "שלום, מדברים ממסעדת לבונטין. אני מתקשר כדי לאשר את ההזמנה שלך להיום.",
+    "note": "Outbound opener — must sound warm and human, not robotic."
+  },
+  {
+    "id": "out_confirm_q",
+    "category": "outbound",
+    "text": "ההזמנה שלך היא לשעה שמונה וחצי בערב, לארבעה אנשים. אתה עדיין מגיע?",
+    "note": "Numbers + time + party size read naturally."
+  },
+  {
+    "id": "out_readback",
+    "category": "outbound",
+    "text": "מצוין, אז אישרתי את ההזמנה שלך לשעה תשע, לשניים. נתראה הערב!",
+    "note": "Read-back before DB write — clarity of the time/number is critical."
+  },
+  {
+    "id": "out_dtmf",
+    "category": "outbound",
+    "text": "אם אתה מגיע, הקש אחת. אם ברצונך לבטל, הקש שתיים.",
+    "note": "DTMF fallback prompt."
+  },
+  {
+    "id": "homographs",
+    "category": "stress",
+    "text": "הבוקר הזמנו בירה, וזה דבר אחר לגמרי.",
+    "note": "Unvowelized homograph trap: בוקר (boker), בירה (bira), דבר (davar/daber)."
+  },
+  {
+    "id": "gender_suffix",
+    "category": "stress",
+    "text": "מה שלומך? ההזמנה שלך נשמרה במערכת.",
+    "note": "שלומך / שלך gender ambiguity (shlomCHA vs shlomECH)."
+  },
+  {
+    "id": "foreign_names",
+    "category": "stress",
+    "text": "התפריט כולל פוקאצ'ה, ניוקי וקרפצ'ו, וגם מנה מיוחדת של השף דניאל.",
+    "note": "Foreign dish names + a proper name (anglicization risk)."
+  },
+  {
+    "id": "numbers_times",
+    "category": "stress",
+    "text": "יש לנו מקום פנוי בשעה שבע, בשבע וחצי, או בשמונה. לכמה אנשים ההזמנה?",
+    "note": "Multiple times + a question — number reading + intonation."
+  },
+  {
+    "id": "in_hours",
+    "category": "inbound",
+    "text": "אנחנו פתוחים ראשון עד חמישי משתים עשרה בצהריים, שישי עד ארבע, ושבת משבע בערב.",
+    "note": "Inbound FAQ answer (hours)."
+  },
+  {
+    "id": "in_cancellation",
+    "category": "inbound",
+    "text": "אפשר לבטל ללא עלות עד שעתיים לפני מועד ההזמנה. אחרי זה ייתכן חיוב דמי ביטול.",
+    "note": "Inbound FAQ answer (cancellation policy)."
+  }
+]

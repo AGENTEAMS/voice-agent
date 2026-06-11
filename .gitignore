@@ -1,0 +1,29 @@
+# Secrets
+.env
+.env.local
+*.local
+
+# Pre-generated / captured audio (large, regenerable)
+audio/
+eval/**/*.wav
+eval/**/*.mp3
+eval/**/*.ulaw
+eval/**/clips/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Node / Next.js
+node_modules/
+.next/
+dist/
+.vercel/
+
+# Supabase local
+supabase/.branches/
+supabase/.temp/
+
+# OS
+.DS_Store

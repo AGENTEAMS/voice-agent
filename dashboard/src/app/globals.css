@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-heebo), system-ui, sans-serif;
+  --color-background: #09090b;
+  --color-foreground: #e4e4e7;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-foreground);
+  background-color: var(--color-background);
+  background-image:
+    radial-gradient(900px circle at 100% -5%, rgba(251, 191, 36, 0.06), transparent 45%),
+    radial-gradient(800px circle at 0% 0%, rgba(56, 189, 248, 0.05), transparent 40%);
+  background-attachment: fixed;
+}
+
+/* Slim scrollbars to match the dark UI */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+}

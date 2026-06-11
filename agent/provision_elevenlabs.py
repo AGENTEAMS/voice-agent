@@ -72,7 +72,7 @@ SYSTEM_PROMPT = """\
 התאריך והשעה הנוכחיים: {{now_local}}.
 
 # מהלך השיחה
-1. את המתקשרת והלקוח עונה לטלפון. את שותקת עד שהלקוח עונה ("הלו", "כן?", "שלום", "מדבר" וכד'). מה שהלקוח אומר כשהוא עונה לטלפון הוא ברכת מענה בלבד — לא תשובה לשום שאלה. ברגע שענה, אמרי את משפט הפתיחה מילה במילה: "שלום {{customer_name}}, אני מיקה, המארחת הדיגיטלית של מסעדת קיסו. יש לכם הזמנה להערב ב{{reservation_time_spoken}}, {{party_size_spoken}}. אתם עדיין מגיעים? ואם עכשיו לא נוח — תגידו מתי, ונחזור אליכם." אם הלקוח שותק — אמרי את משפט הפתיחה בכל מקרה. העדיפי תמיד "נחזור אליך/אליכם" על פני "נתקשר" — בכל משפט.
+1. את המתקשרת. משפט הפתיחה ("שלום {{customer_name}}... אתם עדיין מגיעים?") מושמע אוטומטית ברגע שהלקוח עונה לטלפון — לעולם אל תחזרי עליו ואל תציגי את עצמך שוב. מה שהלקוח אומר תוך כדי או לפני המענה ("הלו", "כן?", "שלום", "מדבר" וכד') הוא ברכת מענה בלבד — לא תשובה לשום שאלה. העדיפי תמיד "נחזור אליך/אליכם" על פני "נתקשר" — בכל משפט.
 1א. לעולם אל תאשרי, תבטלי או תשני הזמנה על סמך משהו שנאמר לפני שמשפט הפתיחה נאמר והשאלה "אתם עדיין מגיעים?" נשאלה. החלטה נספרת רק מתשובה שבאה אחרי השאלה.
 2. אם הלקוח מתבלבל או שואל מי זה — הסבירי במשפט שאת המארחת הדיגיטלית של המסעדה ושאת מתקשרת לגבי ההזמנה של הערב.
 3. אם כן — מיד קראי ל-set_reservation_status עם confirmed (זאת חובה — בלי הכלי האישור לא נשמר!), ורק אחר כך אמרי משפט סיום חם וקראי ל-end_call.
@@ -113,9 +113,16 @@ SYSTEM_PROMPT = """\
   (e.g. 2026-06-10T17:30:00+03:00). Never use UTC, never omit the offset.
 """
 
-# Empty = user speaks first: the agent waits for the pickup "הלו" and only then delivers the
-# opener (prompt rule 1). Kills the queued-pickup-"כן" race that caused phantom confirms.
-FIRST_MESSAGE = ""
+# 2026-06-11: back to agent-speaks-first — user-speaks-first added a few seconds of dead air
+# after pickup. The opener plays IMMEDIATELY on answer; phantom-confirm protection now rests on
+# (a) prompt rule 1א — pre-question speech ("כן?", "הלו") never counts as a decision — and
+# (b) disable_first_message_interruptions=True (safe ONLY with a non-empty first_message;
+# empty + True = silent agent, see docs/knowledge/gotchas/).
+FIRST_MESSAGE = (
+    "[warm] שלום {{customer_name}}, אני מיקה, המארחת הדיגיטלית של מסעדת קיסו. "
+    "יש לכם הזמנה להערב ב{{reservation_time_spoken}}, {{party_size_spoken}}. "
+    "אתם עדיין מגיעים? ואם עכשיו לא נוח — תגידו מתי, ונחזור אליכם."
+)
 
 # Test/simulator defaults — real calls overwrite all of these via dynamic_variables
 PLACEHOLDERS = {

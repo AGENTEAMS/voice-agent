@@ -10,7 +10,9 @@ read [PROJECT-HISTORY.md](../PROJECT-HISTORY.md) first for the story, then dip i
 |------|-----------------|
 | [maitre-voice-agent-architecture](decisions/maitre-voice-agent-architecture.md) | The original system design — control plane, voice plane, data plane |
 | [runtime-fork-openai-vs-elevenlabs](decisions/runtime-fork-openai-vs-elevenlabs.md) | Why ElevenLabs Conversational AI won and the OpenAI Realtime path was deleted |
-| [user-speaks-first-outbound](decisions/user-speaks-first-outbound.md) | Why the agent waits for the callee to speak first, and how the opener works |
+| [agent-speaks-first-opener](decisions/agent-speaks-first-opener.md) | Opener plays immediately on pickup (first_message + flag), phantom-confirm guard kept — NOT yet ear-tested |
+| [restaurant-renamed-kisu](decisions/restaurant-renamed-kisu.md) | לבונטין → קיסו (alias KEE-soo) — sidesteps the v3 stress problem; verified live |
+| [user-speaks-first-outbound](decisions/user-speaks-first-outbound.md) | *Superseded 2026-06-11* — why the agent used to wait for the callee to speak first |
 | [israeli-outbound-call-legality](decisions/israeli-outbound-call-legality.md) | Why the agent is legally *transactional* (no marketing/upsell) under Israeli law |
 
 ## Gotchas (bugs we hit so you don't have to)
@@ -18,6 +20,7 @@ read [PROJECT-HISTORY.md](../PROJECT-HISTORY.md) first for the story, then dip i
 | Page | The trap |
 |------|----------|
 | [elevenlabs-empty-first-message-silent-agent](gotchas/elevenlabs-empty-first-message-silent-agent.md) | Empty `first_message` + `disable_first_message_interruptions=true` = completely silent agent |
+| [elevenlabs-intermittent-silent-generation](gotchas/elevenlabs-intermittent-silent-generation.md) | Platform-side dead air: 0 LLM tokens + 0.0s TTS audio, `error: null` — triage via `metadata.charging` |
 | [elevenlabs-llm-tool-calling-ladder](gotchas/elevenlabs-llm-tool-calling-ladder.md) | gemini-flash goes silent, 4o-mini fakes tool calls, gpt-4o needs a TOOL CONTRACT |
 | [elevenlabs-v3-low-stability-chunk-glitches](gotchas/elevenlabs-v3-low-stability-chunk-glitches.md) | Stability < 0.75 on v3 warps/cuts audio at chunk seams |
 | [elevenlabs-v3-pronunciation-alias-only](gotchas/elevenlabs-v3-pronunciation-alias-only.md) | v3 ignores IPA — only alias respellings work (levonTEEN, Meeka) |

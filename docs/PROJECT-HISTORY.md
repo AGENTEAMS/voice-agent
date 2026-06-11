@@ -146,30 +146,59 @@ Commit `9514427`.
 
 ---
 
+## Session: 2026-06-11 (afternoon) — Migration day: standalone repo + live debugging
+
+The project graduated from `genai-course/projects/final/` to this standalone repo (private
+GitHub `AGENTEAMS/voice-agent`), with all knowledge migrated into `docs/knowledge/`. Then a
+live test-call session:
+
+- **Dead-air mystery solved**: two calls connected but מיקה never spoke. Platform usage records
+  proved ElevenLabs initiated generation but produced **0 gpt-4o tokens and 0.0s of TTS audio**
+  with `error: null` — an intermittent ElevenLabs-side failure, not config
+  ([gotcha](knowledge/gotchas/elevenlabs-intermittent-silent-generation.md)). An
+  `interruption_ignore_terms` fix applied mid-investigation turned out NOT to be the cure
+  (kept anyway — it protects speech from "הלו" echo).
+- **Restaurant renamed לבונטין → קיסו** (alias `KEE-soo`) after Tomer corrected the levonTEEN
+  pronunciation live on a call
+  ([decision](knowledge/decisions/restaurant-renamed-kisu.md)). Verified immediately: full
+  negotiation flow (21:00 full → offered 21:30 → change_reservation → confirmed → end_call)
+  with correct DB write-back.
+- **Callback flow re-verified**: scheduled a callback via `schedule_callback` → pending
+  `scheduled_calls` row. ASR data point: "שתי דקות" was garbled to "עוד שעה" — short Hebrew
+  time phrases are fragile.
+- **Opener flipped back to agent-speaks-first**
+  ([decision](knowledge/decisions/agent-speaks-first-opener.md)): the user-speaks-first design
+  added seconds of dead air after pickup. `first_message` now carries the full opener;
+  `disable_first_message_interruptions=True`; rule 1א keeps the phantom-confirm guard.
+  **Provisioned live, NOT yet ear-tested.**
+
+---
+
 ## Where we are now + next steps
 
-**Current state:** persona **מיקה** (feminine), voice **"hosteses"** `SNXrahWBHym8CEMJveKQ`.
-**NOTHING locked in** — voice/sound iteration continues. All 5 flows (confirm / cancel /
-change-time with negotiation / callback / needs_human) re-verified on the new user-speaks-first
-opener, including the autonomous callback redial.
+**Current state:** persona **מיקה**, voice **"hosteses"** `SNXrahWBHym8CEMJveKQ`, restaurant
+**מסעדת קיסו**. NOTHING locked in — voice iteration continues. Opener is agent-speaks-first
+(untested by ear). Negotiation + callback flows verified today on the Kisu config.
 
 **Next steps:**
-1. **Interruption handling** (explicit #1 priority): background noise / repeated "הלו" cuts the
-   opener mid-sentence and restarts it (callback call restarted it 3×). Candidates:
-   `interruption_ignore_terms`, dropping the `interruption` client event, turn_eagerness=patient —
-   WITHOUT resurrecting the silent-agent bug. Then re-test on good cellular reception.
-2. Import verified caller ID **+972585121998** into ElevenLabs → dial FROM it (test calls then go
-   to main **+972525898552**). Live transfer_to_number test (now unblocked — Full Twilio account).
-3. Ear-verdicts pending good reception: stability 0.75 + [warm]/[friendly] audio tags + "..."
-   pauses.
-4. Later: post-call webhook → persist transcripts into `call_attempts.transcript` (the research
+1. **Ear-test the agent-speaks-first opener**: latency on pickup, opener immune to "הלו" echo,
+   and the phantom-confirm probe (answer the phone with "כן?" — she must still ask and wait).
+2. **Auto-redial watchdog** in `call_and_verify.py` for the intermittent silent-generation
+   failure (detect 0 agent turns / 0.0s TTS audio → redial once). Consider an ElevenLabs
+   support ticket — evidence conv IDs are in the gotcha page.
+3. Import verified caller ID **+972585121998** into ElevenLabs → dial FROM it (test calls then
+   go to main **+972525898552**). Live transfer_to_number test (unblocked — Full Twilio).
+4. Ear-verdicts: stability 0.75 + [warm]/[friendly] tags + "..." pauses; KEE-soo pronunciation.
+5. Later: post-call webhook → persist transcripts into `call_attempts.transcript` (the research
    report has the payload spec); dashboard rebuild; Vercel cron scheduler; n8n daily batch.
 
 **Operational gotchas to know:**
 - Demo data rolls stale at MIDNIGHT mid-session → all availability returns `[]` → run
   `supabase/reseed.py --clean`
   ([knowledge/gotchas/demo-data-date-drift-no-such-slot.md](knowledge/gotchas/demo-data-date-drift-no-such-slot.md)).
-- The 21:00 slot is artificially FULL — it's a negotiation demo prop, not a bug.
+- The 21:00 slot is artificially FULL — a negotiation demo prop. (After today's tests, 21:30
+  is ALSO full and one תומר reservation sits confirmed at 21:30; a pending `scheduled_calls`
+  callback row exists — `reseed.py --clean` resets all of it.)
 - Test dials go to +972585121998.
 - An old ElevenLabs agent `agent_2301k...` (the מאיה persona) is orphaned in the dashboard —
   delete whenever.

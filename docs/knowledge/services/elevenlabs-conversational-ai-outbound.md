@@ -44,3 +44,11 @@ the old +972525898552 verification was deleted. Test calls go TO +972585121998.
 [hebrew-voice-agent-speech-polish](../patterns/hebrew-voice-agent-speech-polish.md),
 [elevenlabs-v3-pronunciation-alias-only](../gotchas/elevenlabs-v3-pronunciation-alias-only.md),
 [stale-env-overrides-provisioned-ids](../gotchas/stale-env-overrides-provisioned-ids.md)
+
+## Update 2026-06-11 (post-migration session)
+- Restaurant renamed **מסעדת קיסו** ([restaurant-renamed-kisu](../decisions/restaurant-renamed-kisu.md)); ASR keywords updated.
+- Opener flipped to **agent-speaks-first**: non-empty `first_message` +
+  `disable_first_message_interruptions=True` ([agent-speaks-first-opener](../decisions/agent-speaks-first-opener.md)) — NOT yet ear-tested.
+- `interruption_ignore_terms` = הלו variants (pickup echo must not cut speech).
+- Intermittent platform-side silent generation observed midday —
+  [elevenlabs-intermittent-silent-generation](../gotchas/elevenlabs-intermittent-silent-generation.md) (auto-redial watchdog still TODO).

@@ -29,3 +29,8 @@ pronunciation unchanged on live calls.
 [elevenlabs-provisioning-as-code](../patterns/elevenlabs-provisioning-as-code.md),
 [hebrew-voice-agent-speech-polish](../patterns/hebrew-voice-agent-speech-polish.md),
 [hebrew-tts-landscape](../services/hebrew-tts-landscape.md)
+
+## Update 2026-06-11
+The levonTEEN alias never landed by ear — resolved by renaming the restaurant entirely:
+[restaurant-renamed-kisu](../decisions/restaurant-renamed-kisu.md). Active alias set is now
+`קיסו → KEE-soo`, `קראטוס → Kraytos`, `מיקה → Meeka`.

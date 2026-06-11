@@ -1,5 +1,10 @@
 # Maître: User-Speaks-First Outbound Opener
 
+> **SUPERSEDED 2026-06-11** by [agent-speaks-first-opener](agent-speaks-first-opener.md) — the
+> wait-for-greeting design added seconds of dead air after pickup. The phantom-confirm
+> protection this page introduced (rule 1א) survives in the new design. Kept for the reasoning
+> and verification record.
+
 The agent stays silent at connect and waits for the callee's pickup greeting ("הלו?"); only then
 does it deliver the opener (reservation details + "אתם עדיין מגיעים?"). Replaces the fixed
 first_message that fired at t=0.

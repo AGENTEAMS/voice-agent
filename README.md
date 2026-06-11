@@ -74,13 +74,16 @@ voice-agent/
 ## Status / next
 
 1. ✅ ElevenLabs agent provisioned as code; all 5 flows live-verified with DB write-back,
-   incl. autonomous callback redial. Twilio account upgraded to Full.
-2. ▶ Voice iteration ongoing — current persona **מיקה**, voice "hosteses"; nothing locked in.
-   User-speaks-first opener live-verified.
-3. ▶ **Next up: interruption handling** — background noise / repeated "הלו" cuts the opener
-   mid-sentence and restarts it. Candidates: `interruption_ignore_terms`, dropping the
-   `interruption` client event, `turn_eagerness=patient` — without resurrecting the
-   [silent-agent bug](docs/knowledge/gotchas/elevenlabs-empty-first-message-silent-agent.md).
-4. ◻ Verified caller ID import (+972585121998) · live `transfer_to_number` test ·
+   incl. autonomous callback redial. Twilio account upgraded to Full. Restaurant renamed
+   **מסעדת קיסו** (2026-06-11) and the negotiation + callback flows re-verified on it.
+2. ▶ Voice iteration ongoing — persona **מיקה**, voice "hosteses"; nothing locked in.
+3. ▶ **Next up: ear-test the agent-speaks-first opener**
+   ([decision](docs/knowledge/decisions/agent-speaks-first-opener.md)) — provisioned live but
+   untested: pickup latency, "הלו"-echo immunity, and the phantom-confirm probe (answering
+   "כן?" must not auto-confirm).
+4. ▶ **Auto-redial watchdog** for the
+   [intermittent silent-generation failure](docs/knowledge/gotchas/elevenlabs-intermittent-silent-generation.md)
+   (platform-side: 0 LLM tokens, 0.0s TTS audio, no error surfaced).
+5. ◻ Verified caller ID import (+972585121998) · live `transfer_to_number` test ·
    post-call webhook → transcripts into `call_attempts.transcript` · dashboard rebuild ·
    Vercel cron scheduler · n8n daily batch ([docs/n8n-automation-guide.md](docs/n8n-automation-guide.md)).

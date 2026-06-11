@@ -309,8 +309,11 @@ def agent_config(tool_ids: list[str], voice_id: str, transfer_number: str | None
                 "keywords": ["לבונטין", "מאיה", "הזמנה", "סועדים", "לבטל", "לאשר"],
             },
             # initial_wait_time: silence fallback — if no pickup speech, agent opens anyway after 4s
+            # interruption_ignore_terms: repeated pickup greetings ("הלו? הלו?") must not cut the
+            # opener mid-sentence (2026-06-11: second הלו killed מיקה's first response entirely)
             "turn": {"turn_timeout": 7, "silence_end_call_timeout": 20, "turn_eagerness": "normal",
-                     "initial_wait_time": 4},
+                     "initial_wait_time": 4,
+                     "interruption_ignore_terms": ["הלו", "הלו הלו", "אלו", "הלו?"]},
             "conversation": {"max_duration_seconds": 300},
         },
         "platform_settings": {

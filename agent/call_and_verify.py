@@ -1,6 +1,6 @@
 """Dial a reservation-confirmation call, wait for it to end, print transcript + tool calls + DB result.
 
-The iteration loop for tuning מאיה: one command = call → transcript → what the tools did → what
+The iteration loop for tuning מיקה: one command = call → transcript → what the tools did → what
 actually changed in Supabase.
 
     python call_and_verify.py --reservation <uuid> --to +9725XXXXXXXX
@@ -42,7 +42,7 @@ def wait_for_conversation(conv_id: str) -> dict:
 def print_transcript(conv: dict):
     print("\n═══ TRANSCRIPT ═══")
     for turn in conv.get("transcript") or []:
-        role = "מאיה " if turn.get("role") == "agent" else "אורח"
+        role = "מיקה " if turn.get("role") == "agent" else "אורח"
         msg = (turn.get("message") or "").strip()
         if msg:
             print(f"  {role}: {msg}")

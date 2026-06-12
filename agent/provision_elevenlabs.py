@@ -74,6 +74,7 @@ SYSTEM_PROMPT = """\
 # מהלך השיחה
 1. את המתקשרת. משפט הפתיחה ("שלום {{customer_name}}... אתם עדיין מגיעים?") מושמע אוטומטית ברגע שהלקוח עונה לטלפון — לעולם אל תחזרי עליו ואל תציגי את עצמך שוב. מה שהלקוח אומר תוך כדי או לפני המענה ("הלו", "כן?", "שלום", "מדבר" וכד') הוא ברכת מענה בלבד — לא תשובה לשום שאלה. העדיפי תמיד "נחזור אליך/אליכם" על פני "נתקשר" — בכל משפט.
 1א. לעולם אל תאשרי, תבטלי או תשני הזמנה על סמך משהו שנאמר לפני שמשפט הפתיחה נאמר והשאלה "אתם עדיין מגיעים?" נשאלה. החלטה נספרת רק מתשובה שבאה אחרי השאלה.
+1ב. הד-קו: לפעמים הקול שלך חוזר אליך דרך הקו, והתמלול מציג קטעים מהמשפטים שלך עצמך כאילו הלקוח אמר אותם (למשל "לא נוח", "מגיעים", "נחזור אליכם"), או רצף סותר וקטוע ("כן. כן. לא. לא."). אם התור הראשון של הלקוח הוא קטע כזה — אל תפעלי לפיו, אל תפני לשום מסלול, ואל תשאלי שום שאלה. עני אך ורק "..." (שקט) ותני ללקוח לענות בקצב שלו. תשובה ברורה שמגיעה אחר כך — גם מילה אחת כמו "כן" או "לא" — היא תשובה לגיטימית לשאלת הפתיחה ופועלים לפיה כרגיל.
 2. אם הלקוח מתבלבל או שואל מי זה — הסבירי במשפט שאת המארחת הדיגיטלית של המסעדה ושאת מתקשרת לגבי ההזמנה של הערב.
 3. אם כן — מיד קראי ל-set_reservation_status עם confirmed (זאת חובה — בלי הכלי האישור לא נשמר!), ורק אחר כך אמרי משפט סיום חם וקראי ל-end_call.
 4. אם רוצים לבטל — אשרי בנימוס, מיד קראי ל-set_reservation_status עם cancelled, הודי, סיימי, ואז end_call.
@@ -314,14 +315,25 @@ def agent_config(tool_ids: list[str], voice_id: str, transfer_number: str | None
                 "provider": "scribe_realtime",
                 "quality": "high",
                 "user_input_audio_format": "ulaw_8000",
-                "keywords": ["קיסו", "מאיה", "הזמנה", "סועדים", "לבטל", "לאשר"],
+                "keywords": ["קיסו", "מיקה", "הזמנה", "סועדים", "לבטל", "לאשר", "כן", "לא", "מגיעים", "לשנות"],
             },
-            # initial_wait_time: silence fallback — if no pickup speech, agent opens anyway after 4s
-            # interruption_ignore_terms: repeated pickup greetings ("הלו? הלו?") must not cut the
-            # opener mid-sentence (2026-06-11: second הלו killed מיקה's first response entirely)
+            # initial_wait_time=1: opener plays at most 1s after connect — never wait for pickup
+            # speech (2026-06-13: guests experienced dead air until they spoke first). API allows
+            # -1 or 1..300; 0 is rejected, and -1 semantics are undocumented so we use 1.
+            # interruption_ignore_terms: speech matching these during agent speech is DISCARDED
+            # entirely (never interrupts, never queued as a turn — verified across test calls:
+            # ignored הלו never appears in transcripts). Covers pickup greetings + yes/no babble +
+            # fragments of the opener that echo back down the line (2026-06-12: echo «לא, לא נוח»
+            # was queued as a guest turn and answered as a callback request). Guest speech AFTER
+            # the agent finishes is never filtered — these only apply while she is talking.
             "turn": {"turn_timeout": 7, "silence_end_call_timeout": 20, "turn_eagerness": "normal",
-                     "initial_wait_time": 4,
-                     "interruption_ignore_terms": ["הלו", "הלו הלו", "אלו", "הלו?"]},
+                     "initial_wait_time": 1,
+                     "interruption_ignore_terms": [
+                         "הלו", "הלו הלו", "אלו", "הלו?", "שלום", "ערב טוב", "מדבר", "מי זה",
+                         "כן", "לא", "כן כן", "לא לא", "כן?",
+                         "לא נוח", "לא, לא נוח", "מגיעים", "אתם עדיין מגיעים",
+                         "נחזור אליכם", "תגידו מתי",
+                     ]},
             "conversation": {"max_duration_seconds": 300},
         },
         "platform_settings": {

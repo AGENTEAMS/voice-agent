@@ -9,6 +9,14 @@ in-call RPCs. Team: Re'i Biton · Haim Toledano · Tomer Elzam.
 - `docs/PROJECT-HISTORY.md` — the story so far + current state and next steps.
 - `docs/knowledge/README.md` — decisions, gotchas, patterns, vendor research.
 - `docs/elevenlabs-tools-config.md` — agent tools + Hebrew system prompt reference.
+- `docs/submission/` — course final-assignment doc + Hebrew pitch deck (due 2026-06-13).
+
+## Orchestration (n8n)
+Batch workflow «Maître — Call Today's Pending Reservations» (`G7RYSw2BQgqnabJt`) on
+asher13.app.n8n.cloud, built/updated via the instance-level n8n MCP (server "n8n" in local
+claude config). Manual trigger only. Hard allowlist in "Build Call Payloads": +972525898552;
++972585121998 is the human-transfer target (`HUMAN_TRANSFER_NUMBER`). `update_workflow`
+WIPES node credentials — after any update, re-pick on the 6 HTTP nodes.
 
 ## Long-term context (Tomer's machine)
 Vault: `~/Development/vaults/voice-agent/` — read `hot.md` for where-we-left-off, `index.md`

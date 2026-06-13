@@ -11,10 +11,14 @@ When a tool event arrives and no CTA call is in flight, the orb auto-wakes to "l
 ## Pre-flight (EVERY test/demo session)
 ```bash
 cd ~/Development/personal/voice-agent
-python supabase/reseed.py --clean        # date drift! also DELETES decided rows
-python agent/make_reservation.py --name "תומר אלזם" --phone +972585121998 --time 20:30 --party 4
+agent/.venv/bin/python supabase/reseed.py --clean   # date drift! deletes decided rows + test rows
+agent/.venv/bin/python agent/make_reservation.py --name "תומר אלזם" --phone +972585121998 --time 20:30 --party 4
+agent/.venv/bin/python agent/make_reservation.py --name "תומר אלזם" --phone +972525898552 --time 19:00 --party 2
 cd stage && npm run dev                  # localhost:3000 (+ /tonight in a second tab)
 ```
+- Transfer (`transfer_to_human`) rings **+972525898552** — set so stage-call tests
+  (which ring +972585121998) make the *other* device ring. Callbacks never fire on
+  their own: `scheduler.py` executes them only when run manually.
 - 21:00 is intentionally FULL (negotiation prop) — ask to move there to trigger the
   negotiation; 21:30 has room.
 - Never edit the n8n workflow before the demo (`update_workflow` wipes node credentials).

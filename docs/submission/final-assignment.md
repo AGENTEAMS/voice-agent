@@ -2,9 +2,9 @@
 
 | | Name | Email |
 |---|---|---|
-| **Student 1** | Re'i Biton | _(fill)_ |
-| **Student 2** | Haim Toledano | _(fill)_ |
-| **Student 3** | Tomer Elzam | mrelzam@gmail.com |
+| **Student 1** | Re'i Biton | 1rere123@gmail.com |
+| **Student 2** | Haim Toledano | Haimtoldo@gmail.com |
+| **Student 3** | Tomer Elzam | tomerelzam1111@gmail.com |
 
 **Project: Maître (מיקה) — an autonomous Hebrew voice agent that calls restaurant guests to confirm tonight's reservations.**
 

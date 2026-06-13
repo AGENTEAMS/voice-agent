@@ -31,3 +31,6 @@ supabase/.temp/
 
 # Playwright CLI test artifacts
 .playwright-cli/
+
+# Instructor-provided assignment briefs (kept local for reference, not republished)
+docs/submission/requirements/

@@ -1,0 +1,212 @@
+{
+  "name": "Maître — Call Today's Pending Reservations",
+  "_note": "Sanitized export — logic only, NO credentials. Supabase project ref + ElevenLabs agent/phone IDs are placeholders (YOUR-...); attach your own n8n credentials (Supabase API + ElevenLabs httpHeaderAuth) on import. The n8n credential store holds the real keys — they are never part of this JSON.",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "maitre-run",
+        "options": {}
+      },
+      "id": "0cba50be-e873-4c9e-a8b6-2e774d06a8b6",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [-16, 272],
+      "webhookId": "b44e65a2-d790-44b1-b465-250459335d3b"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://YOUR-SUPABASE-PROJECT.supabase.co/rest/v1/rpc/todays_pending_reservations",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"p_restaurant_id\": \"11111111-1111-1111-1111-111111111111\"}",
+        "options": {}
+      },
+      "id": "17897783-e0e3-4a0b-b55e-7ce3d9fe4034",
+      "name": "Get Pending Reservations",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [224, 272]
+    },
+    {
+      "parameters": {
+        "jsCode": "// SAFETY: seed numbers are FAKE strangers' numbers. Only dial the allowlist.\n// (+972585121998 is intentionally NOT here — it is the human-transfer target.)\nconst ALLOWED = ['+972585121998'];\nconst HOURS = ['שתים עשרה','אחת','שתיים','שלוש','ארבע','חמש','שש','שבע','שמונה','תשע','עשר','אחת עשרה'];\nconst PARTY = {1:'סועד אחד',2:'שני סועדים',3:'שלושה סועדים',4:'ארבעה סועדים',5:'חמישה סועדים',6:'שישה סועדים',7:'שבעה סועדים',8:'שמונה סועדים',9:'תשעה סועדים',10:'עשרה סועדים'};\n\nfunction spokenTime(dt) {\n  const h12 = HOURS[dt.hour % 12];\n  let base;\n  if (dt.minute === 0) base = h12;\n  else if (dt.minute === 30) base = h12 + ' וחצי';\n  else if (dt.minute === 15) base = h12 + ' ורבע';\n  else if (dt.minute === 45) base = 'רבע ל' + HOURS[(dt.hour + 1) % 12];\n  else base = h12 + ' ' + String(dt.minute).padStart(2, '0');\n  if (dt.minute === 0) {\n    if (dt.hour >= 12 && dt.hour < 17) return base + ' בצהריים';\n    if (dt.hour >= 17) return base + ' בערב';\n    return base + ' בבוקר';\n  }\n  return base;\n}\n\nconst now = $now.setZone('Asia/Jerusalem');\nconst out = [];\nlet skipped = 0;\nfor (const item of $input.all()) {\n  const r = item.json;\n  if (!ALLOWED.includes(r.phone)) { skipped++; continue; }\n  const local = DateTime.fromISO(r.reserved_for).setZone('Asia/Jerusalem');\n  out.push({ json: {\n    to_number: r.phone,\n    customer_name: r.customer_name,\n    reservation_id: r.reservation_id,\n    dynamic_variables: {\n      customer_name: r.customer_name,\n      reservation_time: local.toFormat('HH:mm'),\n      reservation_time_spoken: spokenTime(local),\n      party_size: String(r.party_size),\n      party_size_spoken: PARTY[r.party_size] || (r.party_size + ' סועדים'),\n      reservation_id: r.reservation_id,\n      today: now.toFormat('yyyy-MM-dd'),\n      now_local: now.toFormat(\"yyyy-MM-dd'T'HH:mm:ssZZ\")\n    }\n  }});\n}\nconsole.log('callable:', out.length, '| skipped (not in allowlist):', skipped);\nreturn out;"
+      },
+      "id": "2257ca71-44e1-4d28-b841-f084f3b2b873",
+      "name": "Build Call Payloads",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [448, 272]
+    },
+    {
+      "parameters": { "batchSize": 5, "options": {} },
+      "id": "30bec4a5-7822-4336-b2f1-e3a1f8161c09",
+      "name": "Batch Of 5",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [672, 272]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.elevenlabs.io/v1/convai/twilio/outbound-call",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ agent_id: 'YOUR-ELEVENLABS-AGENT-ID', agent_phone_number_id: 'YOUR-ELEVENLABS-PHONE-NUMBER-ID', to_number: $json.to_number, conversation_initiation_client_data: { dynamic_variables: $json.dynamic_variables } }) }}",
+        "options": {}
+      },
+      "id": "5eacb219-0745-4cab-83f8-a61c14619398",
+      "name": "Place Call",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [896, 272]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pair each placed call's conversation_id with the reservation it was about.\n// (Item order from Place Call matches the batch input order.)\nconst resp = $input.all();\nconst batch = $('Batch Of 5').all();\nconst pairs = resp.map((r, i) => ({\n  conversation_id: r.json.conversation_id,\n  reservation_id: batch[i] && batch[i].json.reservation_id\n})).filter(p => p.conversation_id);\nreturn [{ json: { ids: pairs.map(p => p.conversation_id), pairs } }];"
+      },
+      "id": "82888405-b28f-43cb-9b9d-1c9ad39b6589",
+      "name": "Collect Conversation IDs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 272]
+    },
+    {
+      "parameters": { "amount": 12 },
+      "id": "85d0b12f-c9f4-450f-876b-93b1f6b835f1",
+      "name": "Wait 12s",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1344, 272],
+      "webhookId": "bf7b9205-b1a9-4928-8d76-c81d680bcbb6"
+    },
+    {
+      "parameters": {
+        "url": "https://api.elevenlabs.io/v1/convai/conversations?agent_id=YOUR-ELEVENLABS-AGENT-ID&page_size=30",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "cf69b17c-6445-4f8b-ad4d-0a1addbf002b",
+      "name": "Check Call Statuses",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [1568, 192],
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const ids = $('Collect Conversation IDs').first().json.ids;\nconst convs = $input.first().json.conversations || [];\nconst statusById = {};\nfor (const c of convs) statusById[c.conversation_id] = c.status;\nconst finished = ids.filter(id => ['done', 'failed'].includes(statusById[id] || ''));\n// Safety valve: a no-answer call stays 'initiated' forever — give up after ~5 min of polling\nconst attempt = $runIndex;\nconst all_done = finished.length === ids.length || attempt >= 25;\nreturn [{ json: { all_done, attempt, finished: finished.length, total: ids.length } }];"
+      },
+      "id": "a584313b-a84e-4301-a6b4-eb2296ceba89",
+      "name": "All Calls Finished?",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1792, 192]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "loose", "version": 1 },
+          "conditions": [{ "leftValue": "={{ $json.all_done }}", "operator": { "type": "boolean", "operation": "true" } }],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "37a96e98-6405-43a6-9e59-b1560c385a8f",
+      "name": "Done?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [2016, 336]
+    },
+    {
+      "parameters": {
+        "url": "={{ 'https://YOUR-SUPABASE-PROJECT.supabase.co/rest/v1/reservations?select=id,status,reserved_for,party_size,customers(name,phone)&reserved_for=gte.' + $now.setZone('Asia/Jerusalem').toFormat('yyyy-MM-dd') + '&order=reserved_for' }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "options": {}
+      },
+      "id": "ca0c3533-34f2-478d-a3e6-581eb7d68120",
+      "name": "Fetch Outcomes",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [896, 0],
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "url": "={{ 'https://YOUR-SUPABASE-PROJECT.supabase.co/rest/v1/scheduled_calls?select=reservation_id,scheduled_for&created_at=gte.' + $now.setZone('Asia/Jerusalem').toFormat('yyyy-MM-dd') }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "options": {}
+      },
+      "id": "71f73ee7-7a4b-4633-aee4-70d784f03e93",
+      "name": "Fetch Scheduled Callbacks",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [1120, 0],
+      "executeOnce": true,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// THE GUARANTEE: a completed call about a pending reservation must leave a status change\n// or a scheduled callback. If neither happened, classify deterministically:\n//   - call never connected / instant hangup (<5s)  -> leave pending: next batch run redials\n//   - guest actually engaged but decided nothing   -> flag needs_human for follow-up\n// NOTE: pairs/conv-info come from the LAST loop iteration — fine for single-batch runs\n// (the demo and any run with <=5 calls); multi-batch accumulation is a known TODO.\nconst pairs = $('Collect Conversation IDs').first().json.pairs || [];\nconst convs = $('Check Call Statuses').first().json.conversations || [];\nconst reservations = $('Fetch Outcomes').all().map(i => i.json);\nconst callbacks = $('Fetch Scheduled Callbacks').all().map(i => i.json).filter(j => j && j.reservation_id);\n\nconst convInfo = {};\nfor (const c of convs) convInfo[c.conversation_id] = { status: c.status, dur: c.call_duration_secs || 0 };\nconst statusById = {};\nfor (const r of reservations) statusById[r.id] = r.status;\nconst hasCallback = new Set(callbacks.map(c => c.reservation_id));\n\nconst retryNextRun = [];\nconst needsHuman = [];\nfor (const p of pairs) {\n  if (statusById[p.reservation_id] !== 'pending' || hasCallback.has(p.reservation_id)) continue;\n  const info = convInfo[p.conversation_id];\n  const engaged = info && info.status === 'done' && info.dur >= 5;\n  (engaged ? needsHuman : retryNextRun).push(p.reservation_id);\n}\n// Sentinel UUID keeps the PATCH below a valid no-op when there is nothing to repair\nconst idFilter = needsHuman.length ? needsHuman.join(',') : '00000000-0000-0000-0000-000000000000';\nreturn [{ json: { needsHuman, retryNextRun, idFilter } }];"
+      },
+      "id": "5654884e-aab8-473b-9458-df6528c0cc9c",
+      "name": "Reconcile (Deterministic Guard)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1344, 0]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ 'https://YOUR-SUPABASE-PROJECT.supabase.co/rest/v1/reservations?id=in.(' + $json.idFilter + ')' }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\"status\": \"needs_human\"}",
+        "options": {}
+      },
+      "id": "b8b2e311-929b-432c-adcc-317f3f83c2bd",
+      "name": "Flag needs_human",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [1568, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $('Fetch Outcomes').all().map(i => i.json);\nconst rec = $('Reconcile (Deterministic Guard)').first().json;\nconst by = {};\nfor (const r of items) by[r.status] = (by[r.status] || 0) + 1;\nreturn [{ json: {\n  ran_at: $now.setZone('Asia/Jerusalem').toISO(),\n  reservations_today: items.length,\n  by_status: by,\n  flagged_needs_human: rec.needsHuman,\n  unanswered_will_retry_on_next_run: rec.retryNextRun,\n  details: items.map(r => ({ name: r.customers && r.customers.name, phone: r.customers && r.customers.phone, time: r.reserved_for, party: r.party_size, status: r.status }))\n}}];"
+      },
+      "id": "1ca3cf74-81be-48c9-b592-216cea522d23",
+      "name": "Summarize Batch",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1792, 0]
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "Get Pending Reservations", "type": "main", "index": 0 }]] },
+    "Get Pending Reservations": { "main": [[{ "node": "Build Call Payloads", "type": "main", "index": 0 }]] },
+    "Build Call Payloads": { "main": [[{ "node": "Batch Of 5", "type": "main", "index": 0 }]] },
+    "Batch Of 5": { "main": [[{ "node": "Fetch Outcomes", "type": "main", "index": 0 }], [{ "node": "Place Call", "type": "main", "index": 0 }]] },
+    "Place Call": { "main": [[{ "node": "Collect Conversation IDs", "type": "main", "index": 0 }]] },
+    "Collect Conversation IDs": { "main": [[{ "node": "Wait 12s", "type": "main", "index": 0 }]] },
+    "Wait 12s": { "main": [[{ "node": "Check Call Statuses", "type": "main", "index": 0 }]] },
+    "Check Call Statuses": { "main": [[{ "node": "All Calls Finished?", "type": "main", "index": 0 }]] },
+    "All Calls Finished?": { "main": [[{ "node": "Done?", "type": "main", "index": 0 }]] },
+    "Done?": { "main": [[{ "node": "Batch Of 5", "type": "main", "index": 0 }], [{ "node": "Wait 12s", "type": "main", "index": 0 }]] },
+    "Fetch Outcomes": { "main": [[{ "node": "Fetch Scheduled Callbacks", "type": "main", "index": 0 }]] },
+    "Fetch Scheduled Callbacks": { "main": [[{ "node": "Reconcile (Deterministic Guard)", "type": "main", "index": 0 }]] },
+    "Reconcile (Deterministic Guard)": { "main": [[{ "node": "Flag needs_human", "type": "main", "index": 0 }]] },
+    "Flag needs_human": { "main": [[{ "node": "Summarize Batch", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

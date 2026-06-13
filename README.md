@@ -1,89 +1,97 @@
-# Maître — Hebrew Restaurant Voice Agent
+# Maître (מיקה) - Hebrew Restaurant Voice Agent
 
-Team: Re'i Biton · Haim Toledano · Tomer Elzam
-(Started as the final project of GenAI & LLM Applications, Reichman × Google AI Tech School — now a standalone project.)
+**Team:** Re'i Biton · Haim Toledano · Tomer Elzam
+Final project, GenAI & LLM Applications - Reichman University × Google AI Tech School.
 
-A **Hebrew-only voice agent for restaurants** that calls guests to confirm today's reservations —
-natural Israeli Hebrew, real-time, over a real phone line.
+An autonomous **Hebrew voice agent** that phones restaurant guests to confirm tonight's
+reservations over a real phone line - natural Israeli Hebrew, in real time. Built for
+**מסעדת קיסו** (Kisu), a Tel-Aviv restaurant whose hosts spend ~2 hours a day on confirmation
+calls. Mika makes those calls instead.
 
-- **Outbound** — call every guest with a reservation *today* and ask (in Hebrew) "still coming?"
-  → confirm / cancel / change time & party size / schedule a callback / transfer to a human →
-  write the outcome to the reservation DB. **All 5 flows live-verified end-to-end**, including
-  the agent autonomously scheduling and executing its own callback redial.
-- **Inbound FAQ** — answer policy questions (hours, kashrut, parking) from the same agent.
-- **Dashboard** — live reservations + call outcomes (previous attempt scrapped; to be rebuilt).
+## Live demo
 
-> Scope is deliberately narrow: the agent **only** confirms/cancels/changes and answers policy
-> questions. It never markets, upsells, or makes the final decision — that keeps it legally
-> *transactional* under Israeli law (see [docs/legal.md](docs/legal.md) and
-> [docs/knowledge/decisions/israeli-outbound-call-legality.md](docs/knowledge/decisions/israeli-outbound-call-legality.md)).
+- **Dashboard / click-to-call:** https://voice-agent-delta-one.vercel.app/
+- **Tonight's results:** https://voice-agent-delta-one.vercel.app/tonight
+- **Cancellation insights:** https://voice-agent-delta-one.vercel.app/insights
 
-## New here? Read these first
+Press the CTA on the dashboard and it resets the demo slate, fires the n8n batch, and calls the
+allowlisted number live - the constellation lights up as tools fire and the database updates.
 
-1. **[docs/PROJECT-HISTORY.md](docs/PROJECT-HISTORY.md)** — the full story: every decision,
-   bug, and verified milestone, session by session.
-2. **[docs/knowledge/](docs/knowledge/README.md)** — the knowledge base: architecture decisions,
-   hard-won gotchas (silent-agent trap, LLM tool-calling ladder, v3 stability floor), voice-tuning
-   playbooks, and vendor research.
-3. **[docs/elevenlabs-tools-config.md](docs/elevenlabs-tools-config.md)** — source of truth for
-   the agent's tools + Hebrew system prompt.
+## What Mika does
+
+On each call she greets the guest in Hebrew, asks "still coming tonight?", and handles:
+
+- **Confirm / cancel** (cancel asks *why*, fed back into the insights page)
+- **Change** time and/or party size, with a real **availability check** (no fabrication)
+- **Negotiation** - if the requested slot is full she offers the real free alternatives
+- **Callback** scheduling (relative or absolute time math) - the system redials itself later
+- **Transfer to a human**, and restaurant **FAQs** (hours, parking, policy, vegetarian)
+
+Every decision is written back to the reservation database through tools; a deterministic guard
+reconciles anything ambiguous to `needs_human`. **The agent is probabilistic; the system is not.**
 
 ## Architecture
 
-**Runtime of record: ElevenLabs Conversational AI** (decided 2026-06-10; the earlier OpenAI
-Realtime bridge was removed — see
-[docs/knowledge/decisions/runtime-fork-openai-vs-elevenlabs.md](docs/knowledge/decisions/runtime-fork-openai-vs-elevenlabs.md)).
-
 ```
-VOICE      ElevenLabs CAI   owns telephony + STT + LLM + TTS + turn-taking + tools.
-                            Webhook tools call Supabase PostgREST RPCs DIRECTLY (no middle server).
-TELEPHONY  Twilio           number imported into ElevenLabs; ElevenLabs dials through it.
-CONTROL    script / n8n     pick today's pending reservations → trigger one outbound call each
-                            (agent/outbound_elevenlabs.py + agent/scheduler.py now; n8n daily batch later).
-DATA       Supabase         Postgres — mock restaurant, 8-table schema, in-call RPCs
-                            (apply_call_result, check_availability, change_reservation, schedule_call).
-UI         Next.js (later)  dashboard only — no audio anywhere near it.
+TELEPHONY   Twilio number imported into ElevenLabs
+VOICE       ElevenLabs Conversational AI  - owns ASR (Scribe) + LLM + TTS (v3 Hebrew) + turn-taking
+LLM         Gemini 3 Flash (gemini-3-flash-preview)  - in-call model (see "Model choice")
+TOOLS       4 webhook tools -> Supabase PostgREST RPCs DIRECTLY (business logic lives in SQL)
+            + transfer_to_human + end_call (ElevenLabs system tools)
+DATA        Supabase Postgres  - reservations, customers, availability, cancellations, RPCs
+ORCHESTR.   n8n batch  - pick today's pending -> call (allowlisted, 5 at a time) -> poll -> reconcile
+DASHBOARD   Next.js (stage/) on Vercel  - live constellation, /tonight, /insights
 ```
 
-The 6 agent tools: `set_reservation_status`, `check_availability`, `change_reservation`,
-`schedule_callback` (webhooks → Supabase RPC) + `transfer_to_human`, `end_call` (ElevenLabs
-system tools).
+The 6 tools: `set_reservation_status`, `check_availability`, `change_reservation`,
+`schedule_callback` (webhooks -> Supabase RPC) + `transfer_to_human`, `end_call`.
 
-## Layout
+The **n8n orchestration workflow** (the batch logic - allowlist, status-aware polling, the
+deterministic reconcile guard) is exported credential-free at
+[`docs/maitre-n8n-workflow.json`](docs/maitre-n8n-workflow.json).
+
+## Model choice (a 5-model evaluation)
+
+The in-call LLM was chosen by testing 5 models on real calls, optimizing for **reliable
+tool-calling** then **cost**:
+
+| Model | Verdict |
+|---|---|
+| gpt-4o-mini | ❌ narrated outcomes without ever calling tools ("fake work") |
+| gpt-5-mini | ❌ ~10s latency - too slow for voice |
+| gemini-2.5-flash | ❌ silent no-response turns (froze mid-call) |
+| gpt-4o | ✅ works, but pricier (~$0.18/call) |
+| **gemini-3-flash** | ✅ **winner** - reliable, ~1.3s avg response, **~7× cheaper** (~$0.026/call) |
+
+This is the assignment's "improve at least one dimension (cost/latency/quality)" step: we
+**improved cost ~7×** while keeping reliability. gpt-4o stays a one-command fallback
+(`provision_elevenlabs.py --model gpt-4o`).
+
+**Measured:** 78 real test calls across 14 scenarios · ~1.3s avg LLM response · 100% of decided
+calls written correctly to the database.
+
+## Repo layout
 
 ```
 voice-agent/
-├── agent/          # provisioning-as-code + outbound call trigger + callback scheduler
-├── dashboard/      # SCRAPPED — will be rebuilt from scratch; do not build on it
-├── supabase/       # migrations (0001 schema, 0002 RPCs, 0003 in-call), seed, reseed.py
-├── eval/           # Hebrew TTS audition harness + scoring
-└── docs/           # PROJECT-HISTORY, knowledge base, tools config, call script, legal, n8n guide
+├── agent/     # provisioning-as-code (ElevenLabs), outbound trigger, callback scheduler, eval tooling
+├── stage/     # Next.js dashboard (deployed to Vercel) - constellation, /tonight, /insights, /deck.html
+├── supabase/  # migrations (schema, in-call RPCs, demo_reset, cancellation-insights), seed, reseed
+├── eval/      # Hebrew TTS audition harness + scoring
+└── docs/      # PROJECT-HISTORY, knowledge base, n8n workflow JSON, submission/ (assignment + deck)
 ```
 
 ## Setup
 
-1. Copy `.env.example` → `.env` and fill in the keys (Supabase, ElevenLabs, Twilio).
-   `.env` is gitignored — ask Tomer for the working values.
-2. Agent scripts: `cd agent && python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt`.
-   Start with [agent/README.md](agent/README.md).
-3. Demo data: `python supabase/reseed.py --clean` — **run this whenever availability comes back
-   empty**; the seed dates drift stale at midnight
-   ([why](docs/knowledge/gotchas/demo-data-date-drift-no-such-slot.md)).
-4. Test calls dial **+972585121998**. The 21:00 slot is intentionally FULL (negotiation demo prop).
+1. Copy `.env.example` -> `.env` and fill the keys (Supabase, ElevenLabs, Twilio). `.env` is gitignored.
+2. Agent: `cd agent && python -m venv .venv && .venv/bin/pip install httpx python-dotenv`.
+3. Provision the agent (idempotent): `python agent/provision_elevenlabs.py` (defaults to gemini-3-flash).
+4. Reset the demo slate: `python supabase/demo_reset.py` (one command -> READY).
+5. Dashboard: `cd stage && npm install && npm run dev`.
 
-## Status / next
+## Submission
 
-1. ✅ ElevenLabs agent provisioned as code; all 5 flows live-verified with DB write-back,
-   incl. autonomous callback redial. Twilio account upgraded to Full. Restaurant renamed
-   **מסעדת קיסו** (2026-06-11) and the negotiation + callback flows re-verified on it.
-2. ▶ Voice iteration ongoing — persona **מיקה**, voice "hosteses"; nothing locked in.
-3. ▶ **Next up: ear-test the agent-speaks-first opener**
-   ([decision](docs/knowledge/decisions/agent-speaks-first-opener.md)) — provisioned live but
-   untested: pickup latency, "הלו"-echo immunity, and the phantom-confirm probe (answering
-   "כן?" must not auto-confirm).
-4. ▶ **Auto-redial watchdog** for the
-   [intermittent silent-generation failure](docs/knowledge/gotchas/elevenlabs-intermittent-silent-generation.md)
-   (platform-side: 0 LLM tokens, 0.0s TTS audio, no error surfaced).
-5. ◻ Verified caller ID import (+972585121998) · live `transfer_to_number` test ·
-   post-call webhook → transcripts into `call_attempts.transcript` · dashboard rebuild ·
-   Vercel cron scheduler · n8n daily batch ([docs/n8n-automation-guide.md](docs/n8n-automation-guide.md)).
+- **Write-up:** [`docs/submission/final-assignment.md`](docs/submission/final-assignment.md)
+- **Pitch deck:** [`docs/submission/pitch-deck.pdf`](docs/submission/pitch-deck.pdf) (or open `pitch-deck.html` in a browser for the animated version)
+- **n8n workflow (logic):** [`docs/maitre-n8n-workflow.json`](docs/maitre-n8n-workflow.json)
+- **Full story:** [`docs/PROJECT-HISTORY.md`](docs/PROJECT-HISTORY.md) · **knowledge base:** [`docs/knowledge/`](docs/knowledge/README.md)

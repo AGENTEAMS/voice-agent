@@ -9,7 +9,7 @@ export const supabase = createClient(
 );
 
 export function subscribeStage(handlers: {
-  onToolEvent: (toolName: string, payload: unknown) => void;
+  onToolEvent: (toolName: string, payload: unknown, reservationId: string | null) => void;
   onReservationChange: (row: { id: string; status: string }) => void;
 }) {
   const ch = supabase
@@ -18,8 +18,12 @@ export function subscribeStage(handlers: {
       "postgres_changes",
       { event: "INSERT", schema: "public", table: "tool_events" },
       (p) => {
-        const row = p.new as { tool_name: string; payload: unknown };
-        handlers.onToolEvent(row.tool_name, row.payload);
+        const row = p.new as {
+          tool_name: string;
+          payload: unknown;
+          reservation_id: string | null;
+        };
+        handlers.onToolEvent(row.tool_name, row.payload, row.reservation_id);
       }
     )
     .on(

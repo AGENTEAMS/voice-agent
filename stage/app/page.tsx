@@ -87,26 +87,48 @@ export default function Home() {
   }, [fetchRows]);
 
   // ── realtime (live mode only; sim feeds the same pipes itself) ───────────
+  // Source-agnostic: events from n8n-batch calls light the stage exactly like
+  // CTA calls. When no CTA call owns the orb (no conversation_id), tool events
+  // auto-wake it to "live" and it decays back to idle after silence.
+  const autoLiveDecay = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     if (sim) return;
     let unsub: (() => void) | undefined;
     import("@/lib/supabase").then(({ subscribeStage }) => {
       unsub = subscribeStage({
-        onToolEvent: (tool, payload) => {
+        onToolEvent: (tool, payload, reservationId) => {
           engine.push({ kind: "tool", tool, at: Date.now() });
           const c = captionFor(tool, payload as Record<string, unknown>);
           if (c) setCaption(c);
+          if (reservationId) {
+            calledIdRef.current = reservationId;
+            setCalledId(reservationId);
+          }
+          if (!convIdRef.current) {
+            if (engine.state() === "idle") applyCall("live");
+            if (autoLiveDecay.current) clearTimeout(autoLiveDecay.current);
+            autoLiveDecay.current = setTimeout(() => {
+              if (!convIdRef.current && engine.state() === "live") {
+                applyCall("idle");
+                setCaption("");
+              }
+            }, 25000);
+          }
         },
         onReservationChange: (row) => {
           fetchRows();
-          if (row.id === calledIdRef.current && row.status !== "pending") {
-            setFlippedId(row.id);
+          if (row.status === "pending") return;
+          setFlippedId(row.id);
+          if (row.id === calledIdRef.current || !convIdRef.current) {
             applyCall("resolved");
           }
         },
       });
     });
-    return () => unsub?.();
+    return () => {
+      unsub?.();
+      if (autoLiveDecay.current) clearTimeout(autoLiveDecay.current);
+    };
   }, [sim, engine, fetchRows, applyCall]);
 
   // ── ElevenLabs status polling while a call is in flight ──────────────────

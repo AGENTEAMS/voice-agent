@@ -2,7 +2,7 @@
   "agent_id": "agent_8201ktqbyyqve1d9q8t47a32sd5z",
   "phone_number_id": "phnum_1101ktqbz3g1e7pr5r83s9cvyx6f",
   "voice_id": "SNXrahWBHym8CEMJveKQ",
-  "llm": "gpt-4o",
+  "llm": "gemini-3-flash-preview",
   "agent_name": "Maitre — Mika (repo-provisioned)",
-  "provisioned_at": "2026-06-13T22:10:54+03:00"
+  "provisioned_at": "2026-06-13T23:43:48+03:00"
 }

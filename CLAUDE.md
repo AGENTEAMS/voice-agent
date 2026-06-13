@@ -29,7 +29,7 @@ for the catalog. Session handoffs route here automatically.
 ```bash
 python supabase/demo_reset.py                  # ONE-COMMAND demo slate: full reset + both תומר test rows + verify (READY ✅)
 python supabase/reseed.py --clean              # lower-level reseed. SUPABASE_DB_URL set (Session pooler) ⇒ true full reset; else REST date-shift fallback
-python agent/provision_elevenlabs.py           # idempotent: apply any prompt/tool/config change. --model <id> swaps the in-call LLM (default gpt-4o; plain re-run reverts). LLM cost A/B: docs/next-session-test-plan.md
+python agent/provision_elevenlabs.py           # idempotent: apply any prompt/tool/config change. --model <id> swaps the in-call LLM (default gemini-3-flash-preview; --model gpt-4o = fallback). LLM eval: docs/next-session-test-plan.md
 python agent/outbound_elevenlabs.py --list     # today's pending reservations
 python agent/call_and_verify.py --reservation <uuid> --to +972585121998   # call + transcript + ⚙tool calls + per-call LLM $ (EL charging) + DB
 python agent/cancellation_insights.py          # gpt-4o derive script: cancellations log → /insights themes (needs OPENAI_API_KEY; demo page is seeded, so optional)
@@ -54,7 +54,10 @@ single source for the demo slate; `seed.sql` + `demo_reset.py` just call it.
 - **Provisioning-as-code**: never hand-edit the agent in the ElevenLabs dashboard — change
   `provision_elevenlabs.py` and re-run it.
 - `.provisioned.json` beats `.env` for resource IDs (stale-env trap — see knowledge/gotchas).
-- LLM must stay **gpt-4o** (gemini-flash goes silent, 4o-mini fakes tool calls).
+- LLM ships **gemini-3-flash-preview** (reliable + ~7× cheaper than gpt-4o; fixed 2.5-flash's
+  silent turns). Known weak spot: false-confirms off a pickup "כן" said before the opening
+  question lands (gemini-family) → demo habit is to answer "הלו". Fallback one command away:
+  `provision_elevenlabs.py --model gpt-4o`. gpt-4o-mini fakes tool calls; gpt-5-mini too slow.
 - v3 TTS: stability **0.75 is a hard floor**; pronunciation via **alias respellings only**.
 - `first_message` non-empty ⇄ `disable_first_message_interruptions=True` move together —
   empty + True = silent agent.

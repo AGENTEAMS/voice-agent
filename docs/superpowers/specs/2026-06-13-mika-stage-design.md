@@ -126,3 +126,10 @@ Transcript UI, stats cards, funnel charts, n8n batch trigger, auth, mobile layou
 4. Live call end-to-end (gated on Tomer): reseed --clean → recreate test reservation →
    call from CTA → constellation traces real events → DB state verified via
    `call_and_verify.py` printout.
+
+---
+**Amendment (2026-06-13, post-build):** Palette switched from dark to **Theme A — warm
+linen (light)** at Tomer's direction (projector-safe, hospitality feel); CSS tokens in
+`stage/app/globals.css` are the source of truth. Added `/tonight` results page (counters
++ status list + realtime refresh + «עודכן» stamps) reachable from the stage header — the
+"after the call" view for the demo. Live transcript remains out of scope.

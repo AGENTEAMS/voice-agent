@@ -15,7 +15,7 @@ export async function GET() {
     `?restaurant_id=eq.${ENV.RESTAURANT_ID}` +
     `&reserved_for=gte.${today}T00:00:00%2B03:00` +
     `&reserved_for=lte.${today}T23:59:59%2B03:00` +
-    `&select=id,reserved_for,party_size,status,customers(name,phone)` +
+    `&select=id,reserved_for,party_size,status,updated_at,customers(name,phone)` +
     `&order=reserved_for.asc`;
   const r = await fetch(url, { headers: sb, cache: "no-store" });
   if (!r.ok) {

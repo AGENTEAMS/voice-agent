@@ -227,7 +227,12 @@ export default function Home() {
           <span className="restaurant">קיסו</span>
           <span className="tagline">מיקה — המארחת הדיגיטלית</span>
         </div>
-        <div className="clock mono">{clock}</div>
+        <div className="headerEnd">
+          <a className="navlink" href="/tonight">
+            סיכום הערב ←
+          </a>
+          <div className="clock mono">{clock}</div>
+        </div>
       </header>
       <div className="main">
         <section className="stageCol">

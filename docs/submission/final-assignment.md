@@ -46,9 +46,9 @@ In our work with **Kisu (קיסו)**, a Tel-Aviv restaurant we consult for, we o
 - **Data Availability & Quality:** Reservations, customers, availability and call outcomes live in a Postgres schema (Supabase) we control — so in-call tools can read and write the source of truth directly. Telephony reachable via Twilio (international caller-ID verification done for the pilot number).
 - **Feasibility Assessment / platform research:** We ran a structured vendor evaluation for the voice runtime (full report in the repo: `docs/knowledge/`). Key findings that drove the architecture:
   - **Hebrew TTS quality is the scarcest resource.** ElevenLabs' v3 conversational model is the only agent-platform TTS we found with production-grade Hebrew; that single fact anchored the platform decision.
-  - **LLM choice inside the voice loop is constrained by tool-calling discipline**, not language ability: in our tests gemini-flash produced silent no-response turns, gpt-4o-mini narrated outcomes without calling tools ("fake work"), and gpt-4o was the smallest model that reliably called tools — measured, not assumed.
+  - **LLM choice inside the voice loop is constrained by tool-calling discipline**, not language ability: we evaluated 5 in-call models — gpt-4o-mini narrated outcomes without calling tools ("fake work"), gpt-5-mini was too slow (~10s latency), gemini-2.5-flash produced silent no-response turns, gpt-4o worked but was pricier, and **gemini-3-flash won — reliable tool-calling and ~7× cheaper than gpt-4o** (measured, not assumed).
   - **Latency budget:** a phone conversation tolerates ~1.5–2s of response gap before it feels broken. We measured the ElevenLabs pipeline (ASR→LLM→TTS) at ~1.0–1.6s end-to-end — feasible, with no headroom for extra LLM hops, which ruled out chained-orchestrator designs inside the call.
-  - **Cost:** ≈ $0.10–0.15 per completed confirmation call (platform + telephony at our measured 39s average) vs. ~3 minutes of staff time per manual call — favorable by an order of magnitude at scale.
+  - **Cost:** ≈ $0.026 per completed confirmation call on gemini-3-flash (platform + telephony at our measured 39s average) — ~7× cheaper than the same call on gpt-4o (≈ $0.18) — vs. ~3 minutes of staff time per manual call — favorable by an order of magnitude at scale.
 
 ---
 
@@ -80,7 +80,7 @@ flowchart LR
     end
 
     subgraph Voice["ElevenLabs Conversational AI (voice runtime)"]
-        TW[Twilio PSTN\nimported number] <--> EL[ASR scribe_realtime\nLLM gpt-4o\nTTS eleven_v3 Hebrew]
+        TW[Twilio PSTN\nimported number] <--> EL[ASR scribe_realtime\nLLM gemini-3-flash\nTTS eleven_v3 Hebrew]
         EL -->|webhook tools| RPC
     end
 
@@ -102,7 +102,7 @@ flowchart LR
 | Component | Technology Choice | Reason |
 |---|---|---|
 | Voice agent runtime (telephony + ASR + agent loop + TTS) | **ElevenLabs Conversational AI** | The only platform we found with production-grade **Hebrew** conversational TTS (eleven_v3); owns the full latency-critical loop so no glue code sits inside the 2s response budget |
-| In-call LLM | **OpenAI gpt-4o** (temp 0.3) | Empirically the smallest model that reliably *calls tools instead of narrating outcomes*; gemini-flash went silent, gpt-4o-mini faked tool use in our tests |
+| In-call LLM | **Gemini 3 Flash** (`gemini-3-flash-preview`, temp 0.3) | Winner of a 5-model eval: reliable tool-calling and ~7× cheaper than gpt-4o (≈$0.026 vs ≈$0.18/call). gpt-4o-mini faked tool use, gpt-5-mini was too slow, gemini-2.5-flash went silent, gpt-4o worked but cost more |
 | Telephony | **Twilio** (number imported into ElevenLabs) | Reliable PSTN to Israel, verified caller-ID path, call-status API used for no-answer diagnosis |
 | Database + in-call tools | **Supabase (Postgres + REST RPCs)** | Reservation source of truth; agent tools are thin webhook RPCs, so business rules live in SQL, not in the prompt; Realtime subscriptions power the live dashboard |
 | Orchestration | **n8n (cloud)** | Visual, auditable batch pipeline: fetch pending → call → poll → reconcile → summarize; the deterministic safety net lives here, outside the probabilistic agent |

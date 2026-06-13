@@ -54,7 +54,7 @@ Project Breakdown rules (large fonts, minimal text, evaluation-with-numbers, cha
 **Headline:** מה בנינו - והבחירות שמאחורי זה
 **Table (component · choice · why):**
 - קול · טלפון · ASR · TTS → **ElevenLabs** → הפלטפורמה היחידה עם TTS שיחתי בעברית ברמת ייצור
-- מודל בשיחה → **GPT-4o** → הקטן ביותר שבאמת קורא לכלים (gemini-flash השתתק, 4o-mini זייף)
+- מודל בשיחה → **Gemini 3 Flash** → בדקנו 5 מודלים, זה ניצח: אמין וקורא לכלים, ופי ~7 זול מ-GPT-4o (~$0.026 מול ~$0.18 לשיחה)
 - טלפוניה → **Twilio** → PSTN אמין לישראל
 - נתונים + כלים → **Supabase** → מקור אמת; הכלים RPC - הלוגיקה ב-SQL, לא בפרומפט
 - אורקסטרציה → **n8n** → batch מבוקר + רשת הביטחון הדטרמיניסטית
@@ -86,7 +86,7 @@ reconcile guard catches any call that left no DB trace and routes it within seco
 ---
 
 ## Optional backup slides (skip if short on time)
-- **סולם ה-LLM** - gemini-flash / 4o-mini / gpt-4o עם תופעות הכשל שנמדדו.
+- **סולם ה-LLM** - 5 מודלים: 4o-mini זייף · gpt-5-mini איטי · gemini-2.5-flash השתתק · gpt-4o עובד אך יקר · **gemini-3-flash ניצח**.
 - **ארכיטקטורה מלאה** - דיאגרמת בלוקים: n8n ↔ ElevenLabs ↔ Twilio ↔ Supabase ↔ דשבורד.
 - **כוונון קול עברית** - רצפת stability 0.75, מהירות 0.7, הגייה דרך respellings.
 

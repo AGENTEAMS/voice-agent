@@ -189,8 +189,8 @@
     display:flex;align-items:center;justify-content:center;
     font-family:var(--sans);transition:color .2s,border-color .2s,background .2s,opacity .2s}
   .navarrow:hover{color:var(--ember);border-color:var(--ember);background:var(--paper-2)}
-  .navarrow.prev{left:2.4vw}
-  .navarrow.next{right:2.4vw}
+  .navarrow.prev{right:2.4vw}
+  .navarrow.next{left:2.4vw}
   .navarrow:disabled{opacity:.22;cursor:default;color:var(--ink-soft);border-color:var(--line);background:rgba(244,237,221,.55)}
 
   @media print{
@@ -257,7 +257,7 @@
     <h2 class="kicker r" style="margin-bottom:24px">הסטאק הטכנולוגי</h2>
     <table class="stack r">
       <tr><td class="comp">קול · טלפון · זיהוי דיבור · הקראה</td><td class="pick"><b>ElevenLabs</b></td><td class="why">הפלטפורמה היחידה עם דיבור שיחתי בעברית ברמת ייצור</td></tr>
-      <tr><td class="comp">מודל בשיחה</td><td class="pick"><b>GPT-4o</b></td><td class="why">הקטן ביותר שבאמת קורא לכלים - gemini-flash השתתק, 4o-mini זייף</td></tr>
+      <tr><td class="comp">מודל בשיחה</td><td class="pick"><b>Gemini 3 Flash</b></td><td class="why">בדקנו 5 מודלים - זה ניצח: אמין וקורא לכלים, ופי ~7 זול מ-GPT-4o (~$0.026 מול ~$0.18 לשיחה)</td></tr>
       <tr><td class="comp">טלפוניה</td><td class="pick"><b>Twilio</b></td><td class="why">שירות הטלפוניה שמחבר את מיקה לקו טלפון אמיתי - שיחות אמינות לישראל</td></tr>
       <tr><td class="comp">בסיס נתונים + כלים</td><td class="pick"><b>Supabase</b></td><td class="why">כל ההזמנות נשמרות כאן; מיקה קוראת ומעדכנת אותן ישירות תוך כדי השיחה</td></tr>
       <tr><td class="comp">מנוע אוטומציה</td><td class="pick"><b>n8n</b></td><td class="why">מריץ את כל שיחות הערב לפי הסדר, ותופס כל מקרה חריג לטיפול אנושי</td></tr>
@@ -273,7 +273,7 @@
     <h2 class="kicker r">הכלים של מיקה</h2>
     <table class="tools r">
       <tr><td class="t">אישור או ביטול</td><td class="d">מעדכנת את ההזמנה במערכת - מגיע, מבטל, או "לא ברור ← נציג"</td><td class="w">אחרי שחזרה על הפרטים והאורח ענה</td></tr>
-      <tr><td class="t">בדיקת זמינות + שינוי הזמנה</td><td class="d">בודקת מה פנוי ומשנה שעה או מספר סועדים</td><td class="w">כשמבקשים לשנות - ומתמקחת אם תפוס</td></tr>
+      <tr><td class="t">בדיקת זמינות + שינוי הזמנה</td><td class="d">בודקת מה פנוי ומשנה שעה או מספר סועדים</td><td class="w">כשמבקשים לשנות - ומציעה שעות פנויות אם תפוס</td></tr>
       <tr><td class="t">תיאום שיחה חוזרת</td><td class="d">קובעת מועד עתידי - והמערכת מתקשרת שוב לבד</td><td class="w">כשהאורח לא יכול לדבר עכשיו</td></tr>
       <tr><td class="t">העברה לנציג אנושי</td><td class="d">מעבירה את השיחה לאדם אמיתי על הקו</td><td class="w">כשמבקשים לדבר עם נציג</td></tr>
       <tr><td class="t">מענה על שאלות</td><td class="d">שעות פתיחה · חניה · מדיניות ביטול · אפשרויות צמחוניות</td><td class="w">כשהאורח שואל באמצע השיחה</td></tr>
@@ -322,8 +322,8 @@
   <span>רעי · חיים · תומר</span>
 </div>
 
-<button class="navarrow prev" aria-label="שקופית קודמת">&#8249;</button>
-<button class="navarrow next" aria-label="שקופית הבאה">&#8250;</button>
+<button class="navarrow prev" aria-label="שקופית קודמת">&#8250;</button>
+<button class="navarrow next" aria-label="שקופית הבאה">&#8249;</button>
 
 <div class="dots" id="dots"></div>
 <div class="hint">→ ← מקשים · חיצים או לחיצה למעבר</div>

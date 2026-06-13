@@ -68,6 +68,13 @@ insert into policies (restaurant_id, kind, question_he, answer_he) values
 -- ── Availability for today (dinner slots) ─────────────────────────────────────
 insert into availability (restaurant_id, date, time_slot, capacity, booked)
 select '11111111-1111-1111-1111-111111111111', (now() at time zone 'Asia/Jerusalem')::date, slot, 40,
-       (random()*30)::int
+       -- Demo props are DETERMINISTIC (not random) so a full reset always reproduces the
+       -- negotiation flow: 21:00 FULL → she offers 21:30; 20:00 has room for the change-to-eight demo.
+       case slot
+         when time '20:00' then 4    -- 36 free: explicit change-to-20:00 demo
+         when time '21:00' then 40   -- FULL: negotiation prop (ask to move here → 21:30 offered)
+         when time '21:30' then 28   -- 12 free: the slot she offers as the alternative
+         else (random()*30)::int
+       end
 from (values (time '18:00'),(time '18:30'),(time '19:00'),(time '19:30'),(time '20:00'),
              (time '20:30'),(time '21:00'),(time '21:30'),(time '22:00'),(time '22:30')) as s(slot);

@@ -16,7 +16,7 @@ Code repository: **https://github.com/AGENTEAMS/voice-agent**
 
 ### Chosen Business Problem
 
-In our work with **Kisu (קיסו)**, a Tel-Aviv restaurant we consult for through AGENTEAMS, we observed that the host team spends **1.5–2 hours every afternoon** phoning guests to confirm that evening's reservations — and on busy days the calls simply don't all get made. Unconfirmed reservations turn into no-shows: a held table on a Friday night is unsellable inventory. Industry data consistently places restaurant no-show rates at **10–20%**, and confirmation calls are the single most effective countermeasure — but they are exactly the work a small host team doesn't have time for.
+In our work with **Kisu (קיסו)**, a Tel-Aviv restaurant we consult for, we observed that the host team spends **1.5–2 hours every afternoon** phoning guests to confirm that evening's reservations — and on busy days the calls simply don't all get made. Unconfirmed reservations turn into no-shows: a held table on a Friday night is unsellable inventory. Industry data consistently places restaurant no-show rates at **10–20%**, and confirmation calls are the single most effective countermeasure — but they are exactly the work a small host team doesn't have time for.
 
 > In our role as AI consultants for Kisu restaurant, we observed that daily reservation-confirmation calls are either consuming ~2 hours of staff time or silently not happening. This impacts the restaurant through no-show revenue loss (a 4-top held and unfilled on a peak night), and impacts guests through inability to easily adjust or cancel — which itself produces more no-shows.
 

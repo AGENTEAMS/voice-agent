@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מיקה - מצגת פיץ׳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4EDDD;            /* warm cream */
+    --paper-2:#EDE3CE;          /* card tint  */
+    --ink:#241F18;              /* warm near-black */
+    --ink-soft:#5A5145;         /* muted ink */
+    --line:#D8CBB0;             /* hairline   */
+    --ember:#C0542A;            /* sharp accent */
+    --ember-soft:#E8C9B4;
+    --olive:#6E6A45;            /* secondary  */
+    --serif:"Frank Ruhl Libre",Georgia,serif;
+    --sans:"Heebo","Assistant",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  /* paper grain */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:9;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    mix-blend-mode:multiply;
+  }
+
+  .deck{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  .slide{
+    position:absolute;inset:0;display:none;
+    flex-direction:column;justify-content:center;
+    padding:6.5vh 9vw 8vh;
+    opacity:0;transition:opacity .5s ease;
+  }
+  .slide.active{display:flex;opacity:1}
+
+  /* chrome: running header + footer */
+  .chrome{position:fixed;left:0;right:0;z-index:8;display:flex;justify-content:space-between;
+    align-items:center;padding:0 9vw;font-family:var(--sans);font-size:13px;letter-spacing:.06em;
+    color:var(--ink-soft);text-transform:uppercase}
+  .chrome.top{top:4vh}
+  .chrome.bot{bottom:4vh}
+  .chrome .rule{height:1px;background:var(--line);flex:1;margin:0 18px}
+  .brand b{color:var(--ember);font-weight:700}
+  .pageno{font-variant-numeric:tabular-nums}
+
+  /* constellation motif (quiet) */
+  .stars{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5}
+  .stars line{stroke:var(--line);stroke-width:1}
+  .stars circle{fill:var(--olive)}
+  .stars circle.hot{fill:var(--ember)}
+
+  .eyebrow{font-family:var(--sans);font-weight:700;letter-spacing:.01em;font-size:clamp(22px,2.7vw,38px);
+    color:var(--ember);margin-bottom:18px;line-height:1.1}
+  h1{font-family:var(--serif);font-weight:900;line-height:.98;letter-spacing:-.01em}
+  h2{font-family:var(--serif);font-weight:700;line-height:1.02}
+  .lead{font-family:var(--sans);font-weight:300;color:var(--ink-soft)}
+
+  /* staggered reveal */
+  .slide.active .r{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+  .slide.active .r:nth-child(2){animation-delay:.08s}
+  .slide.active .r:nth-child(3){animation-delay:.16s}
+  .slide.active .r:nth-child(4){animation-delay:.24s}
+  .slide.active .r:nth-child(5){animation-delay:.32s}
+  @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+  /* ---------- Slide 1 ---------- */
+  #s1 h1{font-size:clamp(48px,9vw,128px)}
+  #s1 .lead{font-size:clamp(20px,2.6vw,34px);max-width:20ch;margin-top:26px}
+  .demo-pill{display:inline-flex;align-items:center;gap:12px;margin-top:46px;
+    background:var(--ink);color:var(--paper);padding:14px 26px;border-radius:999px;
+    font-weight:500;font-size:19px;letter-spacing:.02em;width:max-content}
+  .demo-pill .dot{width:11px;height:11px;border-radius:50%;background:var(--ember);
+    box-shadow:0 0 0 0 rgba(192,84,42,.7);animation:pulse 1.8s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(192,84,42,.6)}70%{box-shadow:0 0 0 16px rgba(192,84,42,0)}100%{box-shadow:0 0 0 0 rgba(192,84,42,0)}}
+
+  /* ---------- generic headline block ---------- */
+  .kicker{font-family:var(--serif);font-weight:700;font-size:clamp(34px,5vw,64px);
+    line-height:1.04;margin-bottom:40px;max-width:24ch}
+  /* slide 2 runs dense - pull the type in so nothing clips */
+  #s2 .eyebrow{margin-bottom:14px}
+  #s2 .kicker{font-size:clamp(26px,3.6vw,46px);margin-bottom:26px;max-width:30ch}
+  #s2 .roi{gap:12px}
+  #s2 .roi .card{padding:14px 22px}
+  #s2 .roi .num{font-size:clamp(30px,3.7vw,46px)}
+  #s2 .probs li{font-size:clamp(17px,1.9vw,23px)}
+  #s2 .foot-note{margin-top:18px}
+  .ember{color:var(--ember)}
+
+  /* two-column */
+  .cols{display:grid;grid-template-columns:1.05fr 1fr;gap:6vw;align-items:start}
+  .probs{list-style:none;display:flex;flex-direction:column;gap:22px}
+  .probs li{font-size:clamp(18px,2.1vw,26px);font-weight:300;line-height:1.4;
+    padding-inline-start:26px;position:relative;color:var(--ink)}
+  .probs li::before{content:"";position:absolute;inset-inline-start:0;top:.62em;
+    width:10px;height:10px;background:var(--ember);border-radius:2px;transform:rotate(45deg)}
+
+  /* ROI cards */
+  .roi{display:flex;flex-direction:column;gap:16px}
+  .roi .card{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;
+    padding:20px 24px;display:flex;align-items:baseline;gap:16px}
+  .roi .num{font-family:var(--serif);font-weight:900;font-size:clamp(34px,4.4vw,56px);
+    color:var(--ember);line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .roi .lbl{font-size:clamp(15px,1.5vw,19px);color:var(--ink-soft);font-weight:400}
+  .roi .prize{background:var(--ink);border-color:var(--ink)}
+  .roi .prize .num{color:var(--ember-soft)}
+  .roi .prize .lbl{color:#E7DCC8}
+
+  /* tech table */
+  .stack{width:100%;border-collapse:collapse;font-size:clamp(14px,1.45vw,19px)}
+  .stack tr{border-bottom:1px solid var(--line)}
+  .stack tr:first-child td{padding-top:0}
+  .stack td{padding:15px 0;vertical-align:baseline}
+  .stack .comp{color:var(--ink-soft);width:30%;font-weight:400}
+  .stack .pick{font-weight:700;width:24%}
+  .stack .pick b{color:var(--ember)}
+  .stack .why{color:var(--ink-soft);font-weight:300;line-height:1.35}
+  .tradeoff{margin-top:30px;border-inline-start:4px solid var(--ember);padding:8px 20px;
+    font-size:clamp(16px,1.7vw,22px);font-weight:300;color:var(--ink)}
+
+  /* struggles */
+  .strikes{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:42px}
+  .strike{background:var(--paper-2);border:1px solid var(--line);border-radius:16px;padding:28px}
+  .strike .ic{font-size:40px;line-height:1;margin-bottom:16px}
+  .strike h3{font-family:var(--serif);font-weight:700;font-size:clamp(19px,2vw,26px);margin-bottom:10px}
+  .strike p{font-size:clamp(14px,1.4vw,18px);font-weight:300;color:var(--ink-soft);line-height:1.4}
+  .pullquote{font-family:var(--serif);font-weight:900;font-size:clamp(30px,4.6vw,60px);
+    text-align:center;letter-spacing:-.01em}
+  .pullquote .ember{display:inline}
+
+  /* results */
+  .heroes{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-bottom:40px}
+  .hero .n{font-family:var(--serif);font-weight:900;font-size:clamp(46px,7vw,96px);
+    color:var(--ember);line-height:.9;font-variant-numeric:tabular-nums}
+  .hero .c{font-size:clamp(15px,1.5vw,20px);color:var(--ink-soft);margin-top:10px;font-weight:400}
+  .ba{width:100%;border-collapse:collapse;font-size:clamp(14px,1.5vw,20px);margin-bottom:30px}
+  .ba td,.ba th{padding:12px 18px;text-align:start;border-bottom:1px solid var(--line)}
+  .ba th{font-weight:500;color:var(--ink-soft);font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+  .ba .was{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:var(--line)}
+  .ba .now{font-weight:700;color:var(--ink)}
+  .cta{font-family:var(--serif);font-weight:700;font-size:clamp(22px,2.8vw,38px);line-height:1.15}
+  .cta .ember{display:inline}
+  .next-lines{margin-top:16px;font-size:clamp(14px,1.55vw,20px);font-weight:300;
+    color:var(--ink-soft);line-height:1.55}
+  .next-lines b{font-weight:600;color:var(--ink)}
+  #s5 .heroes{margin-bottom:30px}
+  #s5 .ba{margin-bottom:24px}
+
+  .foot-note{margin-top:26px;font-size:clamp(14px,1.45vw,18px);color:var(--ink-soft);opacity:.95;font-weight:400}
+
+  /* nav dots */
+  .dots{position:fixed;bottom:4vh;left:50%;transform:translateX(-50%);z-index:8;display:flex;gap:10px}
+  .dots button{width:8px;height:8px;border-radius:50%;border:1px solid var(--ink-soft);
+    background:transparent;cursor:pointer;padding:0;transition:.25s}
+  .dots button.on{background:var(--ember);border-color:var(--ember);transform:scale(1.3)}
+
+  .hint{position:fixed;bottom:4vh;right:9vw;z-index:8;font-size:12px;color:var(--ink-soft);
+    letter-spacing:.05em}
+
+  @media print{
+    @page{size:1280px 720px;margin:0}
+    body{overflow:visible}
+    .slide{display:flex!important;opacity:1!important;position:relative;page-break-after:always;
+      width:1280px;height:720px}
+    .stars,.dots,.hint,.chrome{position:absolute}
+    .demo-pill .dot{animation:none}
+    .slide .r{animation:none!important}
+  }
+</style>
+</head>
+<body>
+
+<svg class="stars" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <line x1="1120" y1="120" x2="1190" y2="200"/><line x1="1190" y1="200" x2="1110" y2="270"/>
+  <line x1="120" y1="560" x2="180" y2="620"/><line x1="180" y1="620" x2="110" y2="660"/>
+  <circle cx="1120" cy="120" r="4" class="hot"/><circle cx="1190" cy="200" r="3"/><circle cx="1110" cy="270" r="3"/>
+  <circle cx="120" cy="560" r="3"/><circle cx="180" cy="620" r="4" class="hot"/><circle cx="110" cy="660" r="2.5"/>
+  <circle cx="1040" cy="80" r="2"/><circle cx="240" cy="520" r="2"/>
+</svg>
+
+<div class="chrome top">
+  <span class="brand">מיקה - <b>המארחת הדיגיטלית</b></span>
+  <span class="rule"></span>
+  <span>מסעדת קיסו</span>
+</div>
+
+<div class="deck">
+
+  <!-- 1 - WHAT SHE DOES -->
+  <section class="slide active" id="s1">
+    <div class="eyebrow r">פיץ׳ · 6 דקות · דמו חי</div>
+    <h1 class="r">מיקה<br>המארחת הדיגיטלית</h1>
+    <p class="lead r">מתקשרת לכל הזמנה, מדברת עברית טבעית, ומעדכנת את המערכת - <strong style="font-weight:500;color:var(--ink)">עוד לפני שניתקה.</strong></p>
+    <div class="demo-pill r"><span class="dot"></span> דמו חי - מתקשרים עכשיו</div>
+  </section>
+
+  <!-- 2 - PROBLEM + ROI -->
+  <section class="slide" id="s2">
+    <div class="eyebrow r">הבעיה האמיתית - והחיסכון</div>
+    <h2 class="kicker r">כל ערב, <span class="ember">שעתיים</span> על הטלפון.<br>ושולחנות ריקים שאף אחד לא ידע עליהם.</h2>
+    <div class="cols">
+      <ul class="probs r">
+        <li>מארחת מתקשרת לכל ההזמנות של הלילה - ידנית, כל יום.</li>
+        <li>בימים עמוסים פשוט לא מתקשרים ← <strong style="font-weight:600">10-20% אי-הגעה.</strong></li>
+        <li>SMS לא פותר: אי אפשר להתמקח עם תזכורת.</li>
+      </ul>
+      <div class="roi r">
+        <div class="card"><span class="num">~45 שע׳</span><span class="lbl">זמן צוות שמשתחרר בחודש (~90%)</span></div>
+        <div class="card"><span class="num">~₪2,000</span><span class="lbl">חיסכון חודשי בעלות שיחות (~80%)</span></div>
+        <div class="card"><span class="num">פי ~5</span><span class="lbl">זול יותר לאישור - מ-₪2.5 ל-₪0.5</span></div>
+        <div class="card prize"><span class="num">17:00</span><span class="lbl">ביטול ידוע מבעוד מועד - השולחן נמכר מחדש (הרווח הגדול)</span></div>
+      </div>
+    </div>
+    <p class="foot-note r">הערכה: ~40 הזמנות/ערב · ~26 ערבים/חודש ≈ ~1,000 שיחות · 3 דק׳/שיחה ידנית · עלות מארחת ~₪50/שעה · ₪0.5/שיחה (נמדד: 39 שנ׳ ממוצע).</p>
+  </section>
+
+  <!-- 3 - TECH STACK -->
+  <section class="slide" id="s3">
+    <div class="eyebrow r">מה בנינו - והבחירות שמאחורי זה</div>
+    <h2 class="kicker r" style="margin-bottom:24px">הסטאק הטכנולוגי</h2>
+    <table class="stack r">
+      <tr><td class="comp">קול · טלפון · ASR · TTS</td><td class="pick"><b>ElevenLabs</b></td><td class="why">הפלטפורמה היחידה עם TTS שיחתי בעברית ברמת ייצור</td></tr>
+      <tr><td class="comp">מודל בשיחה</td><td class="pick"><b>GPT-4o</b></td><td class="why">הקטן ביותר שבאמת קורא לכלים - gemini-flash השתתק, 4o-mini זייף</td></tr>
+      <tr><td class="comp">טלפוניה</td><td class="pick"><b>Twilio</b></td><td class="why">PSTN אמין לישראל, נתיב מספר מזהה מאומת</td></tr>
+      <tr><td class="comp">נתונים + כלים</td><td class="pick"><b>Supabase</b></td><td class="why">מקור אמת; הכלים הם RPC - הלוגיקה ב-SQL, לא בפרומפט</td></tr>
+      <tr><td class="comp">אורקסטרציה</td><td class="pick"><b>n8n</b></td><td class="why">פייפליין batch מבוקר + רשת הביטחון הדטרמיניסטית</td></tr>
+      <tr><td class="comp">דשבורד</td><td class="pick"><b>Next.js</b></td><td class="why">מעקב חי אחרי כלים וכתיבות ל-DB בזמן אמת</td></tr>
+    </table>
+  </section>
+
+  <!-- 4 - STRUGGLES -->
+  <section class="slide" id="s4">
+    <div class="eyebrow r">החלק הכי מעניין</div>
+    <h2 class="kicker r" style="margin-bottom:30px">שלושה כשלים שלימדו אותנו הכי הרבה</h2>
+    <div class="strikes r">
+      <div class="strike"><div class="ic">👻</div><h3>האורח הפנטום</h3><p>הקו החזיר את ההד של מיקה; ה-ASR תמלל אותה כאילו האורח דיבר. היא ענתה למי שלא אמר כלום.</p></div>
+      <div class="strike"><div class="ic">🔇</div><h3>הרשימה שבלעה את ה"כן"</h3><p>תיקון ההד הראשון סינן בטעות תשובות אמת - פילטר גלובלי מחק «כן» של אורח אמיתי מהתמלול.</p></div>
+      <div class="strike"><div class="ic">🤥</div><h3>הסוכנת ששיקרה</h3><p>הכריזה «אישרתי» - ומעולם לא קראה לכלי. הדאטהבייס נשאר ממתין.</p></div>
+    </div>
+    <p class="pullquote r">הסוכן הסתברותי. <span class="ember">המערכת - לא.</span></p>
+  </section>
+
+  <!-- 5 - RESULTS + VALUE + CTA -->
+  <section class="slide" id="s5">
+    <div class="eyebrow r">נמדד על שיחות אמיתיות</div>
+    <div class="heroes r">
+      <div class="hero"><div class="n">100%</div><div class="c">מהשיחות שהוכרעו<br>נכתבו נכון במערכת</div></div>
+      <div class="hero"><div class="n">~1.3<span style="font-size:.4em"> שנ׳</span></div><div class="c">זמן תגובה ממוצע בשיחה</div></div>
+      <div class="hero"><div class="n">22</div><div class="c">שיחות אמיתיות · 14 תרחישים</div></div>
+    </div>
+    <table class="ba r">
+      <tr><th></th><th>לפני</th><th>אחרי</th></tr>
+      <tr><td>זמן צוות ביום</td><td class="was">~שעתיים</td><td class="now">~10 דקות (חריגים בלבד)</td></tr>
+      <tr><td>כיסוי אישורים</td><td class="was">50-70%</td><td class="now">~100% + ניסיונות חוזרים</td></tr>
+      <tr><td>ביטולים</td><td class="was">מתגלים ב-20:00</td><td class="now">ידועים ב-17:00 - נמכר מחדש</td></tr>
+    </table>
+    <div class="next r">
+      <p class="cta">אותו מנוע <span class="ember">- הרבה מעבר למסעדה.</span></p>
+      <p class="next-lines"><b>עוד כלים לאותה מסעדה:</b> רשימת המתנה · שיחת משוב אחרי הביקור · אישור פיקדון לקבוצות.<br>
+      <b>אותו דפוס, תחומים אחרים:</b> מרפאות שיניים · מספרות · שליחויות (חלון מסירה) · זימון מועמדים. כל מי שמתקשר לאשר ולתאם.</p>
+    </div>
+  </section>
+
+</div>
+
+<div class="chrome bot">
+  <span class="pageno"><span id="cur">1</span> / 5</span>
+  <span class="rule"></span>
+  <span>רעי · חיים · תומר</span>
+</div>
+
+<div class="dots" id="dots"></div>
+<div class="hint">→ ← מקשים · לחיצה למעבר</div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const dots=document.getElementById('dots');
+  const cur=document.getElementById('cur');
+  let i=0;
+  slides.forEach((_,n)=>{const b=document.createElement('button');b.onclick=()=>go(n);dots.appendChild(b)});
+  const dotEls=[...dots.children];
+  function go(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+    dotEls.forEach((d,k)=>d.classList.toggle('on',k===i));
+    cur.textContent=i+1;
+  }
+  // RTL-aware: ArrowRight = previous (toward start), ArrowLeft = next
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowLeft'||e.key==='PageDown'||e.key===' ')go(i+1);
+    if(e.key==='ArrowRight'||e.key==='PageUp')go(i-1);
+    if(e.key==='Home')go(0);if(e.key==='End')go(slides.length-1);
+  });
+  document.querySelector('.deck').addEventListener('click',e=>{if(!e.target.closest('.demo-pill'))go(i+1)});
+  go(0);
+</script>
+</body>
+</html>

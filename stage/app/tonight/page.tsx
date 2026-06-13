@@ -6,19 +6,18 @@ import type { ReservationRow } from "@/components/ReservationsStrip";
 
 type Row = ReservationRow & { updated_at?: string };
 
-const STATUS_HE: Record<string, string> = {
-  pending: "ממתינה",
-  confirmed: "אושרה",
-  cancelled: "בוטלה",
-  needs_human: "דרוש נציג",
-};
+const COLUMNS: Array<{ status: string; label: string; cls: string }> = [
+  { status: "confirmed", label: "אושרו", cls: "ok" },
+  { status: "pending", label: "ממתינות", cls: "wait" },
+  { status: "needs_human", label: "דרוש נציג", cls: "warn" },
+  { status: "cancelled", label: "בוטלו", cls: "off" },
+];
 
-const fmt = (iso: string, withSeconds = false) =>
+const fmt = (iso: string) =>
   new Intl.DateTimeFormat("he-IL", {
     timeZone: "Asia/Jerusalem",
     hour: "2-digit",
     minute: "2-digit",
-    ...(withSeconds ? { second: "2-digit" } : {}),
   }).format(new Date(iso));
 
 export default function Tonight() {
@@ -50,14 +49,6 @@ export default function Tonight() {
     return () => unsub?.();
   }, [fetchRows]);
 
-  const count = (s: string) => rows.filter((r) => r.status === s).length;
-  const counters = [
-    { key: "confirmed", label: "אושרו", cls: "ok" },
-    { key: "pending", label: "ממתינות", cls: "" },
-    { key: "cancelled", label: "בוטלו", cls: "off" },
-    { key: "needs_human", label: "דרוש נציג", cls: "warn" },
-  ];
-
   return (
     <div className="shell">
       <header className="header">
@@ -70,33 +61,42 @@ export default function Tonight() {
         </Link>
       </header>
       <div className="tonight">
-        <div className="counters">
-          {counters.map((c) => (
-            <div key={c.key} className={`counter ${c.cls}`}>
-              <span className="num">{count(c.key)}</span>
-              <span className="lbl">{c.label}</span>
-            </div>
-          ))}
-        </div>
-        <div className="tlist">
-          {rows.map((r) => (
-            <div
-              key={`${r.id}-${r.status}-${r.reserved_for}`}
-              className={"trow" + (r.id === flippedId ? " flip" : "")}
-              data-status={r.status}
-            >
-              <span className="dot" />
-              <span className="tname">{r.customers?.name ?? "—"}</span>
-              <span className="tmeta mono">{fmt(r.reserved_for)}</span>
-              <span className="tparty">{r.party_size} סועדים</span>
-              <span className="pill" data-status={r.status}>
-                {STATUS_HE[r.status] ?? r.status}
-              </span>
-              <span className="tupd">
-                {r.status !== "pending" && r.updated_at ? `עודכן ${fmt(r.updated_at)}` : ""}
-              </span>
-            </div>
-          ))}
+        <div className="cols">
+          {COLUMNS.map((c) => {
+            const colRows = rows
+              .filter((r) => r.status === c.status)
+              .sort((a, b) => a.reserved_for.localeCompare(b.reserved_for));
+            return (
+              <section key={c.status} className={`col ${c.cls}`}>
+                <header className="colHead">
+                  <span className="colDot" />
+                  <span className="colLabel">{c.label}</span>
+                  <span className="colCount">{colRows.length}</span>
+                </header>
+                {colRows.length === 0 && <div className="colEmpty">אין הזמנות</div>}
+                {colRows.map((r) => (
+                  <article
+                    key={`${r.id}-${r.status}-${r.reserved_for}`}
+                    className={"ccard" + (r.id === flippedId ? " flip" : "")}
+                    data-status={r.status}
+                  >
+                    <div className="ccTop">
+                      <span className="ccName">{r.customers?.name ?? "—"}</span>
+                      <span className="ccTime mono">{fmt(r.reserved_for)}</span>
+                    </div>
+                    <div className="ccBottom">
+                      <span>{r.party_size} סועדים</span>
+                      <span className="ccUpd">
+                        {r.status !== "pending" && r.updated_at
+                          ? `עודכן ${fmt(r.updated_at)}`
+                          : ""}
+                      </span>
+                    </div>
+                  </article>
+                ))}
+              </section>
+            );
+          })}
         </div>
       </div>
     </div>

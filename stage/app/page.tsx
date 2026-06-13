@@ -268,7 +268,16 @@ export default function Home() {
             onCall={handleCall}
           />
         </section>
-        <ReservationsStrip rows={rows} calledId={calledId} flippedId={flippedId} />
+        <ReservationsStrip
+          rows={rows}
+          calledId={calledId}
+          flippedId={flippedId}
+          onSelect={(id) => {
+            if (callState !== "idle") return;
+            calledIdRef.current = id;
+            setCalledId(id);
+          }}
+        />
       </div>
     </div>
   );

@@ -41,6 +41,11 @@ python agent/call_and_verify.py --reservation <uuid> --to +972585121998
 (or check the row + `tool_events` in Supabase). The CTA can only dial the two
 allowlisted test numbers — enforced server-side, unit-tested.
 
+**CTA always works:** `stage/.env.local` sets `STAGE_CALL_TARGET=+972585121998`, so
+clicking ANY guest dials the test phone with that guest's dynamic variables (מיקה
+greets the selected guest by name). Pending rows in the strip are clickable to choose
+who "answers". Remove that env line only if you want strict per-reservation dialing.
+
 **Level 3 — n8n batch + stage as observer:** phone +972525898552 rings (n8n allowlist).
 1. Stage + `/tonight` open on the projector.
 2. asher13.app.n8n.cloud → «Maître — Call Today's Pending Reservations» → **Execute

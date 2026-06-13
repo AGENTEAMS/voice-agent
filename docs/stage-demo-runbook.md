@@ -52,7 +52,7 @@ who "answers". Remove that env line only if you want strict per-reservation dial
 
 **Level 3 — n8n batch + stage as observer:** phone +972525898552 rings (n8n allowlist).
 1. Stage + `/tonight` open on the projector.
-2. asher13.app.n8n.cloud → «Maître — Call Today's Pending Reservations» → **Execute
+2. YOUR-N8N-INSTANCE.app.n8n.cloud → «Maître — Call Today's Pending Reservations» → **Execute
    workflow** (manual trigger; the n8n execution view doubles as the orchestration
    visual).
 3. Each batched call streams its tool events to the constellation as it happens;

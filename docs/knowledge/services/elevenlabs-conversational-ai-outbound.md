@@ -6,7 +6,7 @@ with Supabase write-back.
 
 ## Context
 Account: Tomer's ElevenLabs (tier **creator**, active). Twilio: "Agenteams" account
-(SID `ACe1b660bfa3b6de048e4913d809235445`), **upgraded to Full 2026-06-10** ($20) — trial limits
+(SID `AC<redacted>`), **upgraded to Full 2026-06-10** ($20) — trial limits
 (English preamble, verified-destinations-only) GONE. Number **+1 336 729 5695** imported into EL.
 Verified caller ID: **+972585121998** ("Tomer second line", PN56b8079705b695b65f25917c8abaf70f) —
 the old +972525898552 verification was deleted. Test calls go TO +972585121998.

@@ -13,9 +13,9 @@ in-call RPCs. Team: Re'i Biton · Haim Toledano · Tomer Elzam.
 
 ## Orchestration (n8n)
 Batch workflow «Maître — Call Today's Pending Reservations» (`G7RYSw2BQgqnabJt`) on
-asher13.app.n8n.cloud, built/updated via the instance-level n8n MCP (server "n8n" in local
+YOUR-N8N-INSTANCE.app.n8n.cloud, built/updated via the instance-level n8n MCP (server "n8n" in local
 claude config). Triggers: Manual ("Run Batch") + **Webhook** (POST, path `maitre-run`, Respond
-Immediately) → production URL `https://asher13.app.n8n.cloud/webhook/maitre-run`. Hard allowlist
+Immediately) → production URL `https://YOUR-N8N-INSTANCE.app.n8n.cloud/webhook/maitre-run`. Hard allowlist
 in "Build Call Payloads" = **+972585121998 only** (the stage button dials only Tomer; fake-number
 pending rows are skipped/display-only). `update_workflow` WIPES node credentials — so the webhook
 trigger was added BY HAND in the UI (not via MCP); for any structural change, prefer a manual UI

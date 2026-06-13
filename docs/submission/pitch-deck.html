@@ -128,6 +128,18 @@
   .stack .why{color:var(--ink-soft);font-weight:300;line-height:1.35}
   .tradeoff{margin-top:30px;border-inline-start:4px solid var(--ember);padding:8px 20px;
     font-size:clamp(16px,1.7vw,22px);font-weight:300;color:var(--ink)}
+  /* stack runs to 8 rows now - tighten so nothing clips */
+  #s3 .kicker{margin-bottom:18px}
+  #s3 .stack td{padding:11px 0}
+
+  /* ---------- tools slide ---------- */
+  #stools .kicker{margin-bottom:22px}
+  .tools{width:100%;border-collapse:collapse;font-size:clamp(13px,1.4vw,18px)}
+  .tools tr{border-bottom:1px solid var(--line)}
+  .tools td{padding:13px 0;vertical-align:baseline}
+  .tools .t{font-weight:700;color:var(--ember);width:26%;padding-inline-end:18px;line-height:1.25}
+  .tools .d{color:var(--ink);font-weight:400;width:40%;padding-inline-end:18px;line-height:1.35}
+  .tools .w{color:var(--ink-soft);font-weight:300;width:34%;line-height:1.35}
 
   /* struggles */
   .strikes{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:42px}
@@ -230,16 +242,33 @@
     <div class="eyebrow r">מה בנינו - והבחירות שמאחורי זה</div>
     <h2 class="kicker r" style="margin-bottom:24px">הסטאק הטכנולוגי</h2>
     <table class="stack r">
-      <tr><td class="comp">קול · טלפון · ASR · TTS</td><td class="pick"><b>ElevenLabs</b></td><td class="why">הפלטפורמה היחידה עם TTS שיחתי בעברית ברמת ייצור</td></tr>
+      <tr><td class="comp">קול · טלפון · זיהוי דיבור · הקראה</td><td class="pick"><b>ElevenLabs</b></td><td class="why">הפלטפורמה היחידה עם דיבור שיחתי בעברית ברמת ייצור</td></tr>
       <tr><td class="comp">מודל בשיחה</td><td class="pick"><b>GPT-4o</b></td><td class="why">הקטן ביותר שבאמת קורא לכלים - gemini-flash השתתק, 4o-mini זייף</td></tr>
       <tr><td class="comp">טלפוניה</td><td class="pick"><b>Twilio</b></td><td class="why">PSTN אמין לישראל, נתיב מספר מזהה מאומת</td></tr>
       <tr><td class="comp">נתונים + כלים</td><td class="pick"><b>Supabase</b></td><td class="why">מקור אמת; הכלים הם RPC - הלוגיקה ב-SQL, לא בפרומפט</td></tr>
       <tr><td class="comp">אורקסטרציה</td><td class="pick"><b>n8n</b></td><td class="why">פייפליין batch מבוקר + רשת הביטחון הדטרמיניסטית</td></tr>
       <tr><td class="comp">דשבורד</td><td class="pick"><b>Next.js</b></td><td class="why">מעקב חי אחרי כלים וכתיבות ל-DB בזמן אמת</td></tr>
+      <tr><td class="comp">אירוח · פריסה</td><td class="pick"><b>Vercel</b></td><td class="why">הדשבורד פרוס בענן עם כתובת ייעודית - לחיצה מריצה את n8n</td></tr>
+      <tr><td class="comp">קוד · גרסאות</td><td class="pick"><b>GitHub</b></td><td class="why">כל המערכת בקוד, עם פריסה אוטומטית מ-main</td></tr>
     </table>
   </section>
 
-  <!-- 4 - STRUGGLES -->
+  <!-- 4 - HER TOOLS -->
+  <section class="slide" id="stools">
+    <div class="eyebrow r">מה היא יכולה לעשות</div>
+    <h2 class="kicker r">הכלים של מיקה</h2>
+    <table class="tools r">
+      <tr><td class="t">אישור או ביטול</td><td class="d">מעדכנת את ההזמנה במערכת - מגיע, מבטל, או "לא ברור ← נציג"</td><td class="w">אחרי שחזרה על הפרטים והאורח ענה</td></tr>
+      <tr><td class="t">בדיקת זמינות + שינוי הזמנה</td><td class="d">בודקת מה פנוי ומשנה שעה או מספר סועדים</td><td class="w">כשמבקשים לשנות - ומתמקחת אם תפוס</td></tr>
+      <tr><td class="t">תיאום שיחה חוזרת</td><td class="d">קובעת מועד עתידי - והמערכת מתקשרת שוב לבד</td><td class="w">כשהאורח לא יכול לדבר עכשיו</td></tr>
+      <tr><td class="t">העברה לנציג אנושי</td><td class="d">מעבירה את השיחה לאדם אמיתי על הקו</td><td class="w">כשמבקשים לדבר עם נציג</td></tr>
+      <tr><td class="t">מענה על שאלות</td><td class="d">שעות פתיחה · חניה · מדיניות ביטול · אפשרויות צמחוניות</td><td class="w">כשהאורח שואל באמצע השיחה</td></tr>
+      <tr><td class="t">סיום שיחה</td><td class="d">נפרדת בנימוס ומנתקת - בלי קו פתוח שנשאר תלוי</td><td class="w">בסוף כל מסלול, אחרי משפט הסיום</td></tr>
+    </table>
+    <p class="foot-note r">בדמו החי תראו כמה מאלה בפעולה - שינוי הזמנה, שאלה על חניה, וביטול - בשיחה אחת.</p>
+  </section>
+
+  <!-- 5 - STRUGGLES -->
   <section class="slide" id="s4">
     <div class="eyebrow r">החלק הכי מעניין</div>
     <h2 class="kicker r" style="margin-bottom:30px">שלושה כשלים שלימדו אותנו הכי הרבה</h2>
@@ -275,7 +304,7 @@
 </div>
 
 <div class="chrome bot">
-  <span class="pageno"><span id="cur">1</span> / 5</span>
+  <span class="pageno"><span id="cur">1</span> / 6</span>
   <span class="rule"></span>
   <span>רעי · חיים · תומר</span>
 </div>

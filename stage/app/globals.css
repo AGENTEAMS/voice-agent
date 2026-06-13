@@ -32,7 +32,7 @@ code, .mono { font-family: var(--font-mono), ui-monospace, monospace; direction:
 button { font-family: inherit; }
 
 /* ── Layout ─────────────────────────────────────────────────────────────── */
-.shell { display: grid; grid-template-rows: 64px 1fr; height: 100vh; }
+.shell { display: grid; grid-template-rows: 64px 1fr; height: 100vh; position: relative; z-index: 1; }
 .header {
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 28px; border-bottom: 1px solid var(--border);
@@ -127,7 +127,10 @@ button { font-family: inherit; }
   background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
   color: var(--text-dim);
   box-shadow: 0 2px 10px rgba(42, 39, 34, 0.05);
+  transform: translate(var(--x), var(--y));
 }
+.nodeInner { display: block; }
+.ring { position: absolute; left: 0; top: 0; }
 .node .icon { display: block; font-size: 16px; margin-bottom: 2px; }
 .node .name { font-size: 13px; font-weight: 500; }
 .node .icons { display: flex; gap: 7px; align-items: center; justify-content: center; margin-bottom: 3px; height: 18px; }
@@ -275,128 +278,224 @@ button { font-family: inherit; }
 .ssItem.active { background: var(--amber-faint); color: var(--amber); font-weight: 600; }
 .ssNum { display: inline-block; width: 16px; color: var(--text-faint); font-family: var(--font-mono); }
 
-/* ═══ V1 פשתן+ — refined linen: grain + warm vignette ═══ */
-body[data-style="v1"] {
-  background:
-    radial-gradient(900px 600px at 42% 40%, rgba(255, 251, 240, 0.9), transparent 70%),
-    radial-gradient(rgba(42, 39, 34, 0.028) 1px, transparent 1px), var(--bg);
-  background-size: auto, 26px 26px, auto;
-}
-body[data-style="v1"] .strip { background: rgba(255, 253, 248, 0.55); }
+/* ═══════════ SCENE LAYER ═══════════ */
+.scenefx { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 
-/* ═══ V2 כרטיסיות — ticket stubs ═══ */
-body[data-style="v2"] {
-  background:
-    repeating-linear-gradient(45deg, transparent 0 16px, rgba(42, 39, 34, 0.016) 16px 17px), var(--bg);
+/* ═══ S1 גלי קול — sonar rings breathe out of מיקה ═══ */
+body[data-style="s1"] {
+  background: radial-gradient(900px 620px at 42% 40%, rgba(255, 251, 240, 0.85), transparent 70%), var(--bg);
 }
-body[data-style="v2"] .row {
-  background: var(--surface); border-color: var(--border); border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(42, 39, 34, 0.05); padding: 9px 12px;
+body[data-style="s1"] .center::before,
+body[data-style="s1"] .center::after {
+  content: ""; position: absolute; left: -80px; top: -80px; width: 160px; height: 160px;
+  border-radius: 50%; border: 1.5px solid rgba(199, 126, 31, 0.35); z-index: 0;
+  animation: sonar 7s linear infinite;
 }
-body[data-style="v2"] .row .time {
-  border-inline-start: 1px dashed var(--border); padding-inline-start: 12px;
-  font-size: 14.5px; color: var(--text); align-self: stretch; display: flex; align-items: center;
+body[data-style="s1"] .center::after { animation-delay: 3.5s; }
+body[data-call-state="live"][data-style="s1"] .center::before,
+body[data-call-state="live"][data-style="s1"] .center::after { animation-duration: 3.5s; }
+@keyframes sonar {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(3.4); opacity: 0; }
 }
-body[data-style="v2"] .avatar { border-radius: 8px; }
+body[data-style="s1"] .row { background: rgba(255, 253, 248, 0.6); border-color: var(--border); }
 
-/* ═══ V3 פנקס המארחת — maître's ledger, serif + ruling ═══ */
-body[data-style="v3"] { --bg: #f7f1e3; --surface: #fffaf0; --border: #e3d6bb; }
-body[data-style="v3"] .brand .restaurant,
-body[data-style="v3"] .row .name,
-body[data-style="v3"] .strip h2 { font-family: var(--font-serif); }
-body[data-style="v3"] .brand .restaurant { font-size: 26px; }
-body[data-style="v3"] .strip {
-  background:
-    repeating-linear-gradient(0deg, transparent 0 35px, rgba(167, 139, 90, 0.18) 35px 36px);
+/* ═══ S2 שמיים של לילה — the constellation becomes literal ═══ */
+body[data-style="s2"] {
+  --bg: #0e1118; --surface: #171b26; --border: #262c3d;
+  --text: #e9e8e1; --text-dim: #969cb0; --text-faint: #5d6375;
+  --orb-hi: #2a3044; --orb-lo: #131722; --orb-border: #3a4156;
+  --node-flare-text: #ffe9c4; --wire-tail: rgba(255, 255, 255, 0.07);
+  --red-dim: #7d5560; --amber-faint: rgba(232, 163, 61, 0.1);
+  background: linear-gradient(180deg, #0c0f17, #12141f 60%, #171727);
 }
-body[data-style="v3"] .row { border-radius: 0; border-bottom: none; margin-bottom: 0; min-height: 36px; padding: 2px 6px; }
-body[data-style="v3"] .avatar { display: none; }
-body[data-style="v3"] .row .name { font-size: 15px; font-weight: 500; }
-body[data-style="v3"] .row .party { font-size: 11px; }
-body[data-style="v3"] .row .time { font-size: 14px; color: var(--text); }
-body[data-style="v3"] .row.called { background: var(--amber-faint); border: none; outline: 1px solid var(--amber-soft); }
+body[data-style="s2"] .stars i {
+  position: absolute; border-radius: 50%; background: #fff; opacity: 0.22;
+  animation: twinkle 4.5s ease-in-out infinite;
+}
+@keyframes twinkle { 0%, 100% { opacity: 0.1; } 50% { opacity: 0.55; } }
+body[data-style="s2"] .shooting {
+  position: absolute; top: 16%; left: -12%; width: 130px; height: 1.5px;
+  background: linear-gradient(90deg, transparent, #fff, transparent);
+  transform: rotate(9deg); opacity: 0; animation: shoot 13s ease-in 4s infinite;
+}
+@keyframes shoot {
+  0% { transform: translate(0, 0) rotate(9deg); opacity: 0; }
+  2% { opacity: 0.85; }
+  7% { transform: translate(70vw, 11vw) rotate(9deg); opacity: 0; }
+  100% { transform: translate(70vw, 11vw) rotate(9deg); opacity: 0; }
+}
+body[data-style="s2"] .wire { background: linear-gradient(90deg, rgba(232, 163, 61, 0.3), rgba(255, 255, 255, 0.1)); }
+body[data-style="s2"] .node { box-shadow: 0 0 24px rgba(0, 0, 0, 0.45); }
+body[data-style="s2"] .row { background: var(--surface); border-color: var(--border); }
 
-/* ═══ V4 אור נרות — candlelight espresso ═══ */
-body[data-style="v4"] {
-  --bg: #191512; --surface: #221d18; --border: #3a3027;
-  --text: #ede4d6; --text-dim: #a3947f; --text-faint: #6b5f50;
-  --orb-hi: #332b22; --orb-lo: #1c1712; --orb-border: #4a3d2e;
-  --node-flare-text: #ecd9b3; --wire-tail: rgba(255, 255, 255, 0.05);
+/* ═══ S3 מפת המסעדה — tables of the house behind the agent ═══ */
+body[data-style="s3"] { --bg: #f6f0e2; --surface: #fffaf0; --border: #e2d5b8; }
+body[data-style="s3"] .floorplan .table {
+  position: absolute; border: 1.5px solid rgba(96, 74, 40, 0.16); border-radius: 50%;
+}
+body[data-style="s3"] .floorplan .table::before,
+body[data-style="s3"] .floorplan .table::after {
+  content: ""; position: absolute; width: 9px; height: 9px; border-radius: 50%;
+  border: 1.2px solid rgba(96, 74, 40, 0.14); left: 50%; margin-left: -4.5px;
+}
+body[data-style="s3"] .floorplan .table::before { top: -14px; }
+body[data-style="s3"] .floorplan .table::after { bottom: -14px; }
+body[data-style="s3"] .brand .restaurant, body[data-style="s3"] .row .name { font-family: var(--font-serif); }
+body[data-style="s3"] .row { background: var(--surface); border-color: var(--border); box-shadow: 0 2px 8px rgba(96, 74, 40, 0.06); }
+body[data-style="s3"] .row .time { border-inline-start: 1px dashed var(--border); padding-inline-start: 12px; align-self: stretch; display: flex; align-items: center; }
+
+/* ═══ S4 קצב הלילה — equalizer skyline + perspective floor ═══ */
+body[data-style="s4"] {
+  --bg: #14110d; --surface: #1e1913; --border: #38302a;
+  --text: #ece4d4; --text-dim: #a3947f; --text-faint: #6b5f50;
+  --orb-hi: #322a20; --orb-lo: #1a1510; --orb-border: #4a3d2e;
+  --node-flare-text: #ffe2a8; --wire-tail: rgba(255, 255, 255, 0.05);
   --red-dim: #8a5a52; --amber-faint: rgba(232, 163, 61, 0.1);
-  background:
-    radial-gradient(1000px 700px at 42% 38%, rgba(232, 163, 61, 0.07), transparent 70%), #191512;
+  background: radial-gradient(900px 500px at 50% 30%, rgba(232, 163, 61, 0.06), transparent 70%), #14110d;
 }
-body[data-style="v4"] .node, body[data-style="v4"] .counter, body[data-style="v4"] .ccard,
-body[data-style="v4"] .colHead { box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3); }
-body[data-style="v4"] .row { background: var(--surface); border-color: var(--border); }
-body[data-style="v4"] .row.called { border-color: rgba(232, 163, 61, 0.5); background: rgba(232, 163, 61, 0.08); }
+body[data-style="s4"] .scenefx::before {
+  content: ""; position: absolute; left: -20%; right: -20%; bottom: 0; height: 38%;
+  background:
+    repeating-linear-gradient(90deg, rgba(232, 163, 61, 0.07) 0 1px, transparent 1px 90px),
+    repeating-linear-gradient(0deg, rgba(232, 163, 61, 0.06) 0 1px, transparent 1px 42px);
+  transform: perspective(420px) rotateX(58deg); transform-origin: bottom;
+  mask-image: linear-gradient(180deg, transparent, #000 55%);
+}
+.eqcity {
+  position: absolute; left: 0; right: 0; bottom: -2px; display: flex; align-items: flex-end;
+  gap: 4px; padding: 0 8px; opacity: 0.5;
+}
+.eqcity i {
+  flex: 1; background: linear-gradient(180deg, rgba(232, 163, 61, 0.8), transparent);
+  border-radius: 2px 2px 0 0; transform-origin: bottom;
+  animation: cityeq 3.4s ease-in-out infinite;
+}
+@keyframes cityeq { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
+body[data-call-state="live"] .eqcity i { animation-duration: 1.05s; }
+body[data-call-state="live"] .eqcity { opacity: 0.75; }
+body[data-style="s4"] .row { background: var(--surface); border-color: var(--border); border-inline-start: 2px solid rgba(232, 163, 61, 0.35); }
 
-/* ═══ V5 טראצו — sparse terrazzo dots, pill rows ═══ */
-body[data-style="v5"] {
-  --bg: #f6f1e7;
-  background:
-    radial-gradient(3px 3px at 31px 47px, rgba(199, 126, 31, 0.2), transparent 4px),
-    radial-gradient(2.5px 2.5px at 127px 163px, rgba(62, 142, 90, 0.16), transparent 4px),
-    radial-gradient(2px 2px at 191px 83px, rgba(42, 39, 34, 0.12), transparent 3px),
-    radial-gradient(3px 3px at 83px 211px, rgba(185, 132, 125, 0.18), transparent 4px),
-    #f6f1e7;
-  background-size: 240px 240px;
+/* ═══ S5 אור בוקר — sunlight through the window ═══ */
+body[data-style="s5"] { --bg: #faf6ec; --surface: #ffffff; --border: #e9e1cf; }
+.sunpatch {
+  position: absolute; width: 58vw; height: 58vw; border-radius: 50%;
+  background: radial-gradient(rgba(255, 203, 110, 0.22), transparent 64%);
+  filter: blur(28px); animation: drift 28s ease-in-out infinite alternate;
 }
-body[data-style="v5"] .row { background: var(--surface); border-color: var(--border); border-radius: 99px; padding: 6px 9px; }
-body[data-style="v5"] .row .time { background: var(--bg); border-radius: 99px; padding: 3px 10px; font-size: 12.5px; }
-body[data-style="v5"] .node { border-radius: 18px; }
+.sunpatch.a { top: -18vw; inset-inline-end: -12vw; }
+.sunpatch.b { bottom: -22vw; inset-inline-start: -16vw; animation-delay: -14s; }
+@keyframes drift { to { transform: translate(-5vw, 4vh) scale(1.12); } }
+.leaf {
+  position: absolute; width: 34vw; height: 20vw;
+  background: radial-gradient(ellipse, rgba(98, 122, 76, 0.1), transparent 68%);
+  filter: blur(16px); transform-origin: top center;
+  animation: sway 13s ease-in-out infinite alternate;
+}
+.leaf.a { top: 4%; inset-inline-end: 6%; }
+.leaf.b { bottom: 10%; inset-inline-start: 4%; animation-delay: -6s; }
+@keyframes sway { from { transform: rotate(-3deg); } to { transform: rotate(3.5deg); } }
+body[data-style="s5"] .row { background: #fff; border-color: var(--border); border-radius: 14px; box-shadow: 0 3px 14px rgba(110, 90, 50, 0.06); }
 
-/* ═══ V6 ביסטרו — bold poster, awning stripe ═══ */
-body[data-style="v6"] .header {
-  border-bottom: none;
-  box-shadow: 0 1px 0 var(--border), inset 0 -6px 0 -2px transparent;
-  background:
-    linear-gradient(var(--bg), var(--bg)) padding-box,
-    repeating-linear-gradient(90deg, var(--amber) 0 22px, transparent 22px 44px) border-box;
-  border-block-end: 5px solid transparent;
+/* ═══ S6 אורורה חמה — slow drifting color weather ═══ */
+body[data-style="s6"] { --bg: #f6f2e9; background: #f6f2e9; }
+.aurora {
+  position: absolute; width: 62vw; height: 58vh; border-radius: 46%;
+  filter: blur(64px); opacity: 0.55; animation: blob 26s ease-in-out infinite alternate;
 }
-body[data-style="v6"] .brand .restaurant { font-family: var(--font-serif); font-size: 27px; font-weight: 700; }
-body[data-style="v6"] .row { border-radius: 8px; padding: 10px 12px; }
-body[data-style="v6"] .row:nth-child(even) { background: var(--surface); }
-body[data-style="v6"] .row .name { font-family: var(--font-serif); font-size: 15.5px; }
-body[data-style="v6"] .row .time { font-size: 16.5px; font-weight: 700; color: var(--text); font-family: var(--font-serif); }
-body[data-style="v6"] .avatar { display: none; }
-
-/* ═══ V7 זכוכית חמה — warm glass, floating frosted rows ═══ */
-body[data-style="v7"] {
-  background:
-    radial-gradient(800px 500px at 80% 8%, rgba(199, 126, 31, 0.12), transparent 65%),
-    radial-gradient(700px 500px at 12% 92%, rgba(62, 142, 90, 0.07), transparent 65%),
-    linear-gradient(165deg, #f6f2ea, #efe9dd);
-}
-body[data-style="v7"] .strip { border-inline-start-color: rgba(255, 255, 255, 0.7); }
-body[data-style="v7"] .row {
+.aurora.a { background: rgba(232, 163, 61, 0.18); top: -12%; inset-inline-start: -8%; }
+.aurora.b { background: rgba(214, 134, 110, 0.13); top: 22%; inset-inline-end: -14%; animation-delay: -9s; }
+.aurora.c { background: rgba(95, 191, 119, 0.1); bottom: -16%; inset-inline-start: 22%; animation-delay: -18s; }
+@keyframes blob { to { transform: translate(7vw, 5vh) scale(1.2) rotate(8deg); } }
+body[data-style="s6"] .row {
   background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(10px);
-  border-color: rgba(255, 255, 255, 0.75); box-shadow: 0 4px 18px rgba(42, 39, 34, 0.06);
+  border-color: rgba(255, 255, 255, 0.8); box-shadow: 0 4px 18px rgba(42, 39, 34, 0.05);
 }
-body[data-style="v7"] .node {
-  background: rgba(255, 253, 248, 0.6); backdrop-filter: blur(8px);
-  border-color: rgba(255, 255, 255, 0.8);
-}
-body[data-style="v7"] .cta { box-shadow: 0 8px 28px rgba(199, 126, 31, 0.3); }
+body[data-style="s6"] .node { background: rgba(255, 253, 248, 0.65); backdrop-filter: blur(8px); border-color: rgba(255, 255, 255, 0.85); }
 
-/* ═══ V8 קו דק — hairline minimal, concentric echo ═══ */
-body[data-style="v8"] {
+/* ═══ S7 קווי תנועה — ink journeys flowing to the restaurant ═══ */
+body[data-style="s7"] { --bg: #f7f2e6; --surface: #fffaf0; --border: #e3d8c0; }
+.flows { position: absolute; inset: 0; width: 100%; height: 100%; }
+.flows path {
+  fill: none; stroke: rgba(140, 108, 58, 0.16); stroke-width: 1.6;
+  stroke-dasharray: 7 11; animation: flowdash 26s linear infinite;
+}
+.flows path:nth-child(2) { animation-duration: 34s; animation-direction: reverse; }
+.flows path:nth-child(3) { animation-duration: 44s; }
+@keyframes flowdash { to { stroke-dashoffset: -340; } }
+body[data-style="s7"] .brand .restaurant, body[data-style="s7"] .row .name { font-family: var(--font-serif); }
+body[data-style="s7"] .row { border-bottom: 1px solid var(--border); border-radius: 0; margin-bottom: 0; padding: 10px 6px; }
+body[data-style="s7"] .avatar { background: transparent; border-style: dashed; }
+
+/* ═══ S8 במה ואור — spotlight, dust, the show ═══ */
+body[data-style="s8"] {
+  --bg: #16120e; --surface: #201a14; --border: #3b322a;
+  --text: #efe6d8; --text-dim: #a89880; --text-faint: #6e6253;
+  --orb-hi: #34291d; --orb-lo: #1a1510; --orb-border: #54442f;
+  --node-flare-text: #ffe2a8; --wire-tail: rgba(255, 255, 255, 0.05);
+  --red-dim: #8a5a52; --amber-faint: rgba(232, 163, 61, 0.12);
+  background: radial-gradient(1200px 800px at 50% 110%, rgba(60, 40, 20, 0.5), transparent 60%), #16120e;
+}
+body[data-style="s8"] .stageCol::before {
+  content: ""; position: absolute; top: -10%; left: 50%; transform: translateX(-50%);
+  width: 560px; height: 80%; pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 214, 140, 0.17), transparent 82%);
+  clip-path: polygon(40% 0, 60% 0, 100% 100%, 0 100%); filter: blur(12px);
+}
+.motes i {
+  position: absolute; bottom: 26%; width: 3px; height: 3px; border-radius: 50%;
+  background: rgba(255, 222, 160, 0.55); animation: rise linear infinite;
+}
+@keyframes rise {
+  0% { transform: translateY(38vh) translateX(0); opacity: 0; }
+  18% { opacity: 0.75; }
+  60% { opacity: 0.35; }
+  100% { transform: translateY(-14vh) translateX(2vw); opacity: 0; }
+}
+body[data-style="s8"] .row { background: var(--surface); border-color: var(--border); }
+body[data-style="s8"] .row.called { border-color: rgba(232, 163, 61, 0.55); }
+
+/* ═══ S9 מסלולים — the tools orbit her, slowly, forever ═══ */
+body[data-style="s9"] {
+  background: radial-gradient(860px 600px at 42% 42%, rgba(255, 252, 243, 0.9), transparent 72%), var(--bg);
+}
+body[data-style="s9"] .center::before,
+body[data-style="s9"] .center::after {
+  content: ""; position: absolute; border-radius: 50%; border: 1px dashed rgba(110, 90, 55, 0.18);
+  z-index: 0;
+}
+body[data-style="s9"] .center::before { width: 504px; height: 504px; left: -252px; top: -252px; }
+body[data-style="s9"] .center::after { width: 360px; height: 360px; left: -180px; top: -180px; border-style: solid; border-color: rgba(110, 90, 55, 0.08); }
+body[data-style="s9"] .ring { animation: orbit 240s linear infinite; }
+body[data-style="s9"] .nodeInner { animation: orbitBack 240s linear infinite; }
+@keyframes orbit { to { transform: rotate(360deg); } }
+@keyframes orbitBack { to { transform: rotate(-360deg); } }
+body[data-style="s9"] .row { border-bottom: 1px solid var(--border); border-radius: 0; margin-bottom: 0; }
+body[data-style="s9"] .avatar { display: none; }
+
+/* ═══ S10 שרטוט — the architect's drawing of tonight ═══ */
+body[data-style="s10"] {
+  --bg: #f3ecdc; --surface: transparent; --border: rgba(96, 70, 32, 0.35);
+  --text: #4a3a22; --text-dim: #7d6a4c; --text-faint: #a8967a;
   background:
-    repeating-radial-gradient(circle at 41% 42%, rgba(42, 39, 34, 0.022) 0 1px, transparent 1px 110px),
-    var(--bg);
+    repeating-linear-gradient(90deg, rgba(120, 92, 50, 0.07) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(0deg, rgba(120, 92, 50, 0.07) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(90deg, rgba(120, 92, 50, 0.12) 0 1px, transparent 1px 140px),
+    repeating-linear-gradient(0deg, rgba(120, 92, 50, 0.12) 0 1px, transparent 1px 140px),
+    #f3ecdc;
 }
-body[data-style="v8"] .row {
-  border-radius: 0; border-bottom: 1px solid var(--border); margin-bottom: 0; padding: 10px 4px;
+body[data-style="s10"] .node {
+  background: rgba(243, 236, 220, 0.88); border: 1.3px solid rgba(96, 70, 32, 0.5);
+  border-radius: 4px; box-shadow: none;
 }
-body[data-style="v8"] .avatar { display: none; }
-body[data-style="v8"] .row .party {
-  order: 2; font-size: 11px; border: 1px solid var(--border); border-radius: 99px;
-  padding: 1px 8px; align-self: flex-start;
+body[data-style="s10"] .wire {
+  background: repeating-linear-gradient(90deg, rgba(96, 70, 32, 0.4) 0 6px, transparent 6px 12px);
 }
-body[data-style="v8"] .strip h2 { letter-spacing: 0.12em; text-transform: none; font-size: 12px; }
-body[data-style="v8"] .node { background: transparent; box-shadow: none; }
-body[data-style="v8"] .cta {
-  background: transparent; color: var(--amber); border: 1.5px solid var(--amber);
+body[data-style="s10"] .orb { border: 1.3px solid rgba(96, 70, 32, 0.5); background: rgba(243, 236, 220, 0.92); }
+body[data-style="s10"] .row { border: 1px solid var(--border); border-radius: 4px; background: rgba(243, 236, 220, 0.8); }
+body[data-style="s10"] .row .time, body[data-style="s10"] .clock { font-family: var(--font-mono); }
+body[data-style="s10"] .cta {
+  background: transparent; border: 1.6px solid rgba(96, 70, 32, 0.6); color: #4a3a22; border-radius: 6px;
 }
-body[data-style="v8"] .cta:hover:not(:disabled) { background: var(--amber-faint); box-shadow: none; }
+body[data-style="s10"] .cta:hover:not(:disabled) { background: rgba(96, 70, 32, 0.08); box-shadow: none; }
+body[data-style="s10"] .avatar { border-radius: 4px; background: transparent; }

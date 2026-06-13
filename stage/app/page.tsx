@@ -47,6 +47,11 @@ export default function Home() {
     [engine]
   );
 
+  // expose call state to scene layers (state-reactive backgrounds)
+  useEffect(() => {
+    document.body.dataset.callState = callState;
+  }, [callState]);
+
   // rAF tick loop drives queued pulses
   useEffect(() => {
     let raf = 0;

@@ -25,6 +25,7 @@ export default function Home() {
   const convIdRef = useRef<string | null>(null);
   const transferredSeen = useRef(false);
   const pulseCounter = useRef(0);
+  const dialTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // ── engine (stable instance; onFire animates via state setters) ──────────
   const engineRef = useRef<ReturnType<typeof createEngine> | null>(null);
@@ -110,7 +111,11 @@ export default function Home() {
             setCalledId(reservationId);
           }
           if (!convIdRef.current) {
-            if (engine.state() === "idle") applyCall("live");
+            if (dialTimeout.current) {
+              clearTimeout(dialTimeout.current);
+              dialTimeout.current = null;
+            }
+            if (engine.state() === "idle" || engine.state() === "dialing") applyCall("live");
             if (autoLiveDecay.current) clearTimeout(autoLiveDecay.current);
             autoLiveDecay.current = setTimeout(() => {
               if (!convIdRef.current && engine.state() === "live") {
@@ -167,6 +172,10 @@ export default function Home() {
   // resolved → settle back to idle
   useEffect(() => {
     if (callState !== "resolved") return;
+    if (dialTimeout.current) {
+      clearTimeout(dialTimeout.current);
+      dialTimeout.current = null;
+    }
     const t = setTimeout(() => {
       applyCall("idle");
       setCaption("");
@@ -219,33 +228,32 @@ export default function Home() {
     }
   }, [rows]);
 
-  // ── click-to-call ─────────────────────────────────────────────────────────
+  // ── click-to-run: reset to clean slate, then fire the n8n batch (calls only Tomer) ──
   const handleCall = useCallback(async () => {
-    const target = rows.find((r) => r.id === calledIdRef.current) ??
-      rows.find((r) => r.status === "pending");
-    if (!target) return;
-    calledIdRef.current = target.id;
-    setCalledId(target.id);
-    setCaption(`מחייגת אל ${target.customers?.name ?? "האורח"}…`);
+    setCaption("מאפסת את הלוח ומחייגת…");
     applyCall("dialing");
-    try {
-      const r = await fetch("/api/call", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reservation_id: target.id }),
-      });
-      const body = await r.json();
-      if (!r.ok) {
+    // Safety: if no tool event arrives (e.g. no answer) within 35s, settle back to idle.
+    if (dialTimeout.current) clearTimeout(dialTimeout.current);
+    dialTimeout.current = setTimeout(() => {
+      if (engine.state() === "dialing") {
         applyCall("idle");
-        setCaption(r.status === 403 ? "המספר אינו ברשימת מספרי הבדיקה" : "החיוג נכשל");
-        return;
+        setCaption("");
       }
-      convIdRef.current = body.conversation_id;
+    }, 35000);
+    try {
+      const r = await fetch("/api/run", { method: "POST" });
+      if (!r.ok) {
+        if (dialTimeout.current) clearTimeout(dialTimeout.current);
+        applyCall("idle");
+        setCaption("ההפעלה נכשלה");
+      }
+      // success: n8n places the call; the board lights from Supabase Realtime.
     } catch {
+      if (dialTimeout.current) clearTimeout(dialTimeout.current);
       applyCall("idle");
-      setCaption("החיוג נכשל");
+      setCaption("ההפעלה נכשלה");
     }
-  }, [rows, applyCall]);
+  }, [applyCall, engine]);
 
   return (
     <div className="shell">
@@ -267,11 +275,7 @@ export default function Home() {
           <div className="caption" key={caption}>
             {caption || " "}
           </div>
-          <CallButton
-            state={callState}
-            disabled={!rows.some((r) => r.status === "pending")}
-            onCall={handleCall}
-          />
+          <CallButton state={callState} disabled={false} onCall={handleCall} />
         </section>
         <ReservationsStrip
           rows={rows}

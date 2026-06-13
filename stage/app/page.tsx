@@ -33,7 +33,7 @@ export default function Home() {
       const id = ++pulseCounter.current;
       setFlares((f) => ({ ...f, [p.node]: { id, writes: p.writes } }));
       if (p.writes) {
-        setTimeout(() => setDbPulse({ id }), 550);
+        setTimeout(() => setDbPulse({ id }), 1100);
       }
     });
   }

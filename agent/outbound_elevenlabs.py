@@ -101,7 +101,8 @@ def reservation_context(reservation_id: str) -> dict:
     local_dt = datetime.fromisoformat(row["reserved_for"]).astimezone(TZ)
     now = datetime.now(TZ)
     return {
-        "customer_name": cust.get("name", "אורח"),
+        # first name only — a hostess never reads the full name off a list
+        "customer_name": (cust.get("name") or "אורח").split()[0],
         "reservation_time": local_dt.strftime("%H:%M"),
         "reservation_time_spoken": spoken_time_he(local_dt),
         "party_size": str(row["party_size"]),

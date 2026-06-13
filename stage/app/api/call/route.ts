@@ -48,8 +48,11 @@ export async function POST(req: Request) {
 
   const res = tzParts(new Date(row.reserved_for));
   const now = tzParts(new Date());
+  // Demo override: when redirecting to the test phone, greet the test person.
+  // Always first name only — a hostess never reads the full name off a list.
+  const fullName = (ENV.STAGE_CALL_TARGET && ENV.STAGE_CALL_NAME) || row.customers?.name || "אורח";
   const dyn = {
-    customer_name: row.customers?.name ?? "אורח",
+    customer_name: fullName.trim().split(/\s+/)[0],
     reservation_time: res.hhmm,
     reservation_time_spoken: spokenTimeHe(res.hour, res.minute),
     party_size: String(row.party_size),

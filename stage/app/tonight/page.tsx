@@ -5,6 +5,14 @@ import Link from "next/link";
 import type { ReservationRow } from "@/components/ReservationsStrip";
 
 type Row = ReservationRow & { updated_at?: string };
+type Callback = {
+  id: string;
+  kind: "callback" | "retry";
+  status: string;
+  scheduled_for: string;
+  reason: string | null;
+  reservations: { id: string; customers: { name: string } | null } | null;
+};
 
 const COLUMNS: Array<{ status: string; label: string; cls: string }> = [
   { status: "confirmed", label: "אושרו", cls: "ok" },
@@ -12,6 +20,14 @@ const COLUMNS: Array<{ status: string; label: string; cls: string }> = [
   { status: "needs_human", label: "דרוש נציג", cls: "warn" },
   { status: "cancelled", label: "בוטלו", cls: "off" },
 ];
+
+const CB_STATUS_HE: Record<string, string> = {
+  pending: "ממתינה",
+  in_progress: "מתבצעת",
+  done: "בוצעה",
+  cancelled: "בוטלה",
+  failed: "נכשלה",
+};
 
 const fmt = (iso: string) =>
   new Intl.DateTimeFormat("he-IL", {
@@ -22,32 +38,38 @@ const fmt = (iso: string) =>
 
 export default function Tonight() {
   const [rows, setRows] = useState<Row[]>([]);
+  const [callbacks, setCallbacks] = useState<Callback[]>([]);
+  const [changedIds, setChangedIds] = useState<Set<string>>(new Set());
   const [flippedId, setFlippedId] = useState<string | null>(null);
 
-  const fetchRows = useCallback(async () => {
+  const fetchAll = useCallback(async () => {
     try {
-      const r = await fetch("/api/reservations", { cache: "no-store" });
+      const r = await fetch("/api/tonight", { cache: "no-store" });
       const data = await r.json();
-      if (Array.isArray(data)) setRows(data);
+      if (Array.isArray(data.reservations)) setRows(data.reservations);
+      if (Array.isArray(data.callbacks)) setCallbacks(data.callbacks);
+      if (Array.isArray(data.changedIds)) setChangedIds(new Set(data.changedIds));
     } catch {
-      /* keep current rows */
+      /* keep current data */
     }
   }, []);
 
   useEffect(() => {
-    fetchRows();
+    fetchAll();
     let unsub: (() => void) | undefined;
     import("@/lib/supabase").then(({ subscribeStage }) => {
       unsub = subscribeStage({
-        onToolEvent: () => {},
+        onToolEvent: (tool) => {
+          if (tool === "change_reservation" || tool === "schedule_call") fetchAll();
+        },
         onReservationChange: (row) => {
           setFlippedId(row.id);
-          fetchRows();
+          fetchAll();
         },
       });
     });
     return () => unsub?.();
-  }, [fetchRows]);
+  }, [fetchAll]);
 
   return (
     <div className="shell">
@@ -92,11 +114,36 @@ export default function Tonight() {
                           : ""}
                       </span>
                     </div>
+                    {changedIds.has(r.id) && <span className="badge">השעה שונתה בשיחה</span>}
                   </article>
                 ))}
               </section>
             );
           })}
+          <section className="col cbcol">
+            <header className="colHead">
+              <span className="colDot cb" />
+              <span className="colLabel">שיחות חוזרות</span>
+              <span className="colCount">{callbacks.length}</span>
+            </header>
+            {callbacks.length === 0 && (
+              <div className="colEmpty">אין שיחות חוזרות</div>
+            )}
+            {callbacks.map((cb) => (
+              <article key={cb.id} className="ccard cb">
+                <div className="ccTop">
+                  <span className="ccName">
+                    {cb.reservations?.customers?.name ?? "—"}
+                  </span>
+                  <span className="ccTime mono">{fmt(cb.scheduled_for)}</span>
+                </div>
+                <div className="ccBottom">
+                  <span>{cb.kind === "retry" ? "ניסיון חוזר" : "לבקשת האורח"}</span>
+                  <span>{CB_STATUS_HE[cb.status] ?? cb.status}</span>
+                </div>
+              </article>
+            ))}
+          </section>
         </div>
       </div>
     </div>

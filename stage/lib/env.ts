@@ -22,4 +22,5 @@ export const ENV = {
   PHONE_NUMBER_ID: prov.phone_number_id || process.env.ELEVENLABS_PHONE_NUMBER_ID || "",
   RESTAURANT_ID: process.env.RESTAURANT_ID ?? "11111111-1111-1111-1111-111111111111",
   STAGE_CALL_TARGET: process.env.STAGE_CALL_TARGET ?? "",
+  STAGE_CALL_NAME: process.env.STAGE_CALL_NAME ?? "",
 };

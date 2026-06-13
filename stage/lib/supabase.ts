@@ -8,12 +8,17 @@ export const supabase = createClient(
   { realtime: { params: { eventsPerSecond: 20 } } }
 );
 
+let channelSeq = 0;
+
 export function subscribeStage(handlers: {
   onToolEvent: (toolName: string, payload: unknown, reservationId: string | null) => void;
   onReservationChange: (row: { id: string; status: string }) => void;
 }) {
+  // Unique name per subscription: channel("stage") would return the SAME
+  // instance on remount/second page and throw "cannot add callbacks after
+  // subscribe()". Each subscriber owns and removes its own channel.
   const ch = supabase
-    .channel("stage")
+    .channel(`stage-${++channelSeq}-${Date.now()}`)
     .on(
       "postgres_changes",
       { event: "INSERT", schema: "public", table: "tool_events" },

@@ -1,19 +1,14 @@
-"""One-command demo slate — run this right before a demo/test session.
+"""One-command demo slate — run right before a demo/test session.
 
-Does the whole dance deterministically:
-  1. Full clean reset via reseed.py (needs SUPABASE_DB_URL = Session-pooler URI in .env;
-     falls back to REST date-shift with a warning if missing).
-  2. Creates the two תומר test reservations (stage CTA + n8n batch numbers).
-  3. Verifies the slate: both test rows pending, 21:00 FULL, 20:00 + 21:30 have room.
+Calls the authoritative public.demo_reset() RPC (single source of truth, defined in
+supabase/migrations/0005_demo_reset.sql), then verifies the slate. Pure REST with the
+service key — no SUPABASE_DB_URL needed.
 
     agent/.venv/bin/python supabase/demo_reset.py
-
-Props (21:00 FULL → negotiation, 20:00 room → change-to-eight) are baked into seed.sql,
-so they survive every full reset — no manual `booked` tweaks needed anymore.
 """
 import os
-import subprocess
 import sys
+from datetime import date
 from pathlib import Path
 
 import httpx
@@ -21,48 +16,36 @@ from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parents[1]
 load_dotenv(ROOT / ".env")
-PY = sys.executable
-AGENT = ROOT / "agent"
-RID = "11111111-1111-1111-1111-111111111111"
-
-TEST_ROWS = [
-    ("תומר אלזם", "+972585121998", "20:30", "4"),  # stage CTA / single-call target
-    ("תומר אלזם", "+972525898552", "19:00", "2"),  # n8n batch original target
-]
-
-
-def run(args):
-    print(f"\n$ {' '.join(str(a) for a in args)}")
-    r = subprocess.run([PY, *args], cwd=ROOT)
-    if r.returncode != 0:
-        sys.exit(f"step failed: {args}")
+RID = os.environ.get("RESTAURANT_ID", "11111111-1111-1111-1111-111111111111")
+TARGET = "+972585121998"   # the only number the demo dials
 
 
 def main():
-    run([ROOT / "supabase" / "reseed.py", "--clean"])
-    for name, phone, t, party in TEST_ROWS:
-        run([AGENT / "make_reservation.py", "--name", name, "--phone", phone, "--time", t, "--party", party])
-
-    # ── verify ──────────────────────────────────────────────────────────────
     url = os.environ["SUPABASE_URL"].rstrip("/")
     key = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
     h = {"apikey": key, "Authorization": f"Bearer {key}", "Content-Type": "application/json"}
+
+    # ── reset ──
+    r = httpx.post(f"{url}/rest/v1/rpc/demo_reset", headers=h, json={}, timeout=30)
+    r.raise_for_status()
+    print("demo_reset() applied.")
+
+    # ── verify ──
     pend = httpx.post(f"{url}/rest/v1/rpc/todays_pending_reservations", headers=h,
-                      json={"p_restaurant_id": RID}).json()
+                      json={"p_restaurant_id": RID}, timeout=20).json()
     avail = httpx.get(f"{url}/rest/v1/availability",
-                      params={"select": "time_slot,available", "date": "eq."
-                              + __import__("datetime").date.today().isoformat(),
-                              "order": "time_slot"}, headers=h).json()
+                      params={"select": "time_slot,available",
+                              "date": f"eq.{date.today().isoformat()}",
+                              "order": "time_slot"}, headers=h, timeout=20).json()
     av = {a["time_slot"][:5]: a["available"] for a in avail}
 
     print("\n── demo slate ──────────────────────────────────────")
     ok = True
-    for _, phone, _, _ in TEST_ROWS:
-        rows = [x for x in pend if x.get("phone") == phone]
-        flag = "OK" if len(rows) == 1 else f"!! {len(rows)} rows"
-        ok &= len(rows) == 1
-        print(f"  {phone:16} pending: {flag}")
-    checks = [("20:00", av.get("20:00", 0) > 0, "room for change-to-eight"),
+    only_tomer = len(pend) == 1 and pend[0].get("phone") == TARGET
+    ok &= only_tomer
+    print(f"  pending rows: {len(pend)}  → "
+          f"{'OK (only Tomer)' if only_tomer else '!! expected exactly 1 at ' + TARGET}")
+    checks = [("20:00", av.get("20:00", 0) >= 8, "room for change-to-eight"),
               ("21:00", av.get("21:00", 1) == 0, "FULL (negotiation prop)"),
               ("21:30", av.get("21:30", 0) > 0, "room for the offer")]
     for slot, good, why in checks:

@@ -17,7 +17,6 @@ export default function Insights() {
   const [insights, setInsights] = useState<Insight[]>([]);
   const [total, setTotal] = useState(0);
   const [period, setPeriod] = useState("");
-  const [generatedBy, setGeneratedBy] = useState("gpt-4o");
 
   useEffect(() => {
     fetch("/api/insights", { cache: "no-store" })
@@ -26,7 +25,6 @@ export default function Insights() {
         if (Array.isArray(d.insights)) setInsights(d.insights);
         setTotal(d.total ?? 0);
         setPeriod(d.period ?? "");
-        setGeneratedBy(d.generatedBy ?? "gpt-4o");
       })
       .catch(() => {
         /* keep empty state */
@@ -95,9 +93,6 @@ export default function Insights() {
             )}
           </div>
 
-          <p className="insFoot">
-            הנושאים נגזרו בניתוח LLM ({generatedBy}) של סיבות הביטול שמיקה אוספת בשיחות — לולאת משוב מהשיחה אל ההנהלה.
-          </p>
         </div>
       </div>
     </div>

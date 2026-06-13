@@ -2,9 +2,10 @@
 -- Single source of truth for the reset used by the stage button (reset-on-START of every run),
 -- the local supabase/demo_reset.py, supabase/seed.sql, and any REST caller:
 --   POST /rest/v1/rpc/demo_reset
--- Produces a populated "tonight" board where every guest is already handled (confirmed /
--- cancelled / needs_human) EXCEPT one Tomer row (+972585121998) left PENDING — so the n8n
--- batch (todays_pending_reservations) calls only Tomer, once. Negotiation props baked in:
+-- Produces a VARIED "tonight" board for realism: most rows pending, some confirmed / needs_human /
+-- cancelled. Tomer's row (+972585121998, name "תומר") is the ONLY one with a real, allowlisted
+-- number — so although several rows are pending, the n8n batch's allowlist ("Build Call Payloads")
+-- dials only Tomer, once; the fake-number pending rows are display-only. Negotiation props baked in:
 -- 20:00 has room (change-to-eight), 21:00 FULL, 21:30 is the alternative she offers.
 create or replace function public.demo_reset()
 returns void
@@ -52,7 +53,7 @@ begin
     ('22222222-0000-0000-0000-000000000013', v_rid, 'הדר נחום','+972505550013',null),
     ('22222222-0000-0000-0000-000000000014', v_rid, 'אסף קפלן','+972505550014',null),
     ('22222222-0000-0000-0000-000000000015', v_rid, 'יעל אברהם','+972505550015',null),
-    (v_tomer,                                v_rid, 'תומר אלזם','+972585121998',null);
+    (v_tomer,                                v_rid, 'תומר','+972585121998',null);
 
   -- ── reservations for TODAY: everyone non-pending EXCEPT Tomer (the only call) ──
   insert into reservations (restaurant_id, customer_id, reserved_for, party_size, status, source)
@@ -60,20 +61,20 @@ begin
          ((now() at time zone 'Asia/Jerusalem')::date + c.t) at time zone 'Asia/Jerusalem',
          c.party, c.status::reservation_status, 'seed'
   from (values
-    ('22222222-0000-0000-0000-000000000001'::uuid, time '19:00', 2, 'confirmed'),
-    ('22222222-0000-0000-0000-000000000002'::uuid, time '19:30', 4, 'confirmed'),
+    ('22222222-0000-0000-0000-000000000001'::uuid, time '19:00', 2, 'pending'),
+    ('22222222-0000-0000-0000-000000000002'::uuid, time '19:30', 4, 'pending'),
     ('22222222-0000-0000-0000-000000000003'::uuid, time '20:00', 2, 'confirmed'),
     ('22222222-0000-0000-0000-000000000004'::uuid, time '20:00', 6, 'confirmed'),
-    ('22222222-0000-0000-0000-000000000005'::uuid, time '20:30', 2, 'confirmed'),
-    ('22222222-0000-0000-0000-000000000006'::uuid, time '20:30', 8, 'confirmed'),
+    ('22222222-0000-0000-0000-000000000005'::uuid, time '20:30', 2, 'pending'),
+    ('22222222-0000-0000-0000-000000000006'::uuid, time '20:30', 8, 'needs_human'),
     ('22222222-0000-0000-0000-000000000007'::uuid, time '21:00', 3, 'cancelled'),
-    ('22222222-0000-0000-0000-000000000008'::uuid, time '21:00', 2, 'confirmed'),
+    ('22222222-0000-0000-0000-000000000008'::uuid, time '21:00', 2, 'pending'),
     ('22222222-0000-0000-0000-000000000009'::uuid, time '21:30', 4, 'confirmed'),
-    ('22222222-0000-0000-0000-000000000010'::uuid, time '21:30', 2, 'needs_human'),
-    ('22222222-0000-0000-0000-000000000011'::uuid, time '22:00', 2, 'confirmed'),
-    ('22222222-0000-0000-0000-000000000012'::uuid, time '22:00', 5, 'confirmed'),
-    ('22222222-0000-0000-0000-000000000013'::uuid, time '22:30', 2, 'confirmed'),
-    ('22222222-0000-0000-0000-000000000014'::uuid, time '18:30', 2, 'confirmed'),
+    ('22222222-0000-0000-0000-000000000010'::uuid, time '21:30', 2, 'pending'),
+    ('22222222-0000-0000-0000-000000000011'::uuid, time '22:00', 2, 'needs_human'),
+    ('22222222-0000-0000-0000-000000000012'::uuid, time '22:00', 5, 'pending'),
+    ('22222222-0000-0000-0000-000000000013'::uuid, time '22:30', 2, 'cancelled'),
+    ('22222222-0000-0000-0000-000000000014'::uuid, time '18:30', 2, 'pending'),
     ('22222222-0000-0000-0000-000000000015'::uuid, time '18:30', 4, 'confirmed'),
     (v_tomer,                                      time '20:30', 4, 'pending')
   ) as c(customer_id, t, party, status);

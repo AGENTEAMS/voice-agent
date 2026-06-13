@@ -41,10 +41,11 @@ def main():
 
     print("\n── demo slate ──────────────────────────────────────")
     ok = True
-    only_tomer = len(pend) == 1 and pend[0].get("phone") == TARGET
-    ok &= only_tomer
-    print(f"  pending rows: {len(pend)}  → "
-          f"{'OK (only Tomer)' if only_tomer else '!! expected exactly 1 at ' + TARGET}")
+    callable_rows = [p for p in pend if p.get("phone") == TARGET]
+    one_callable = len(callable_rows) == 1
+    ok &= one_callable
+    print(f"  pending rows: {len(pend)} (varied board) | callable at real number: {len(callable_rows)}  → "
+          f"{'OK — only Tomer gets dialed' if one_callable else '!! expected exactly 1 pending at ' + TARGET}")
     checks = [("20:00", av.get("20:00", 0) >= 8, "room for change-to-eight"),
               ("21:00", av.get("21:00", 1) == 0, "FULL (negotiation prop)"),
               ("21:30", av.get("21:30", 0) > 0, "room for the offer")]

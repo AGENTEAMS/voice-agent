@@ -323,7 +323,12 @@ def agent_config(tool_ids: list[str], voice_id: str, transfer_number: str | None
                 "provider": "scribe_realtime",
                 "quality": "high",
                 "user_input_audio_format": "ulaw_8000",
-                "keywords": ["קיסו", "מיקה", "הזמנה", "סועדים", "לבטל", "לאשר", "כן", "לא", "מגיעים", "לשנות"],
+                # Keyword boost biases recognition toward these. Deliberately EXCLUDES
+                # «כן» and «מגיעים»: boosting them made the recognizer snap a pickup
+                # click/breath/opener-echo to a phantom "yes" → false confirmation
+                # (conv_6201..., 2026-06-13). «כן» is common enough to recognize unboosted.
+                # NEVER re-add «כן»/«מגיעים» here. Domain nouns/verbs only.
+                "keywords": ["קיסו", "מיקה", "הזמנה", "סועדים", "לבטל", "לאשר", "לא", "לשנות"],
             },
             # initial_wait_time=1: opener plays at most 1s after connect — never wait for pickup
             # speech (2026-06-13: guests experienced dead air until they spoke first). API allows

@@ -230,7 +230,7 @@ export default function Home() {
 
   // ── click-to-run: reset to clean slate, then fire the n8n batch (calls only Tomer) ──
   const handleCall = useCallback(async () => {
-    setCaption("מאפסת את הלוח ומחייגת…");
+    setCaption("מחייגת…");
     applyCall("dialing");
     // Safety: if no tool event arrives (e.g. no answer) within 35s, settle back to idle.
     if (dialTimeout.current) clearTimeout(dialTimeout.current);

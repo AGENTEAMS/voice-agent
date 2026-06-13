@@ -272,7 +272,7 @@ def upsert_pronunciation_dict(c: httpx.Client) -> dict | None:
 
 
 def agent_config(tool_ids: list[str], voice_id: str, transfer_number: str | None,
-                 pronunciation_locator: dict | None = None) -> dict:
+                 pronunciation_locator: dict | None = None, llm: str = "gpt-4o") -> dict:
     built_in: dict = {
         "end_call": {"name": "end_call",
                      "description": "לסיום השיחה, רק אחרי משפט פרידה — ורק אחרי שכבר קראת ל-set_reservation_status בשיחה הזאת.",
@@ -310,8 +310,11 @@ def agent_config(tool_ids: list[str], voice_id: str, transfer_number: str | None
                 "prompt": {
                     "prompt": SYSTEM_PROMPT,
                     # gemini-2.5-flash: silent no-response turns. gpt-4o-mini: fluent Hebrew but
-                    # narrates outcomes without calling tools. gpt-4o: solid tool-calling (2026-06-10).
-                    "llm": "gpt-4o",
+                    # narrated outcomes without calling tools (2026-06-10 — but that test predated
+                    # the TOOL CONTRACT block below; a fair re-test gives mini the same hardening).
+                    # gpt-4o: solid tool-calling. Override with --model for the cost A/B; default
+                    # restores gpt-4o, so a plain re-run reverts the demo agent.
+                    "llm": llm,
                     "temperature": 0.3,
                     "tool_ids": tool_ids,
                     "built_in_tools": built_in,
@@ -486,6 +489,9 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--voices", action="store_true")
     ap.add_argument("--adopt", metavar="OWNER_ID:VOICE_ID")
+    ap.add_argument("--model", default="gpt-4o",
+                    help="LLM for the agent (e.g. gpt-4o-mini for the cost A/B). "
+                         "Reversible: re-run WITHOUT this flag to restore gpt-4o.")
     args = ap.parse_args()
 
     if args.voices:
@@ -503,7 +509,7 @@ def main():
     transfer = os.environ.get("HUMAN_TRANSFER_NUMBER") or None
 
     if args.dry_run:
-        cfg = agent_config(["tool_…x4"], voice_id, transfer)
+        cfg = agent_config(["tool_…x4"], voice_id, transfer, llm=args.model)
         print(json.dumps(cfg, ensure_ascii=False, indent=2))
         return
 
@@ -521,9 +527,9 @@ def main():
         sb_id = upsert_secret(c, SECRET_BEARER_NAME, f"Bearer {service_key}")
         print("2/4 webhook tools")
         tool_ids = upsert_tools(c, webhook_tools(sk_id, sb_id))
-        print("3/4 agent (+ pronunciation dictionary)")
+        print(f"3/4 agent (+ pronunciation dictionary) — LLM: {args.model}")
         pron = upsert_pronunciation_dict(c)
-        agent_id = upsert_agent(c, agent_config(tool_ids, voice_id, transfer, pron))
+        agent_id = upsert_agent(c, agent_config(tool_ids, voice_id, transfer, pron, llm=args.model))
         print("4/4 Twilio number")
         phone_id = upsert_phone(c, agent_id)
 
@@ -531,6 +537,7 @@ def main():
         "agent_id": agent_id,
         "phone_number_id": phone_id,
         "voice_id": voice_id,
+        "llm": args.model,
         "agent_name": AGENT_NAME,
         "provisioned_at": datetime.now().astimezone().isoformat(timespec="seconds"),
     }

@@ -59,6 +59,30 @@ def print_transcript(conv: dict):
         print(f"  summary: {a['transcript_summary'][:400]}")
 
 
+def print_llm_cost(conv: dict):
+    """Per-call LLM token usage + dollar cost from ElevenLabs charging data.
+    The model swap moves ONLY this number; EL credits (TTS/ASR/per-minute) are model-independent."""
+    ch = (conv.get("metadata") or {}).get("charging") or {}
+    llm = ch.get("llm_usage") or {}
+    total = 0.0
+    toks_in = toks_out = 0
+    model_name = "?"
+    for phase in llm.values():
+        for model, kinds in (phase.get("model_usage") or {}).items():
+            model_name = model
+            for kind, v in kinds.items():
+                if isinstance(v, dict):
+                    total += v.get("price", 0) or 0
+                    if "output" in kind:
+                        toks_out += v.get("tokens", 0) or 0
+                    else:
+                        toks_in += v.get("tokens", 0) or 0
+    print("\n═══ LLM COST (this call) ═══")
+    print(f"  model: {model_name} · in≈{toks_in} tok · out≈{toks_out} tok · LLM cost ≈ ${total:.4f}")
+    print(f"  EL credits (platform TTS/ASR/min — model-independent): "
+          f"{(conv.get('metadata') or {}).get('cost')}")
+
+
 def print_db_state(reservation_id: str):
     print("\n═══ SUPABASE ═══")
     with httpx.Client(timeout=15) as c:
@@ -87,6 +111,7 @@ def main():
     print(f"  answer your phone… (polling every {POLL_SECS}s)")
     conv = wait_for_conversation(conv_id)
     print_transcript(conv)
+    print_llm_cost(conv)
     print_db_state(args.reservation)
 
 

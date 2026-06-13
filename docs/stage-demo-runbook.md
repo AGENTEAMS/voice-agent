@@ -12,7 +12,7 @@ When a tool event arrives and no CTA call is in flight, the orb auto-wakes to "l
 ```bash
 cd ~/Development/personal/voice-agent
 python supabase/reseed.py --clean        # date drift! also DELETES decided rows
-python agent/make_reservation.py --name "תומר אלון" --phone +972585121998 --time 20:30 --party 4
+python agent/make_reservation.py --name "תומר אלזם" --phone +972585121998 --time 20:30 --party 4
 cd stage && npm run dev                  # localhost:3000 (+ /tonight in a second tab)
 ```
 - 21:00 is intentionally FULL (negotiation prop) — ask to move there to trigger the

@@ -1,4 +1,4 @@
--- Maître — tool_events: per-tool-call telemetry for the live stage dashboard («מיקה — במה»).
+-- Mika Voice Agent — tool_events: per-tool-call telemetry for the live stage dashboard («מיקה — במה»).
 -- Each in-call RPC logs itself on entry; Supabase Realtime pushes INSERTs to the UI.
 -- Demo-grade anon read policies for the localhost stage (no auth). Whole file is one
 -- transaction when applied via supabase/apply_sql.py.

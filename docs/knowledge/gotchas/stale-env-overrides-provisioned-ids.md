@@ -1,6 +1,6 @@
 # Stale .env Values Override Fresh Provisioning (and Placeholder Comments Become Values)
 
-Two flavors of `.env` rot broke the Maître ElevenLabs runtime in one session: (1) old resource IDs
+Two flavors of `.env` rot broke the Mika Voice Agent ElevenLabs runtime in one session: (1) old resource IDs
 from a previous account silently winning over freshly-provisioned ones, and (2) placeholder
 comments pasted as values crashing scripts.
 

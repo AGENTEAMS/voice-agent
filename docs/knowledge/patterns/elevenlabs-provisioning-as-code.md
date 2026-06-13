@@ -6,7 +6,7 @@ dictionary. Re-run after every prompt tweak. Born from the failure mode of UI cl
 session "configured" 6 tools in the EL UI and only 1 actually saved.
 
 ## Context
-Maître (Hebrew restaurant voice agent), ElevenLabs Conversational AI, 2026-06-10. ~10 provision
+Mika Voice Agent (Hebrew restaurant voice agent), ElevenLabs Conversational AI, 2026-06-10. ~10 provision
 runs in one evening, each followed by a live test call — iteration cycle of ~2 minutes.
 
 ## Pattern body

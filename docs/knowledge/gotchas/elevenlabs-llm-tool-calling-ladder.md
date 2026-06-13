@@ -1,6 +1,6 @@
 # ElevenLabs Agents — LLM Tool-Calling Ladder (gemini silent → 4o-mini fakes → gpt-4o works)
 
-Three LLM failures/fixes discovered in one live-call iteration loop on the Maître Hebrew agent.
+Three LLM failures/fixes discovered in one live-call iteration loop on the Mika Voice Agent Hebrew agent.
 The model choice dominates tool reliability; prompt hardening alone did not fix the weaker models.
 
 ## Context

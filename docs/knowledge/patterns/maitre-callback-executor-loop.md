@@ -6,7 +6,7 @@ callback **14 seconds after due time**, guest answered the new call — and chai
 from inside it.
 
 ## Context
-Maître / ElevenLabs. `schedule_callback` tool → Supabase RPC `schedule_call` → `scheduled_calls`
+Mika Voice Agent / ElevenLabs. `schedule_callback` tool → Supabase RPC `schedule_call` → `scheduled_calls`
 (status enum pending/in_progress/done/cancelled/failed, `scheduled_for` timestamptz, `attempts`).
 
 ## Pattern body

@@ -4,7 +4,7 @@ Picking a natural-sounding Israeli-Hebrew TTS for a real-time phone agent. The c
 "supports Hebrew" claims are unreliable** — trust blind MOS over 8kHz telephony, not language-count tables.
 
 ## Context
-For the Maître voice agent ([maitre-voice-agent-architecture](../decisions/maitre-voice-agent-architecture.md)) the make-or-break was natural Hebrew.
+For the Mika Voice Agent voice agent ([maitre-voice-agent-architecture](../decisions/maitre-voice-agent-architecture.md)) the make-or-break was natural Hebrew.
 Researched + adversarially verified 2026-06-04.
 
 ## The unvowelized-Hebrew problem

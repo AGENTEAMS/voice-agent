@@ -1,4 +1,4 @@
--- Maître — Cancellation Insights
+-- Mika Voice Agent — Cancellation Insights
 -- ─────────────────────────────────────────────────────────────────────────────
 -- A feedback loop on top of the cancel-asks-why flow: when Mika cancels a
 -- reservation she now captures WHY (free Hebrew). Those reasons accumulate in a

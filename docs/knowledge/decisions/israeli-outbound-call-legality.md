@@ -4,7 +4,7 @@ A purely transactional automated call (confirming an existing reservation) sits 
 anti-spam regimes — but a single marketing line flips it and triggers heavy fines.
 
 ## Context
-Legal basis for the Maître agent's outbound confirm/cancel calls
+Legal basis for the Mika Voice Agent's outbound confirm/cancel calls
 ([maitre-voice-agent-architecture](maitre-voice-agent-architecture.md)).
 Researched + adversarially verified 2026-06-04. Confidence medium-high (secondary legal sources + Israeli
 case law, not primary statute). Not legal advice.

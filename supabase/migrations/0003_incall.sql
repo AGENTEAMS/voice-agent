@@ -1,4 +1,4 @@
--- Maître — in-call function expansion: change-time, callbacks, retries.
+-- Mika Voice Agent — in-call function expansion: change-time, callbacks, retries.
 -- Adds the scheduled_calls table (drives n8n callbacks + retries) and three RPCs the
 -- bridge / n8n call directly. Does NOT touch reservation_status or apply_call_result
 -- (their confirmed/cancelled/needs_human contract stays intact).

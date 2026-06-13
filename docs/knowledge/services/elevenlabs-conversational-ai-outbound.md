@@ -1,6 +1,6 @@
-# ElevenLabs Conversational AI — Maître Runtime (current state)
+# ElevenLabs Conversational AI — Mika Voice Agent Runtime (current state)
 
-THE runtime for Maître since 2026-06-10 (fork resolved, OpenAI path deleted). ElevenLabs owns
+THE runtime for Mika Voice Agent since 2026-06-10 (fork resolved, OpenAI path deleted). ElevenLabs owns
 telephony + ASR + LLM + TTS + tools; repo provisions everything via API. All 5 flows live-verified
 with Supabase write-back.
 

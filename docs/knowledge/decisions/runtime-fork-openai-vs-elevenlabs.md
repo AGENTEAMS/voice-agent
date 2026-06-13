@@ -1,4 +1,4 @@
-# Maître — Runtime Fork RESOLVED: ElevenLabs Conversational AI
+# Mika Voice Agent — Runtime Fork RESOLVED: ElevenLabs Conversational AI
 
 **Decided 2026-06-10: ElevenLabs CAI is the agent of record.** The OpenAI Realtime path was
 deleted from the repo the same day (commit `b494949`; recoverable at `8ba10d6`). By end of session,

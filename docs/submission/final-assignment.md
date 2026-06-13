@@ -6,7 +6,7 @@
 | **Student 2** | Haim Toledano | Haimtoldo@gmail.com |
 | **Student 3** | Tomer Elzam | tomerelzam1111@gmail.com |
 
-**Project: Maître (מיקה) — an autonomous Hebrew voice agent that calls restaurant guests to confirm tonight's reservations.**
+**Project: Mika Voice Agent (מיקה) — an autonomous Hebrew voice agent that calls restaurant guests to confirm tonight's reservations.**
 
 Code repository: **https://github.com/AGENTEAMS/voice-agent**
 
@@ -16,9 +16,9 @@ Code repository: **https://github.com/AGENTEAMS/voice-agent**
 
 ### Chosen Business Problem
 
-In our work with **Kisu (קיסו)**, a Tel-Aviv restaurant we consult for, we observed that the host team spends **1.5–2 hours every afternoon** phoning guests to confirm that evening's reservations — and on busy days the calls simply don't all get made. Unconfirmed reservations turn into no-shows: a held table on a Friday night is unsellable inventory. Industry data consistently places restaurant no-show rates at **10–20%**, and confirmation calls are the single most effective countermeasure — but they are exactly the work a small host team doesn't have time for.
+We chose **restaurant reservation confirmation** as our problem - a daily, well-documented operations pain every restaurant faces. We build the POC around a representative Tel-Aviv restaurant we call **קיסו (Kisu)**: its host team would spend **1.5-2 hours every afternoon** phoning guests to confirm that evening's reservations - and on busy days the calls simply don't all get made. Unconfirmed reservations turn into no-shows: a held table on a Friday night is unsellable inventory. Industry data consistently places restaurant no-show rates at **10–20%**, and confirmation calls are the single most effective countermeasure — but they are exactly the work a small host team doesn't have time for.
 
-> In our role as AI consultants for Kisu restaurant, we observed that daily reservation-confirmation calls are either consuming ~2 hours of staff time or silently not happening. This impacts the restaurant through no-show revenue loss (a 4-top held and unfilled on a peak night), and impacts guests through inability to easily adjust or cancel — which itself produces more no-shows.
+> Daily reservation-confirmation calls either consume ~2 hours of staff time or silently don't happen. This impacts the restaurant through no-show revenue loss (a 4-top held and unfilled on a peak night), and impacts guests through inability to easily adjust or cancel — which itself produces more no-shows.
 
 ### Background & Context
 
@@ -42,7 +42,7 @@ In our work with **Kisu (קיסו)**, a Tel-Aviv restaurant we consult for, we o
 
 ### Technical Discovery
 
-- **Stakeholder Interviews:** Working sessions with the Kisu owner shaped three hard requirements: the agent must (1) sound like a pleasant human hostess in natural Israeli Hebrew — guests hang up on robots; (2) never invent availability — offers must come from the live reservation database; (3) hand off to a human on request, instantly.
+- **Stakeholder perspective:** We don't run a real restaurant, so we grounded requirements in how reservation confirmation actually works plus our own experience as frequent guests. Three hard requirements emerged: the agent must (1) sound like a pleasant human hostess in natural Israeli Hebrew - guests hang up on robots; (2) never invent availability - offers must come from the live reservation database; (3) hand off to a human on request, instantly.
 - **Data Availability & Quality:** Reservations, customers, availability and call outcomes live in a Postgres schema (Supabase) we control — so in-call tools can read and write the source of truth directly. Telephony reachable via Twilio (international caller-ID verification done for the pilot number).
 - **Feasibility Assessment / platform research:** We ran a structured vendor evaluation for the voice runtime (full report in the repo: `docs/knowledge/`). Key findings that drove the architecture:
   - **Hebrew TTS quality is the scarcest resource.** ElevenLabs' v3 conversational model is the only agent-platform TTS we found with production-grade Hebrew; that single fact anchored the platform decision.

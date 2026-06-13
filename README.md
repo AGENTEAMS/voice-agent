@@ -1,12 +1,12 @@
-# Maître (מיקה) - Hebrew Restaurant Voice Agent
+# Mika Voice Agent (מיקה) - Hebrew Restaurant Voice Agent
 
 **Team:** Re'i Biton · Haim Toledano · Tomer Elzam
 Final project, GenAI & LLM Applications - Reichman University × Google AI Tech School.
 
 An autonomous **Hebrew voice agent** that phones restaurant guests to confirm tonight's
-reservations over a real phone line - natural Israeli Hebrew, in real time. Built for
-**מסעדת קיסו** (Kisu), a Tel-Aviv restaurant whose hosts spend ~2 hours a day on confirmation
-calls. Mika makes those calls instead.
+reservations over a real phone line - natural Israeli Hebrew, in real time. We build the POC
+around **מסעדת קיסו** (Kisu), a representative Tel-Aviv restaurant whose hosts would spend ~2 hours
+a day on confirmation calls. Mika makes those calls instead.
 
 ## Live demo
 
@@ -48,7 +48,7 @@ The 6 tools: `set_reservation_status`, `check_availability`, `change_reservation
 
 The **n8n orchestration workflow** (the batch logic - allowlist, status-aware polling, the
 deterministic reconcile guard) is exported credential-free at
-[`docs/maitre-n8n-workflow.json`](docs/maitre-n8n-workflow.json).
+[`docs/mika-n8n-workflow.json`](docs/mika-n8n-workflow.json).
 
 ## Model choice (a 5-model evaluation)
 
@@ -93,5 +93,5 @@ voice-agent/
 
 - **Write-up:** [`docs/submission/final-assignment.md`](docs/submission/final-assignment.md)
 - **Pitch deck:** [`docs/submission/pitch-deck.pdf`](docs/submission/pitch-deck.pdf) (or open `pitch-deck.html` in a browser for the animated version)
-- **n8n workflow (logic):** [`docs/maitre-n8n-workflow.json`](docs/maitre-n8n-workflow.json)
+- **n8n workflow (logic):** [`docs/mika-n8n-workflow.json`](docs/mika-n8n-workflow.json)
 - **Full story:** [`docs/PROJECT-HISTORY.md`](docs/PROJECT-HISTORY.md) · **knowledge base:** [`docs/knowledge/`](docs/knowledge/README.md)

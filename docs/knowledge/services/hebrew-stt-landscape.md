@@ -4,7 +4,7 @@ Real-time Hebrew speech-to-text for a phone voice agent. Key result: the popular
 **no real Hebrew evidence**; the best-documented hosted Hebrew is **Soniox**.
 
 ## Context
-The "ear" half of the Maître agent ([maitre-voice-agent-architecture](../decisions/maitre-voice-agent-architecture.md)); the "mouth" is
+The "ear" half of the Mika Voice Agent ([maitre-voice-agent-architecture](../decisions/maitre-voice-agent-architecture.md)); the "mouth" is
 [hebrew-tts-landscape](hebrew-tts-landscape.md). Researched + adversarially verified 2026-06-04.
 
 ## Ranking (by real Israeli-Hebrew evidence)
@@ -28,7 +28,7 @@ worse. Mitigate: **keyterm/context prompting** (Soniox/Deepgram support it), and
 **DTMF fallback + spoken read-back** so a single STT miss can't flip a reservation.
 
 ## In a speech-to-speech model, STT disappears
-If you use OpenAI Realtime (s2s, the Maître pick), the model does its own internal STT → you don't use
+If you use OpenAI Realtime (s2s, the Mika Voice Agent pick), the model does its own internal STT → you don't use
 Soniox at all. Soniox is for the **cascaded** path. Trade-off: lose best-in-class Hebrew STT, gain one-model
 simplicity + lowest latency.
 

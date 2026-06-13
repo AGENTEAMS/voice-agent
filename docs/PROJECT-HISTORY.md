@@ -1,7 +1,7 @@
-# Project History — Maître (Hebrew Restaurant Voice Agent)
+# Project History — Mika Voice Agent (Hebrew Restaurant Voice Agent)
 
 A session-by-session narrative of how this project evolved, written for new collaborators.
-Maître is the GenAI course final project: a Hebrew-only voice agent for restaurants
+Mika Voice Agent is the GenAI course final project: a Hebrew-only voice agent for restaurants
 (מסעדת לבונטין in the demo) that **outbound**-calls today's reservations to confirm/cancel
 (updating a Supabase DB) and answers **inbound** FAQ. Team: Re'i Biton, Haim Toledano, Tomer Elzam.
 

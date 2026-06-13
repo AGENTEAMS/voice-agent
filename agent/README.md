@@ -1,4 +1,4 @@
-# agent/ — Maître outbound caller (ElevenLabs Conversational AI)
+# agent/ — Mika Voice Agent outbound caller (ElevenLabs Conversational AI)
 
 ElevenLabs Conversational AI owns the entire voice stack: telephony (a Twilio number imported into
 ElevenLabs), STT, LLM, TTS, turn-taking, and tool-calling. There is **no audio server in this repo**

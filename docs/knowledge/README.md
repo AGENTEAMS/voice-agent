@@ -1,6 +1,6 @@
 # Knowledge Base
 
-Everything we've learned building Maître — decisions, hard-won bugs, reusable patterns, and
+Everything we've learned building Mika Voice Agent — decisions, hard-won bugs, reusable patterns, and
 vendor research. Migrated from the original project vault on 2026-06-11. If you're new here,
 read [PROJECT-HISTORY.md](../PROJECT-HISTORY.md) first for the story, then dip into these by topic.
 

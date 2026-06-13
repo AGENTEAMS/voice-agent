@@ -1,7 +1,7 @@
 # Research: ElevenLabs Outbound Voice Agents — User-Speaks-First, Caller ID, and Platform Handles
 
 **Date**: 2026-06-10 · **Protocol**: deep-research v4 (Round 1: WebSearch + Exa + Tavily; Perplexity lane DOWN — API quota exhausted; Round 2 skipped — coverage solid)
-**Trigger**: Maître bug — `first_message=""` on outbound Twilio call → agent totally silent (user speech transcribed, zero agent turns, 19s to hangup).
+**Trigger**: Mika Voice Agent bug — `first_message=""` on outbound Twilio call → agent totally silent (user speech transcribed, zero agent turns, 19s to hangup).
 
 ---
 
@@ -35,7 +35,7 @@ Hypothesis: with `first_message=""` the "first message being delivered" window n
 ## 3. Caller ID — the answer
 
 - **Twilio Verified Caller IDs can be imported into ElevenLabs as outbound-only phone numbers** [native-integration doc, HIGH confidence]: "Must be verified in Twilio's 'Verified Caller IDs' section… Ideal for using your existing business number for outbound AI calls." Capabilities auto-detected at import; cannot receive inbound / can't be an agent's inbound number.
-  → **Maître implication**: import verified +972585121998, pass its `agent_phone_number_id` on outbound calls — callee sees the Israeli number. No need to buy a Twilio +972 number for caller-ID purposes.
+  → **Mika Voice Agent implication**: import verified +972585121998, pass its `agent_phone_number_id` on outbound calls — callee sees the Israeli number. No need to buy a Twilio +972 number for caller-ID purposes.
 - **No per-call `from` override** on `POST /v1/convai/twilio/outbound-call` (full schema: required `agent_id`, `agent_phone_number_id`, `to_number`; optional `conversation_initiation_client_data`, `call_recording_enabled`, `telephony_call_config.ringing_timeout_secs` default 60). Caller ID = the number entity you dial from.
 - SIP trunking: caller ID is configured trunk-side; custom SIP headers supported [elevenlabs SIP docs + plivo.com/docs/sip-trunking/ElevenLabs].
 
@@ -58,7 +58,7 @@ LLM params: `transfer_number` (must match a configured rule), `client_message` (
 [post-call-webhooks doc, HIGH confidence]
 - Types: **`post_call_transcription`** (full `transcript[]` with role/message/tool_calls/tool_results/time_in_call_secs/turn metrics incl. LLM TTFB; `metadata` with duration/cost/termination_reason/phone details; `analysis` with `transcript_summary`, `call_successful`, evaluation results; echoes `dynamic_variables` — round-trip your own reservation_id to match rows), **`post_call_audio`** (base64 MP3), **`call_initiation_failure`** (`failure_reason` ∈ busy|no-answer|unknown + raw Twilio StatusCallback body).
 - Auth: HMAC via `ElevenLabs-Signature`; SDK `construct_event()`. Must return 200; auto-disabled after 10+ consecutive failures w/ last success >7 days. Optional static-IP allowlisting (per-region egress IPs).
-- → Maître: a tiny webhook endpoint (Vercel route) + UPDATE `call_attempts.transcript` closes the "transcripts in DB" gap.
+- → Mika Voice Agent: a tiny webhook endpoint (Vercel route) + UPDATE `call_attempts.transcript` closes the "transcripts in DB" gap.
 
 ## 7. Batch calling (for the n8n daily batch)
 

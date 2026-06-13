@@ -1,4 +1,4 @@
--- Maître — public.demo_reset(): ONE authoritative, deterministic demo slate.
+-- Mika Voice Agent — public.demo_reset(): ONE authoritative, deterministic demo slate.
 -- Single source of truth for the reset used by the stage button (reset-on-START of every run),
 -- the local supabase/demo_reset.py, supabase/seed.sql, and any REST caller:
 --   POST /rest/v1/rpc/demo_reset

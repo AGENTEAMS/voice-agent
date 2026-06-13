@@ -5,7 +5,7 @@ Setting `first_message=""` (the documented "user speaks first" recipe) while
 transcribed but no agent turn is ever generated.
 
 ## Context
-Maître switched to a user-speaks-first outbound flow (2026-06-10). First live test: Tomer spoke
+Mika Voice Agent switched to a user-speaks-first outbound flow (2026-06-10). First live test: Tomer spoke
 for 15s ("כן. כן. כן? הלו?" — transcribed fine, one user turn at t=0), agent silent until hangup.
 `initial_wait_time=4` fallback never fired either.
 

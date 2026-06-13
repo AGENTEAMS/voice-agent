@@ -6,7 +6,7 @@ audio finishes playing — then hang up. Idempotent finish + two-stage watchdog 
 but a stuck call still dies.
 
 ## Context
-Maître's `end_call` (OpenAI Realtime bridge, `agent/bridge.py`, commit `8ba10d6`). Survived 3 Codex
+Mika Voice Agent's `end_call` (OpenAI Realtime bridge, `agent/bridge.py`, commit `8ba10d6`). Survived 3 Codex
 review rounds; this timing was one of the hardened items.
 
 ## Pattern

@@ -1,4 +1,4 @@
-# Maître — Hebrew Restaurant Voice Agent (final project)
+# Mika Voice Agent — Hebrew Restaurant Voice Agent (final project)
 
 GenAI course final project: a Hebrew-only voice agent for restaurants that **outbound**-calls today's
 reservations to confirm/cancel (updating a DB) and answers **inbound** FAQ (hours, cancellation,

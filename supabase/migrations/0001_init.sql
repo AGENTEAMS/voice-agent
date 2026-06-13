@@ -1,4 +1,4 @@
--- Maître — Hebrew restaurant voice agent
+-- Mika Voice Agent — Hebrew restaurant voice agent
 -- Schema: restaurants, customers, reservations, call_attempts, policies, availability
 -- Postgres has no Hebrew FTS dictionary; all human text is plain UTF-8 (RTL-safe).
 

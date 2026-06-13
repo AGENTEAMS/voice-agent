@@ -1,4 +1,4 @@
-# Maître: User-Speaks-First Outbound Opener
+# Mika Voice Agent: User-Speaks-First Outbound Opener
 
 > **SUPERSEDED 2026-06-11** by [agent-speaks-first-opener](agent-speaks-first-opener.md) — the
 > wait-for-greeting design added seconds of dead air after pickup. The phantom-confirm

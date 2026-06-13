@@ -1,6 +1,6 @@
 # Demo Data Date-Drift → check_availability / change_reservation return no_such_slot
 
-In the Maître POC, `check_availability` and `change_reservation` match on date. If the seeded demo data
+In the Mika Voice Agent POC, `check_availability` and `change_reservation` match on date. If the seeded demo data
 rolls past "today" (clock moves to a new day), those RPCs return `no_such_slot` and the agent can't
 confirm or change anything — even though rows exist.
 

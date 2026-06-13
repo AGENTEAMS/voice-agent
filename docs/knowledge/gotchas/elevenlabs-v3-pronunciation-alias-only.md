@@ -5,7 +5,7 @@ A pronunciation dictionary with IPA phoneme rules attached correctly to the agen
 models; on v3 the only effective dictionary rule type is **alias** (text substitution).
 
 ## Context
-Maître agent, Hebrew: "לבונטין" stressed wrong (should be milra — levonTIN) and "קראטוס" read as
+Mika Voice Agent, Hebrew: "לבונטין" stressed wrong (should be milra — levonTIN) and "קראטוס" read as
 kra-TOS instead of KRAY-tos. Created dict `maitre-hebrew` with IPA rules, verified the locator was
 attached to the agent's `tts.pronunciation_dictionary_locators` and the version was current —
 pronunciation unchanged on live calls.

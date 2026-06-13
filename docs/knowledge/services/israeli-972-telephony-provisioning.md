@@ -4,7 +4,7 @@ Getting an Israeli phone number for an automated voice agent. The feared blocker
 bundle) is **mostly a myth**; the real risk is **number stock + review latency**.
 
 ## Context
-Telephony for the Maître voice agent ([maitre-voice-agent-architecture](../decisions/maitre-voice-agent-architecture.md)). Adversarially verified 2026-06-04
+Telephony for the Mika Voice Agent voice agent ([maitre-voice-agent-architecture](../decisions/maitre-voice-agent-architecture.md)). Adversarially verified 2026-06-04
 (the original research assumed a local-address bundle was the killer — that was refuted).
 
 ## What's actually true

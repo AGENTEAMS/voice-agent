@@ -6,7 +6,7 @@ How to put a real phone call on the OpenAI Realtime (speech-to-speech) model: Tw
 over a Media Stream WebSocket; a small persistent server relays it to OpenAI Realtime and back.
 
 ## Context
-The voice runtime for the Maître agent
+The voice runtime for the Mika Voice Agent
 ([maitre-voice-agent-architecture](../decisions/maitre-voice-agent-architecture.md)). Implemented in
 `agent/bridge.py` (FastAPI). The GA `gpt-realtime` schema differs from the 2024 beta — the
 beta's `input_audio_format: "g711_ulaw"` is gone.

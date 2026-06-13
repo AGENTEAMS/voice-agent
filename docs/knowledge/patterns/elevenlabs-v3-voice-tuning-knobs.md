@@ -4,7 +4,7 @@ The per-voice tuning levers for `eleven_v3_conversational` agents on phone calls
 values that survived ear-testing — and which knob to reach for per complaint.
 
 ## Context
-Maître voice iteration marathon (2026-06-10/11): Kratos → ריסה → רוני(f) → גיא → Ava → hosteses
+Mika Voice Agent voice iteration marathon (2026-06-10/11): Kratos → ריסה → רוני(f) → גיא → Ava → hosteses
 (מיקה). Every knob is PER-VOICE — retune after every voice swap.
 
 ## The map

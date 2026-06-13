@@ -1,10 +1,10 @@
-# Hebrew Voice-Agent Speech Polish — the rules that made Maître sound human
+# Hebrew Voice-Agent Speech Polish — the rules that made Mika Voice Agent sound human
 
 Accumulated from ~10 live test calls with Tomer playing the guest. Each rule fixed a specific
 "that sounded wrong/robotic" complaint. Reusable for any Hebrew phone agent.
 
 ## Context
-Maître / ElevenLabs CAI / gpt-4o / v3 TTS, 2026-06-10 iteration session.
+Mika Voice Agent / ElevenLabs CAI / gpt-4o / v3 TTS, 2026-06-10 iteration session.
 
 ## Pattern body
 - **Times in spoken Hebrew, computed in code, not prompted**: pass `reservation_time_spoken`

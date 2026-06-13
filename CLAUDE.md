@@ -1,4 +1,4 @@
-# Maître — Hebrew Restaurant Voice Agent
+# Mika Voice Agent — Hebrew Restaurant Voice Agent
 
 Hebrew-only voice agent (persona **מיקה**) for **מסעדת קיסו** that calls guests to confirm
 today's reservations over a real phone line. Runtime of record: **ElevenLabs Conversational AI**
@@ -12,7 +12,7 @@ in-call RPCs. Team: Re'i Biton · Haim Toledano · Tomer Elzam.
 - `docs/submission/` — course final-assignment doc + Hebrew pitch deck (due 2026-06-13).
 
 ## Orchestration (n8n)
-Batch workflow «Maître — Call Today's Pending Reservations» (`G7RYSw2BQgqnabJt`) on
+Batch workflow «Mika Voice Agent — Call Today's Pending Reservations» (`G7RYSw2BQgqnabJt`) on
 YOUR-N8N-INSTANCE.app.n8n.cloud, built/updated via the n8n MCP. Triggers: Manual ("Run Batch") + **Webhook** (POST, path `maitre-run`, Respond
 Immediately) → production URL `https://YOUR-N8N-INSTANCE.app.n8n.cloud/webhook/maitre-run`. Hard allowlist
 in "Build Call Payloads" = **+972585121998 only** (the stage button dials only Tomer; fake-number

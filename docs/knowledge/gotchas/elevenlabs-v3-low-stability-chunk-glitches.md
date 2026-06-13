@@ -4,7 +4,7 @@ On `eleven_v3_conversational` telephony calls, stability values below 0.75 produ
 audio artifacts: slow-motion warps and hard cuts at generation-chunk seams. 0.75 is the floor.
 
 ## Context
-Maître voice tuning (2026-06-10/11). Chasing "less monotone" we lowered stability and hit two
+Mika Voice Agent voice tuning (2026-06-10/11). Chasing "less monotone" we lowered stability and hit two
 distinct glitches on two different voices.
 
 ## Root cause + fix

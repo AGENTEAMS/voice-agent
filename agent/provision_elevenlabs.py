@@ -1,4 +1,4 @@
-"""Provision מאיה — the Maître ElevenLabs Conversational AI agent — entirely via API.
+"""Provision מאיה — the Mika Voice Agent ElevenLabs Conversational AI agent — entirely via API.
 
 Source of truth for the agent config. Idempotent: re-run after every prompt/tool tweak;
 it updates in place (matched by name) instead of duplicating.

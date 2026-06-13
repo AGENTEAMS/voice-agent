@@ -1,5 +1,5 @@
 {
-  "name": "Maître — Call Today's Pending Reservations",
+  "name": "Mika Voice Agent — Call Today's Pending Reservations",
   "_note": "Sanitized export — logic only, NO credentials. Supabase project ref + ElevenLabs agent/phone IDs are placeholders (YOUR-...); attach your own n8n credentials (Supabase API + ElevenLabs httpHeaderAuth) on import. The n8n credential store holds the real keys — they are never part of this JSON.",
   "nodes": [
     {

@@ -48,9 +48,10 @@ export async function POST(req: Request) {
 
   const res = tzParts(new Date(row.reserved_for));
   const now = tzParts(new Date());
-  // Demo override: when redirecting to the test phone, greet the test person.
-  // Always first name only — a hostess never reads the full name off a list.
-  const fullName = (ENV.STAGE_CALL_TARGET && ENV.STAGE_CALL_NAME) || row.customers?.name || "אורח";
+  // Greet the CLICKED guest by their real first name (screen + audio match);
+  // the number dialed is still the allowlisted test phone (resolveTarget above).
+  // First name only — a hostess never reads the full name off a list.
+  const fullName = row.customers?.name || "אורח";
   const dyn = {
     customer_name: fullName.trim().split(/\s+/)[0],
     reservation_time: res.hhmm,

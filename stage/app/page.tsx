@@ -278,7 +278,9 @@ export default function Home() {
           calledId={calledId}
           flippedId={flippedId}
           onSelect={(id) => {
-            if (callState !== "idle") return;
+            // only block while a real call is actually in flight; otherwise always
+            // allow re-selecting (the CTA itself is disabled unless idle)
+            if (convIdRef.current) return;
             calledIdRef.current = id;
             setCalledId(id);
           }}

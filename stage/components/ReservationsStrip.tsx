@@ -35,7 +35,7 @@ export default function ReservationsStrip(props: {
     <aside className="strip">
       <h2>ההזמנות של הערב · {rows.length}</h2>
       {rows.map((r) => {
-        const selectable = r.status === "pending" && !!onSelect;
+        const selectable = !!onSelect;
         const name = r.customers?.name ?? "—";
         return (
           <div

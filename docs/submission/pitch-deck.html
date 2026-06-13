@@ -303,6 +303,19 @@
     <p class="pullquote r">הסוכן הסתברותי. <span class="ember">המערכת - לא.</span></p>
   </section>
 
+  <!-- 4b - THE GUARDS: why the system stays reliable -->
+  <section class="slide" id="s4b">
+    <div class="eyebrow r">הסתברותי ← אמין</div>
+    <h2 class="kicker r" style="margin-bottom:28px">חמישה שומרים שמחזיקים את המערכת</h2>
+    <ul class="probs r">
+      <li><strong style="font-weight:600">הלוגיקה ב-SQL, לא בפרומפט</strong> - הכלים קוראים לפונקציות Postgres; הסוכן רק קורא להן, לא מחשב.</li>
+      <li><strong style="font-weight:600">חוזה כלים</strong> - פעולה רק דרך קריאה אמיתית לכלי; אסור לנקוב בשעה בלי לבדוק זמינות.</li>
+      <li><strong style="font-weight:600">שער אישור</strong> - שינוי רק אחרי "כן" ברור; ההחלטה האחרונה היא הקובעת.</li>
+      <li><strong style="font-weight:600">שומר דטרמיניסטי (n8n)</strong> - כל שיחה שהסתיימה משאירה שינוי-סטטוס או שיחה חוזרת; אחרת ← חיוג חוזר, או needs_human לאדם.</li>
+      <li><strong style="font-weight:600">תיעוד מלא</strong> - כל החלטה נכתבת ל-Postgres. אף אורח לא נופל בין הכיסאות.</li>
+    </ul>
+  </section>
+
   <!-- 5 - RESULTS + VALUE + CTA -->
   <section class="slide" id="s5">
     <div class="eyebrow r">נמדד על שיחות אמיתיות</div>

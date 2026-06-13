@@ -263,6 +263,9 @@ export default function Home() {
           <span className="tagline">מיקה — המארחת הדיגיטלית</span>
         </div>
         <div className="headerEnd">
+          <a className="navlink" href="/insights">
+            תובנות ביטולים ←
+          </a>
           <a className="navlink" href="/tonight">
             סיכום הערב ←
           </a>

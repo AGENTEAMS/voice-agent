@@ -78,9 +78,14 @@ export default function Tonight() {
           <span className="restaurant">קיסו</span>
           <span className="tagline">סיכום הערב</span>
         </div>
-        <Link className="navlink" href="/">
-          ← לבמה
-        </Link>
+        <div className="headerEnd">
+          <Link className="navlink" href="/insights">
+            תובנות ביטולים ←
+          </Link>
+          <Link className="navlink" href="/">
+            ← לבמה
+          </Link>
+        </div>
       </header>
       <div className="tonight">
         <div className="cols">

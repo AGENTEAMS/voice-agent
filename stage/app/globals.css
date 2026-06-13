@@ -502,3 +502,50 @@ body[data-style="s10"] .cta {
 }
 body[data-style="s10"] .cta:hover:not(:disabled) { background: rgba(96, 70, 32, 0.08); box-shadow: none; }
 body[data-style="s10"] .avatar { border-radius: 4px; background: transparent; }
+
+/* ── Insights (cancellation analysis) page ─────────────────────────────── */
+.insights { height: 100%; overflow-y: auto; padding: 30px clamp(18px, 4vw, 56px); }
+.insightsInner { max-width: 1060px; margin: 0 auto; }
+.insHead { margin-bottom: 22px; }
+.insTitle { font-size: clamp(24px, 3vw, 32px); font-weight: 700; letter-spacing: -0.01em; }
+.insSub { font-size: 15px; color: var(--text-dim); margin-top: 7px; }
+.insSub b { color: var(--text); font-weight: 700; }
+
+.insGrid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 16px; align-items: start;
+}
+.insCard {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  padding: 18px 20px 20px; box-shadow: 0 2px 12px rgba(42, 39, 34, 0.05);
+}
+.insCardTop { display: flex; align-items: center; gap: 11px; }
+.insRank {
+  flex: 0 0 auto; width: 25px; height: 25px; border-radius: 50%;
+  background: var(--amber-faint); color: var(--amber);
+  font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center;
+}
+.insTheme { font-weight: 700; font-size: 18px; }
+.insMentions {
+  margin-inline-start: auto; font-size: 13px; color: var(--text-dim);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.insBar {
+  height: 6px; background: var(--amber-faint); border-radius: 99px;
+  margin: 13px 0 14px; overflow: hidden;
+}
+.insBar span { display: block; height: 100%; background: var(--amber); border-radius: 99px; }
+.insQuote {
+  font-style: italic; color: var(--text-dim); font-size: 14.5px; line-height: 1.5;
+  border-inline-start: 3px solid var(--border); padding-inline-start: 12px; margin-bottom: 13px;
+}
+.insLine { font-size: 14.5px; line-height: 1.55; margin-top: 9px; color: var(--text); }
+.insLabel {
+  display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.03em;
+  color: var(--text-faint); margin-inline-end: 8px; transform: translateY(-1px);
+}
+.insLine.rec .insLabel { color: var(--amber); }
+.insEmpty { grid-column: 1 / -1; color: var(--text-dim); padding: 50px; text-align: center; }
+.insFoot {
+  margin-top: 22px; font-size: 12.5px; color: var(--text-faint); text-align: center; line-height: 1.6;
+}

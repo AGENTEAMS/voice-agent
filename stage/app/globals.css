@@ -167,11 +167,18 @@ button { font-family: inherit; }
 }
 .strip h2 { font-size: 13px; font-weight: 500; color: var(--text-faint); margin-bottom: 12px; }
 .row {
-  display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px;
-  border: 1px solid transparent; margin-bottom: 4px; font-size: 13.5px; color: var(--text-dim);
+  display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px;
+  border: 1px solid transparent; margin-bottom: 6px; color: var(--text-dim);
 }
-.row .name { color: var(--text); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.row .meta { font-variant-numeric: tabular-nums; font-size: 12.5px; }
+.avatar {
+  width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+  background: var(--amber-faint); border: 1px solid var(--amber-soft); color: var(--amber);
+  font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+.rowMain { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.row .name { color: var(--text); font-weight: 600; font-size: 13.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.row .party { font-size: 11.5px; color: var(--text-dim); }
+.row .time { font-size: 13px; color: var(--text-dim); }
 .row .dot {
   width: 7px; height: 7px; border-radius: 50%; background: var(--text-faint); flex-shrink: 0;
 }
@@ -251,3 +258,145 @@ button { font-family: inherit; }
   border-radius: 99px; padding: 1.5px 9px;
 }
 .colDot.cb { background: var(--amber); }
+
+/* ═══ Style switcher ═══ */
+.styleSwitcher { position: fixed; inset-inline-start: 16px; bottom: 14px; z-index: 60; font-size: 13px; }
+.ssToggle {
+  background: var(--surface); color: var(--text-dim); border: 1px solid var(--border);
+  border-radius: 99px; padding: 7px 14px; cursor: pointer; box-shadow: 0 3px 14px rgba(0,0,0,.08);
+}
+.ssList {
+  position: absolute; bottom: 42px; inset-inline-start: 0; display: flex; flex-direction: column;
+  gap: 2px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 6px; box-shadow: 0 8px 30px rgba(0,0,0,.12); min-width: 150px;
+}
+.ssItem { background: none; border: none; text-align: start; padding: 6px 9px; border-radius: 8px; cursor: pointer; color: var(--text); font-size: 13px; }
+.ssItem:hover { background: var(--amber-faint); }
+.ssItem.active { background: var(--amber-faint); color: var(--amber); font-weight: 600; }
+.ssNum { display: inline-block; width: 16px; color: var(--text-faint); font-family: var(--font-mono); }
+
+/* ═══ V1 פשתן+ — refined linen: grain + warm vignette ═══ */
+body[data-style="v1"] {
+  background:
+    radial-gradient(900px 600px at 42% 40%, rgba(255, 251, 240, 0.9), transparent 70%),
+    radial-gradient(rgba(42, 39, 34, 0.028) 1px, transparent 1px), var(--bg);
+  background-size: auto, 26px 26px, auto;
+}
+body[data-style="v1"] .strip { background: rgba(255, 253, 248, 0.55); }
+
+/* ═══ V2 כרטיסיות — ticket stubs ═══ */
+body[data-style="v2"] {
+  background:
+    repeating-linear-gradient(45deg, transparent 0 16px, rgba(42, 39, 34, 0.016) 16px 17px), var(--bg);
+}
+body[data-style="v2"] .row {
+  background: var(--surface); border-color: var(--border); border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(42, 39, 34, 0.05); padding: 9px 12px;
+}
+body[data-style="v2"] .row .time {
+  border-inline-start: 1px dashed var(--border); padding-inline-start: 12px;
+  font-size: 14.5px; color: var(--text); align-self: stretch; display: flex; align-items: center;
+}
+body[data-style="v2"] .avatar { border-radius: 8px; }
+
+/* ═══ V3 פנקס המארחת — maître's ledger, serif + ruling ═══ */
+body[data-style="v3"] { --bg: #f7f1e3; --surface: #fffaf0; --border: #e3d6bb; }
+body[data-style="v3"] .brand .restaurant,
+body[data-style="v3"] .row .name,
+body[data-style="v3"] .strip h2 { font-family: var(--font-serif); }
+body[data-style="v3"] .brand .restaurant { font-size: 26px; }
+body[data-style="v3"] .strip {
+  background:
+    repeating-linear-gradient(0deg, transparent 0 35px, rgba(167, 139, 90, 0.18) 35px 36px);
+}
+body[data-style="v3"] .row { border-radius: 0; border-bottom: none; margin-bottom: 0; min-height: 36px; padding: 2px 6px; }
+body[data-style="v3"] .avatar { display: none; }
+body[data-style="v3"] .row .name { font-size: 15px; font-weight: 500; }
+body[data-style="v3"] .row .party { font-size: 11px; }
+body[data-style="v3"] .row .time { font-size: 14px; color: var(--text); }
+body[data-style="v3"] .row.called { background: var(--amber-faint); border: none; outline: 1px solid var(--amber-soft); }
+
+/* ═══ V4 אור נרות — candlelight espresso ═══ */
+body[data-style="v4"] {
+  --bg: #191512; --surface: #221d18; --border: #3a3027;
+  --text: #ede4d6; --text-dim: #a3947f; --text-faint: #6b5f50;
+  --orb-hi: #332b22; --orb-lo: #1c1712; --orb-border: #4a3d2e;
+  --node-flare-text: #ecd9b3; --wire-tail: rgba(255, 255, 255, 0.05);
+  --red-dim: #8a5a52; --amber-faint: rgba(232, 163, 61, 0.1);
+  background:
+    radial-gradient(1000px 700px at 42% 38%, rgba(232, 163, 61, 0.07), transparent 70%), #191512;
+}
+body[data-style="v4"] .node, body[data-style="v4"] .counter, body[data-style="v4"] .ccard,
+body[data-style="v4"] .colHead { box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3); }
+body[data-style="v4"] .row { background: var(--surface); border-color: var(--border); }
+body[data-style="v4"] .row.called { border-color: rgba(232, 163, 61, 0.5); background: rgba(232, 163, 61, 0.08); }
+
+/* ═══ V5 טראצו — sparse terrazzo dots, pill rows ═══ */
+body[data-style="v5"] {
+  --bg: #f6f1e7;
+  background:
+    radial-gradient(3px 3px at 31px 47px, rgba(199, 126, 31, 0.2), transparent 4px),
+    radial-gradient(2.5px 2.5px at 127px 163px, rgba(62, 142, 90, 0.16), transparent 4px),
+    radial-gradient(2px 2px at 191px 83px, rgba(42, 39, 34, 0.12), transparent 3px),
+    radial-gradient(3px 3px at 83px 211px, rgba(185, 132, 125, 0.18), transparent 4px),
+    #f6f1e7;
+  background-size: 240px 240px;
+}
+body[data-style="v5"] .row { background: var(--surface); border-color: var(--border); border-radius: 99px; padding: 6px 9px; }
+body[data-style="v5"] .row .time { background: var(--bg); border-radius: 99px; padding: 3px 10px; font-size: 12.5px; }
+body[data-style="v5"] .node { border-radius: 18px; }
+
+/* ═══ V6 ביסטרו — bold poster, awning stripe ═══ */
+body[data-style="v6"] .header {
+  border-bottom: none;
+  box-shadow: 0 1px 0 var(--border), inset 0 -6px 0 -2px transparent;
+  background:
+    linear-gradient(var(--bg), var(--bg)) padding-box,
+    repeating-linear-gradient(90deg, var(--amber) 0 22px, transparent 22px 44px) border-box;
+  border-block-end: 5px solid transparent;
+}
+body[data-style="v6"] .brand .restaurant { font-family: var(--font-serif); font-size: 27px; font-weight: 700; }
+body[data-style="v6"] .row { border-radius: 8px; padding: 10px 12px; }
+body[data-style="v6"] .row:nth-child(even) { background: var(--surface); }
+body[data-style="v6"] .row .name { font-family: var(--font-serif); font-size: 15.5px; }
+body[data-style="v6"] .row .time { font-size: 16.5px; font-weight: 700; color: var(--text); font-family: var(--font-serif); }
+body[data-style="v6"] .avatar { display: none; }
+
+/* ═══ V7 זכוכית חמה — warm glass, floating frosted rows ═══ */
+body[data-style="v7"] {
+  background:
+    radial-gradient(800px 500px at 80% 8%, rgba(199, 126, 31, 0.12), transparent 65%),
+    radial-gradient(700px 500px at 12% 92%, rgba(62, 142, 90, 0.07), transparent 65%),
+    linear-gradient(165deg, #f6f2ea, #efe9dd);
+}
+body[data-style="v7"] .strip { border-inline-start-color: rgba(255, 255, 255, 0.7); }
+body[data-style="v7"] .row {
+  background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(10px);
+  border-color: rgba(255, 255, 255, 0.75); box-shadow: 0 4px 18px rgba(42, 39, 34, 0.06);
+}
+body[data-style="v7"] .node {
+  background: rgba(255, 253, 248, 0.6); backdrop-filter: blur(8px);
+  border-color: rgba(255, 255, 255, 0.8);
+}
+body[data-style="v7"] .cta { box-shadow: 0 8px 28px rgba(199, 126, 31, 0.3); }
+
+/* ═══ V8 קו דק — hairline minimal, concentric echo ═══ */
+body[data-style="v8"] {
+  background:
+    repeating-radial-gradient(circle at 41% 42%, rgba(42, 39, 34, 0.022) 0 1px, transparent 1px 110px),
+    var(--bg);
+}
+body[data-style="v8"] .row {
+  border-radius: 0; border-bottom: 1px solid var(--border); margin-bottom: 0; padding: 10px 4px;
+}
+body[data-style="v8"] .avatar { display: none; }
+body[data-style="v8"] .row .party {
+  order: 2; font-size: 11px; border: 1px solid var(--border); border-radius: 99px;
+  padding: 1px 8px; align-self: flex-start;
+}
+body[data-style="v8"] .strip h2 { letter-spacing: 0.12em; text-transform: none; font-size: 12px; }
+body[data-style="v8"] .node { background: transparent; box-shadow: none; }
+body[data-style="v8"] .cta {
+  background: transparent; color: var(--amber); border: 1.5px solid var(--amber);
+}
+body[data-style="v8"] .cta:hover:not(:disabled) { background: var(--amber-faint); box-shadow: none; }

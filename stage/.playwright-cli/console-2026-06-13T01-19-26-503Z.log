@@ -1,0 +1,130 @@
+[  824793ms] [ERROR] ./app/layout.tsx:4:1
+Module not found: Can't resolve '@/components/StyleSwitcher'
+  2 | import { Heebo, IBM_Plex_Mono, Frank_Ruhl_Libre } from "next/font/google";
+  3 | import "./globals.css";
+> 4 | import StyleSwitcher from "@/components/StyleSwitcher";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | const heebo = Heebo({ subsets: ["hebrew", "latin"], variable: "--font-heebo" });
+  7 | const mono = IBM_Plex_Mono({
+
+Import map: aliased to relative './components/StyleSwitcher' inside of [project]/
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[  825307ms] [ERROR] ./app/layout.tsx:4:1
+Module not found: Can't resolve '@/components/StyleSwitcher'
+  2 | import { Heebo, IBM_Plex_Mono, Frank_Ruhl_Libre } from "next/font/google";
+  3 | import "./globals.css";
+> 4 | import StyleSwitcher from "@/components/StyleSwitcher";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | const heebo = Heebo({ subsets: ["hebrew", "latin"], variable: "--font-heebo" });
+  7 | const mono = IBM_Plex_Mono({
+
+Import map: aliased to relative './components/StyleSwitcher' inside of [project]/
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[  825485ms] [ERROR] ./app/layout.tsx:4:1
+Module not found: Can't resolve '@/components/StyleSwitcher'
+  2 | import { Heebo, IBM_Plex_Mono, Frank_Ruhl_Libre } from "next/font/google";
+  3 | import "./globals.css";
+> 4 | import StyleSwitcher from "@/components/StyleSwitcher";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | const heebo = Heebo({ subsets: ["hebrew", "latin"], variable: "--font-heebo" });
+  7 | const mono = IBM_Plex_Mono({
+
+Import map: aliased to relative './components/StyleSwitcher' inside of [project]/
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:3318
+[  825486ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/tonight?_rsc=ORYqCmOSamSaGd1I:0
+[  825516ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/tonight?_rsc=ORYqCmOSamSaGd1I:0
+[  825539ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/tonight:0
+[  825646ms] Error: ./app/layout.tsx:4:1
+Module not found: Can't resolve '@/components/StyleSwitcher'
+  2 | import { Heebo, IBM_Plex_Mono, Frank_Ruhl_Libre } from "next/font/google";
+  3 | import "./globals.css";
+> 4 | import StyleSwitcher from "@/components/StyleSwitcher";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | const heebo = Heebo({ subsets: ["hebrew", "latin"], variable: "--font-heebo" });
+  7 | const mono = IBM_Plex_Mono({
+
+Import map: aliased to relative './components/StyleSwitcher' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./app/layout.tsx:4:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at Object.getCompilationErrors (file:///Users/tomer/Development/personal/voice-agent/stage/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:1186:59)
+    at DevBundlerService.getCompilationError (file:///Users/tomer/Development/personal/voice-agent/stage/node_modules/next/dist/server/lib/dev-bundler-service.js:44:55)
+    at DevServer.getCompilationError (file:///Users/tomer/Development/personal/voice-agent/stage/node_modules/next/dist/server/dev/next-dev-server.js:720:42)
+    at DevServer.findPageComponents (file:///Users/tomer/Development/personal/voice-agent/stage/node_modules/next/dist/server/dev/next-dev-server.js:690:43)
+    at async DevServer.renderErrorToResponseImpl (file:///Users/tomer/Development/personal/voice-agent/stage/node_modules/next/dist/server/base-server.js:1753:26)
+[  825659ms] [ERROR] ./app/layout.tsx:4:1
+Module not found: Can't resolve '@/components/StyleSwitcher'
+  2 | import { Heebo, IBM_Plex_Mono, Frank_Ruhl_Libre } from "next/font/google";
+  3 | import "./globals.css";
+> 4 | import StyleSwitcher from "@/components/StyleSwitcher";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | const heebo = Heebo({ subsets: ["hebrew", "latin"], variable: "--font-heebo" });
+  7 | const mono = IBM_Plex_Mono({
+
+Import map: aliased to relative './components/StyleSwitcher' inside of [project]/
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  825659ms] [ERROR] ./app/layout.tsx:4:1
+Module not found: Can't resolve '@/components/StyleSwitcher'
+  2 | import { Heebo, IBM_Plex_Mono, Frank_Ruhl_Libre } from "next/font/google";
+  3 | import "./globals.css";
+> 4 | import StyleSwitcher from "@/components/StyleSwitcher";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | const heebo = Heebo({ subsets: ["hebrew", "latin"], variable: "--font-heebo" });
+  7 | const mono = IBM_Plex_Mono({
+
+Import map: aliased to relative './components/StyleSwitcher' inside of [project]/
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  825659ms] [ERROR] ./app/layout.tsx:4:1
+Module not found: Can't resolve '@/components/StyleSwitcher'
+  2 | import { Heebo, IBM_Plex_Mono, Frank_Ruhl_Libre } from "next/font/google";
+  3 | import "./globals.css";
+> 4 | import StyleSwitcher from "@/components/StyleSwitcher";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | const heebo = Heebo({ subsets: ["hebrew", "latin"], variable: "--font-heebo" });
+  7 | const mono = IBM_Plex_Mono({
+
+Import map: aliased to relative './components/StyleSwitcher' inside of [project]/
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  825706ms] [ERROR] ./app/layout.tsx:4:1
+Module not found: Can't resolve '@/components/StyleSwitcher'
+  2 | import { Heebo, IBM_Plex_Mono, Frank_Ruhl_Libre } from "next/font/google";
+  3 | import "./globals.css";
+> 4 | import StyleSwitcher from "@/components/StyleSwitcher";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | const heebo = Heebo({ subsets: ["hebrew", "latin"], variable: "--font-heebo" });
+  7 | const mono = IBM_Plex_Mono({
+
+Import map: aliased to relative './components/StyleSwitcher' inside of [project]/
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945
+[  827411ms] [ERROR] ./app/layout.tsx:4:1
+Module not found: Can't resolve '@/components/StyleSwitcher'
+  2 | import { Heebo, IBM_Plex_Mono, Frank_Ruhl_Libre } from "next/font/google";
+  3 | import "./globals.css";
+> 4 | import StyleSwitcher from "@/components/StyleSwitcher";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 |
+  6 | const heebo = Heebo({ subsets: ["hebrew", "latin"], variable: "--font-heebo" });
+  7 | const mono = IBM_Plex_Mono({
+
+Import map: aliased to relative './components/StyleSwitcher' inside of [project]/
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_1gdrd03._.js:1945

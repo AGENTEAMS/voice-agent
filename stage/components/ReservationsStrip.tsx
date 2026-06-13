@@ -16,6 +16,14 @@ const fmtTime = (iso: string) =>
     minute: "2-digit",
   }).format(new Date(iso));
 
+const initials = (name: string) =>
+  name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("");
+
 export default function ReservationsStrip(props: {
   rows: ReservationRow[];
   calledId: string | null;
@@ -28,6 +36,7 @@ export default function ReservationsStrip(props: {
       <h2>ההזמנות של הערב · {rows.length}</h2>
       {rows.map((r) => {
         const selectable = r.status === "pending" && !!onSelect;
+        const name = r.customers?.name ?? "—";
         return (
           <div
             key={`${r.id}-${r.status}`}
@@ -41,11 +50,15 @@ export default function ReservationsStrip(props: {
             onClick={selectable ? () => onSelect!(r.id) : undefined}
             title={selectable ? "לחיצה תבחר את האורח לשיחה" : undefined}
           >
-            <span className="dot" />
-            <span className="name">{r.customers?.name ?? "—"}</span>
-            <span className="meta">
-              {fmtTime(r.reserved_for)} · {r.party_size}
+            <span className="avatar" aria-hidden="true">
+              {initials(name)}
             </span>
+            <span className="rowMain">
+              <span className="name">{name}</span>
+              <span className="party">{r.party_size} סועדים</span>
+            </span>
+            <span className="time mono">{fmtTime(r.reserved_for)}</span>
+            <span className="dot" />
           </div>
         );
       })}

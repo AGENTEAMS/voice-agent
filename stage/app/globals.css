@@ -190,10 +190,13 @@ button { font-family: inherit; }
 .row[data-status="cancelled"] .name { text-decoration: line-through; color: var(--text-faint); }
 .row[data-status="needs_human"] .dot { background: var(--amber); }
 .row.called {
-  border-color: var(--amber-soft); background: var(--amber-faint);
+  border-color: var(--amber); background: var(--amber-soft);
+  box-shadow: 0 2px 14px var(--amber-soft);
 }
-.row.selectable { cursor: pointer; }
-.row.selectable:hover { border-color: var(--amber-soft); }
+.row.called .name { font-weight: 700; }
+.row.called .avatar { background: var(--amber); border-color: var(--amber); color: #fff; }
+.row.selectable { cursor: pointer; transition: background 0.12s ease, border-color 0.12s ease; }
+.row.selectable:hover { border-color: var(--amber-soft); background: var(--amber-faint); }
 .row.flip { animation: rowflip 1.1s ease-out; }
 @keyframes rowflip {
   0% { background: rgba(95, 191, 119, 0.28); }
@@ -202,7 +205,7 @@ button { font-family: inherit; }
 .row.called.flip { animation: rowflipCalled 1.1s ease-out forwards; }
 @keyframes rowflipCalled {
   0% { background: rgba(95, 191, 119, 0.3); }
-  100% { background: var(--amber-faint); }
+  100% { background: var(--amber-soft); }
 }
 
 /* ── Nav link + header end ──────────────────────────────────────────────── */

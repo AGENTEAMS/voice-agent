@@ -14,9 +14,12 @@ in-call RPCs. Team: Re'i Biton · Haim Toledano · Tomer Elzam.
 ## Orchestration (n8n)
 Batch workflow «Maître — Call Today's Pending Reservations» (`G7RYSw2BQgqnabJt`) on
 asher13.app.n8n.cloud, built/updated via the instance-level n8n MCP (server "n8n" in local
-claude config). Manual trigger only. Hard allowlist in "Build Call Payloads": +972525898552;
-+972585121998 is the human-transfer target (`HUMAN_TRANSFER_NUMBER`). `update_workflow`
-WIPES node credentials — after any update, re-pick on the 6 HTTP nodes.
+claude config). Triggers: Manual ("Run Batch") + **Webhook** (POST, path `maitre-run`, Respond
+Immediately) → production URL `https://asher13.app.n8n.cloud/webhook/maitre-run`. Hard allowlist
+in "Build Call Payloads" = **+972585121998 only** (the stage button dials only Tomer; fake-number
+pending rows are skipped/display-only). `update_workflow` WIPES node credentials — so the webhook
+trigger was added BY HAND in the UI (not via MCP); for any structural change, prefer a manual UI
+edit or expect to re-pick the 6 HTTP-node creds.
 
 ## Long-term context (Tomer's machine)
 Vault: `~/Development/vaults/voice-agent/` — read `hot.md` for where-we-left-off, `index.md`
@@ -39,6 +42,11 @@ writes), click-to-call, `/tonight` results, 10 scene styles, `?sim=1` fallback. 
 the DB (`tool_events` + Supabase Realtime), so n8n batch / CTA / scheduler all light it. Run
 from `stage/`. Demo flow + test ladder: `docs/stage-demo-runbook.md`. (The old `dashboard/`
 is the scrapped prototype — `stage/` replaces it.)
+**Deployed (live):** https://voice-agent-delta-one.vercel.app/ (Tomer's Vercel, Root Dir=`stage`).
+The CTA → `POST /api/run` → `demo_reset()` RPC (reset-on-START) → n8n webhook → calls Tomer. DB-function
+changes need no redeploy (app reads live DB); app/CSS changes do → push to main (Vercel auto-builds;
+`NEXT_PUBLIC_*` inlined at BUILD). `demo_reset()` is now a Postgres RPC (migrations 0005/0006) — the
+single source for the demo slate; `seed.sql` + `demo_reset.py` just call it.
 
 ## Rules
 - **Provisioning-as-code**: never hand-edit the agent in the ElevenLabs dashboard — change

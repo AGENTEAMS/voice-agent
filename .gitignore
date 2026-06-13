@@ -27,3 +27,4 @@ supabase/.temp/
 
 # OS
 .DS_Store
+.superpowers/

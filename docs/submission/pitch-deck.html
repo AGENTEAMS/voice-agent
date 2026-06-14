@@ -173,6 +173,20 @@
 
   .foot-note{margin-top:26px;font-size:clamp(14px,1.45vw,18px);color:var(--ink-soft);opacity:.95;font-weight:400}
 
+  /* ---------- model evaluation slide ---------- */
+  .evalt{width:100%;border-collapse:collapse;font-size:clamp(15px,1.7vw,22px)}
+  .evalt tr{border-bottom:1px solid var(--line)}
+  .evalt td{padding:14px 14px;vertical-align:baseline}
+  .evalt .m{font-weight:700;color:var(--ink);width:36%;padding-inline-end:18px;line-height:1.25;
+    font-variant-numeric:tabular-nums}
+  .evalt .v{color:var(--ink-soft);font-weight:300;line-height:1.35}
+  .evalt tr.win{background:var(--paper-2)}
+  .evalt tr.win .m{color:var(--ember)}
+  .evalt tr.win td:first-child{border-inline-start:3px solid var(--ember)}
+  .evalt tr.win .v{color:var(--ink);font-weight:400}
+  .evalt .tag{font-size:.66em;font-weight:700;color:var(--ember);margin-inline-start:10px;white-space:nowrap}
+  #seval .kicker{margin-bottom:22px}
+
   /* nav dots */
   .dots{position:fixed;bottom:4vh;left:50%;transform:translateX(-50%);z-index:8;display:flex;gap:10px}
   .dots button{width:8px;height:8px;border-radius:50%;border:1px solid var(--ink-soft);
@@ -248,7 +262,7 @@
     <div class="cols">
       <ul class="probs r">
         <li>מארחת מתקשרת לכל ההזמנות של הלילה - ידנית, כל יום.</li>
-        <li>בימים עמוסים פשוט לא מתקשרים ← <strong style="font-weight:600">10-20% אי-הגעה.</strong></li>
+        <li>בימים עמוסים פשוט לא מתקשרים ← <strong style="font-weight:600">וזה כשאי-ההגעות הכי כואבות.</strong></li>
         <li>SMS לא פותר: אי אפשר להתמקח עם תזכורת.</li>
       </ul>
       <div class="roi r">
@@ -275,6 +289,20 @@
       <tr><td class="comp">אירוח · פריסה</td><td class="pick"><b>Vercel</b></td><td class="why">הדשבורד פרוס בענן עם כתובת ייעודית - לחיצה מריצה את n8n</td></tr>
       <tr><td class="comp">קוד · גרסאות</td><td class="pick"><b>GitHub</b></td><td class="why">כל המערכת בקוד, עם פריסה אוטומטית מ-main</td></tr>
     </table>
+  </section>
+
+  <!-- 3b - MODEL EVALUATION -->
+  <section class="slide" id="seval">
+    <div class="eyebrow r">הערכה · איך בחרנו את המודל</div>
+    <h2 class="kicker r">חמישה מודלים נכנסו לשיחה. אחד שרד.</h2>
+    <table class="evalt r">
+      <tr><td class="m">GPT-4o-mini</td><td class="v">הכריזה שביצעה פעולות - בלי לקרוא לכלים בפועל</td></tr>
+      <tr><td class="m">GPT-5-mini</td><td class="v">איטית מדי לשיחה חיה - זמן תגובה כבד</td></tr>
+      <tr><td class="m">Gemini 2.5 Flash</td><td class="v">תורות שקטים - נתקעה בלי לענות</td></tr>
+      <tr><td class="m">GPT-4o</td><td class="v">עבדה מצוין - אבל יקרה</td></tr>
+      <tr class="win"><td class="m">Gemini 3 Flash <span class="tag">✓ נבחרה</span></td><td class="v">קוראת לכלים באמינות, מהירה - והמשתלמת ביותר</td></tr>
+    </table>
+    <p class="tradeoff r">הצוואר הצר לא היה עברית - אלא משמעת בקריאה לכלים וזמן תגובה. שם נפלו רוב המודלים.</p>
   </section>
 
   <!-- 4 - HER TOOLS -->

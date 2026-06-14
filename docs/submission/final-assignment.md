@@ -16,7 +16,7 @@ Code repository: **https://github.com/AGENTEAMS/voice-agent**
 
 ### Chosen Business Problem
 
-We chose **restaurant reservation confirmation** as our problem - a daily, well-documented operations pain every restaurant faces. We build the POC around a representative Tel-Aviv restaurant we call **קיסו (Kisu)**: its host team would spend **1.5-2 hours every afternoon** phoning guests to confirm that evening's reservations - and on busy days the calls simply don't all get made. Unconfirmed reservations turn into no-shows: a held table on a Friday night is unsellable inventory. Industry data consistently places restaurant no-show rates at **10–20%**, and confirmation calls are the single most effective countermeasure — but they are exactly the work a small host team doesn't have time for.
+We chose **restaurant reservation confirmation** as our problem - a daily, well-documented operations pain every restaurant faces. We build the POC around a representative Tel-Aviv restaurant we call **קיסו (Kisu)**: its host team would spend **1.5-2 hours every afternoon** phoning guests to confirm that evening's reservations - and on busy days the calls simply don't all get made. Unconfirmed reservations turn into no-shows: a held table on a Friday night is unsellable inventory. No-shows are a well-documented, material revenue loss for restaurants, and confirmation calls are the single most effective countermeasure — but they are exactly the work a small host team doesn't have time for.
 
 > Daily reservation-confirmation calls either consume ~2 hours of staff time or silently don't happen. This impacts the restaurant through no-show revenue loss (a 4-top held and unfilled on a peak night), and impacts guests through inability to easily adjust or cancel — which itself produces more no-shows.
 
@@ -190,4 +190,4 @@ flowchart LR
 - **Call to Action:** Pilot-ready, demonstrated end-to-end on our Kisu demo restaurant; next: inbound reservations + multi-restaurant rollout. *"The agent is probabilistic. The system is not."*
 
 ---
-*Document maps 1:1 to the course template; KPI figures marked "est." are projections, all other numbers are measured from the live test campaign (conversation IDs and DB rows auditable in the repo/Supabase).*
+*Note on figures: KPIs marked "est." are projections for a representative 40-reservation/night restaurant; all other numbers are measured from our live test campaign, with conversation IDs and database rows auditable in the repository.*

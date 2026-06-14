@@ -40,7 +40,7 @@ Project Breakdown rules (large fonts, minimal text, evaluation-with-numbers, cha
 **Headline:** כל ערב, שעתיים על הטלפון. ושולחנות ריקים שאף אחד לא ידע עליהם.
 **Right - the problem (3 bullets):**
 - מארחת מתקשרת לכל ההזמנות - ידנית, כל יום
-- בימים עמוסים לא מתקשרים ← **וזה כשאי-ההגעות הכי כואבות**  *(RTL: arrow points LEFT)*
+- בימים עמוסים לא מתקשרים ← **אי-הגעות שאפשר היה למנוע**  *(RTL: arrow points LEFT)*
 - SMS לא פותר: אי אפשר להתמקח עם תזכורת
 **Left - ROI cards (ember numbers):**
 - **~45 שע׳** - זמן צוות שמשתחרר בחודש (~90%)

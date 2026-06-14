@@ -71,7 +71,7 @@ Project Breakdown rules (large fonts, minimal text, evaluation-with-numbers, cha
 reconcile guard catches any call that left no DB trace and routes it within seconds.
 
 ## Slide 5 - תוצאות · ערך · קריאה לפעולה (results + CTA)  *(~1 min)*
-**Eyebrow:** נמדד על שיחות אמיתיות
+**Eyebrow:** נמדד על שיחות דמה
 **3 hero numbers (ember):** **100%** מהשיחות שהוכרעו נכתבו נכון במערכת · **~1.3 שנ׳** זמן תגובה · **22** שיחות · 14 תרחישים
 **Before/After table:**
 - זמן צוות ביום: ~שעתיים → **~10 דקות** (חריגים)

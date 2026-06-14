@@ -81,7 +81,7 @@ def _azure(text, env, voice):
         "Ocp-Apim-Subscription-Key": env["AZURE_SPEECH_KEY"],
         "Content-Type": "application/ssml+xml",
         "X-Microsoft-OutputFormat": "audio-24khz-48kbitrate-mono-mp3",
-        "User-Agent": "maitre-tts-audition",
+        "User-Agent": "mika-tts-audition",
     }
     return http_post(url, ssml, headers), "mp3"
 

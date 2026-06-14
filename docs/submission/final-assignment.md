@@ -164,7 +164,7 @@ flowchart LR
 - **Operational Efficiency:** Confirmation calling is removed from the host team's afternoon entirely; the human role shifts to reviewing a short exception list (needs_human) on a dashboard.
 - **Revenue Protection:** Every cancellation and time-change is captured hours before service while the table can still be resold; the cancellation *reason* is collected for management insight.
 - **Customer Experience:** Guests get a pleasant 40-second Hebrew conversation that can actually solve their problem (move the slot, leave a message, reach a human) instead of an ignorable SMS.
-- **Market Advantage:** To our knowledge, no Israeli reservation product offers negotiating Hebrew voice confirmation; the restaurant operates as an early adopter with a defensible ops improvement.
+- **Market Advantage:** To our knowledge, no Israeli reservation product offers negotiating Hebrew voice confirmation; a restaurant adopting this would gain an early-mover, defensible ops improvement.
 
 **Strategic Scalability Potential**
 
@@ -187,7 +187,7 @@ flowchart LR
 - **Solution Overview:** Mika — a digital hostess that calls, negotiates against the live reservation book, writes every outcome to the database mid-call, and escalates to a human when it matters. A deterministic orchestration layer guarantees nothing falls through.
 - **Demo:** Live batch run from n8n → a real phone rings on stage → confirm-with-a-twist (move the time; she negotiates a full slot) → the dashboard shows turns, tool calls, and the reservation flipping to confirmed in real time.
 - **Business Value:** ~2 staff-hours/day → 10 minutes of exception review; ~10× cheaper per confirmation; cancellations surfaced while tables are still resellable.
-- **Call to Action:** Pilot running for Kisu; next: inbound reservations + multi-restaurant rollout. *"The agent is probabilistic. The system is not."*
+- **Call to Action:** Pilot-ready, demonstrated end-to-end on our Kisu demo restaurant; next: inbound reservations + multi-restaurant rollout. *"The agent is probabilistic. The system is not."*
 
 ---
 *Document maps 1:1 to the course template; KPI figures marked "est." are projections, all other numbers are measured from the live test campaign (conversation IDs and DB rows auditable in the repo/Supabase).*

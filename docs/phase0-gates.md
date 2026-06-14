@@ -83,5 +83,5 @@ ngrok http 5050     # copy host → PUBLIC_HOST in .env → restart uvicorn
 python outbound.py --list
 python outbound.py --reservation <uuid> --to +9725XXXXXXXX   # your own number
 ```
-Expected: your phone rings, מאיה greets in Hebrew, confirms/cancels, and the reservation row updates in
+Expected: your phone rings, מיקה greets in Hebrew, confirms/cancels, and the reservation row updates in
 Supabase.

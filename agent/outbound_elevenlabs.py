@@ -1,6 +1,6 @@
 """Place outbound confirmation calls via ElevenLabs Conversational AI (over your Twilio number).
 
-ElevenLabs owns the telephony + the voice agent (מאיה). Before each call we read the
+ElevenLabs owns the telephony + the voice agent (מיקה). Before each call we read the
 reservation from Supabase and pass customer_name / reservation_time / party_size / reservation_id
 as dynamic variables, so the agent greets the right guest from the first word.
 

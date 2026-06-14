@@ -1,4 +1,4 @@
-"""Create (or refresh) a demo reservation for a REAL person — so מאיה calls you by your name.
+"""Create (or refresh) a demo reservation for a REAL person — so מיקה calls you by your name.
 
 Upserts the customer by phone, cancels any of their older pending reservations today,
 and inserts a fresh pending reservation for TODAY at the given time.

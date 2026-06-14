@@ -20,8 +20,9 @@ on the same Supabase backend — see the history of this page in the source vaul
   applied only to the deleted websocket bridge.
 - Deleted: `bridge.py`, `tools.py`, `prompts.py`, `outbound.py`, `test_oai.py`. Canonical prompt
   now lives inside `provision_elevenlabs.py`. The old gpt-realtime Hebrew-MOS open question is moot.
-- Persona settled (after מאיה → קראטוס experiments): **רוני** — male Hebrew clone voice
-  `wRcoZ4j6obhmFlVbHDKT`, masculine Hebrew prompt.
+- Persona iteration (מאיה → קראטוס → רוני experiments, incl. a male Hebrew clone voice
+  `wRcoZ4j6obhmFlVbHDKT` with a masculine prompt) later settled on **מיקה** — a feminine
+  Hebrew clone hostess (the current live persona).
 
 ## Verified live (2026-06-10, Tomer's phone)
 confirm / cancel / change-time with negotiation (full slot → alternative offered) / callback

@@ -2,7 +2,7 @@
 
 A session-by-session narrative of how this project evolved, written for new collaborators.
 Mika Voice Agent is the GenAI course final project: a Hebrew-only voice agent for restaurants
-(מסעדת לבונטין in the demo) that **outbound**-calls today's reservations to confirm/cancel
+(מסעדת קיסו in the demo) that **outbound**-calls today's reservations to confirm/cancel
 (updating a Supabase DB) and answers **inbound** FAQ. Team: Re'i Biton, Haim Toledano, Tomer Elzam.
 
 The deeper "why" behind each decision lives in `docs/knowledge/` — linked throughout.

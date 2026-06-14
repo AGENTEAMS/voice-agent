@@ -2,7 +2,7 @@
   {
     "id": "out_greeting",
     "category": "outbound",
-    "text": "שלום, מדברים ממסעדת לבונטין. אני מתקשר כדי לאשר את ההזמנה שלך להיום.",
+    "text": "שלום, מדברים ממסעדת קיסו. אני מתקשר כדי לאשר את ההזמנה שלך להיום.",
     "note": "Outbound opener — must sound warm and human, not robotic."
   },
   {

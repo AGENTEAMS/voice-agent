@@ -4,14 +4,14 @@ ElevenLabs Conversational AI owns the entire voice stack: telephony (a Twilio nu
 ElevenLabs), STT, LLM, TTS, turn-taking, and tool-calling. There is **no audio server in this repo**
 — our code only *triggers* calls and owns the data the agent reads/writes (Supabase).
 
-The agent (מאיה, hostess of מסעדת לבונטין) calls a guest with a reservation today, confirms /
+The agent (מיקה, hostess of מסעדת קיסו) calls a guest with a reservation today, confirms /
 cancels / changes it, and writes the outcome back to Supabase through webhook tools that hit
 PostgREST RPCs directly.
 
 ## Files
 - `outbound_elevenlabs.py` — place an outbound confirmation call. Reads the reservation from
   Supabase and passes `customer_name` / `reservation_time` / `party_size` / `reservation_id` /
-  `today` / `now_local` as dynamic variables, so מאיה greets the right guest from the first word.
+  `today` / `now_local` as dynamic variables, so מיקה greets the right guest from the first word.
 
 Source of truth for the agent config (system prompt, first message, all 6 tools):
 `../docs/elevenlabs-tools-config.md`.

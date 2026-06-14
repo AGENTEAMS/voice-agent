@@ -1,16 +1,11 @@
 import { NextResponse } from "next/server";
-import { ENV } from "@/lib/env";
-import { triggerRun } from "@/lib/run";
 
-// Reset-on-START, then fire the n8n batch. The board lights from Supabase Realtime.
+// View-only deployment (post-demo): the live call/reset path is intentionally disabled.
+// The dashboard is kept up for viewing only — the CTA does nothing server-side, so no
+// demo_reset() runs and no n8n batch is fired.
 export async function POST() {
-  const result = await triggerRun({
-    supabaseUrl: ENV.SUPABASE_URL,
-    serviceKey: ENV.SUPABASE_SERVICE_ROLE_KEY,
-    webhookUrl: ENV.N8N_WEBHOOK_URL,
-  });
-  if (!result.ok) {
-    return NextResponse.json({ error: result.error }, { status: result.status });
-  }
-  return NextResponse.json({ ok: true });
+  return NextResponse.json(
+    { ok: false, error: "view-only deployment — live calls are disabled" },
+    { status: 403 }
+  );
 }

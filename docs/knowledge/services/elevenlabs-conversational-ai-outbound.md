@@ -8,8 +8,8 @@ with Supabase write-back.
 Account: Tomer's ElevenLabs (tier **creator**, active). Twilio: "Agenteams" account
 (SID `AC<redacted>`), **upgraded to Full 2026-06-10** ($20) — trial limits
 (English preamble, verified-destinations-only) GONE. Number **+1 336 729 5695** imported into EL.
-Verified caller ID: **+972585121998** ("Tomer second line", PN56b8079705b695b65f25917c8abaf70f) —
-the old +972525898552 verification was deleted. Test calls go TO +972585121998.
+Verified caller ID: **+972500000000** ("Tomer second line", PN56b8079705b695b65f25917c8abaf70f) —
+the old +972500000000 verification was deleted. Test calls go TO +972500000000.
 
 ## Config + gotchas
 - **IDs (current)**: agent `agent_8201ktqbyyqve1d9q8t47a32sd5z` ("Maitre — Mika (repo-provisioned)",
@@ -27,7 +27,7 @@ the old +972525898552 verification was deleted. Test calls go TO +972585121998.
   prefix baked into a second secret) + built-in end_call + transfer_to_number (conference mode,
   target = HUMAN_TRANSFER_NUMBER). Transfer now unblocked (Full account) — still untested live.
 - **Caller ID path (researched, not yet done)**: EL natively imports Twilio Verified Caller IDs
-  as outbound-only numbers → import +972585121998, dial from its `agent_phone_number_id`; callee
+  as outbound-only numbers → import +972500000000, dial from its `agent_phone_number_id`; callee
   sees the Israeli number. Display-only — zero effect on audio quality/lag.
 - **Costs (measured)**: Twilio → IL mobile $0.1868/min (landline $0.0659), per started minute;
   ≈$0.30–0.55/confirmation call all-in, ~$16–18 per talk-hour.

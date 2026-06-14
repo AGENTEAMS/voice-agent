@@ -3,7 +3,7 @@
 Upserts the customer by phone, cancels any of their older pending reservations today,
 and inserts a fresh pending reservation for TODAY at the given time.
 
-    python make_reservation.py --name "תומר" --phone +972525898552 --time 20:00 --party 2
+    python make_reservation.py --name "תומר" --phone +972500000000 --time 20:00 --party 2
 """
 import argparse
 import os

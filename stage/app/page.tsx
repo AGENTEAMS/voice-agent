@@ -278,7 +278,7 @@ export default function Home() {
           <div className="caption" key={caption}>
             {caption || " "}
           </div>
-          <CallButton state={callState} disabled={false} onCall={handleCall} />
+          <CallButton state={callState} disabled={true} onCall={handleCall} />
         </section>
         <ReservationsStrip
           rows={rows}

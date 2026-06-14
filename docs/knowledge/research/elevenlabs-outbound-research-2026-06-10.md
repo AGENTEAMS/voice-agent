@@ -35,7 +35,7 @@ Hypothesis: with `first_message=""` the "first message being delivered" window n
 ## 3. Caller ID — the answer
 
 - **Twilio Verified Caller IDs can be imported into ElevenLabs as outbound-only phone numbers** [native-integration doc, HIGH confidence]: "Must be verified in Twilio's 'Verified Caller IDs' section… Ideal for using your existing business number for outbound AI calls." Capabilities auto-detected at import; cannot receive inbound / can't be an agent's inbound number.
-  → **Mika Voice Agent implication**: import verified +972585121998, pass its `agent_phone_number_id` on outbound calls — callee sees the Israeli number. No need to buy a Twilio +972 number for caller-ID purposes.
+  → **Mika Voice Agent implication**: import verified +972500000000, pass its `agent_phone_number_id` on outbound calls — callee sees the Israeli number. No need to buy a Twilio +972 number for caller-ID purposes.
 - **No per-call `from` override** on `POST /v1/convai/twilio/outbound-call` (full schema: required `agent_id`, `agent_phone_number_id`, `to_number`; optional `conversation_initiation_client_data`, `call_recording_enabled`, `telephony_call_config.ringing_timeout_secs` default 60). Caller ID = the number entity you dial from.
 - SIP trunking: caller ID is configured trunk-side; custom SIP headers supported [elevenlabs SIP docs + plivo.com/docs/sip-trunking/ElevenLabs].
 

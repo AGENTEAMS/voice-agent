@@ -129,7 +129,7 @@ scheduler) all passed on the new opener.
   CONTRACT to the prompt
   ([knowledge/gotchas/elevenlabs-llm-tool-calling-ladder.md](knowledge/gotchas/elevenlabs-llm-tool-calling-ladder.md),
   [knowledge/patterns/hebrew-voice-agent-speech-polish.md](knowledge/patterns/hebrew-voice-agent-speech-polish.md)).
-- **Twilio upgraded to Full**; verified caller ID +972585121998 (the old one deleted); IL call
+- **Twilio upgraded to Full**; verified caller ID +972500000000 (the old one deleted); IL call
   rates measured. This unblocks the live transfer_to_number test.
 - **v3 stability floor = 0.75** — below that the voice warps/cuts
   ([knowledge/gotchas/elevenlabs-v3-low-stability-chunk-glitches.md](knowledge/gotchas/elevenlabs-v3-low-stability-chunk-glitches.md)).
@@ -186,8 +186,8 @@ live test-call session:
 2. **Auto-redial watchdog** in `call_and_verify.py` for the intermittent silent-generation
    failure (detect 0 agent turns / 0.0s TTS audio → redial once). Consider an ElevenLabs
    support ticket — evidence conv IDs are in the gotcha page.
-3. Import verified caller ID **+972585121998** into ElevenLabs → dial FROM it (test calls then
-   go to main **+972525898552**). Live transfer_to_number test (unblocked — Full Twilio).
+3. Import verified caller ID **+972500000000** into ElevenLabs → dial FROM it (test calls then
+   go to main **+972500000000**). Live transfer_to_number test (unblocked — Full Twilio).
 4. Ear-verdicts: stability 0.75 + [warm]/[friendly] tags + "..." pauses; KEE-soo pronunciation.
 5. Later: post-call webhook → persist transcripts into `call_attempts.transcript` (the research
    report has the payload spec); dashboard rebuild; Vercel cron scheduler; n8n daily batch.
@@ -199,6 +199,6 @@ live test-call session:
 - The 21:00 slot is artificially FULL — a negotiation demo prop. (After today's tests, 21:30
   is ALSO full and one תומר reservation sits confirmed at 21:30; a pending `scheduled_calls`
   callback row exists — `reseed.py --clean` resets all of it.)
-- Test dials go to +972585121998.
+- Test dials go to +972500000000.
 - An old ElevenLabs agent `agent_2301k...` (the מאיה persona) is orphaned in the dashboard —
   delete whenever.

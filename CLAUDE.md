@@ -15,7 +15,7 @@ in-call RPCs. Team: Re'i Biton · Haim Toledano · Tomer Elzam.
 Batch workflow «Mika Voice Agent — Call Today's Pending Reservations» (`G7RYSw2BQgqnabJt`) on
 YOUR-N8N-INSTANCE.app.n8n.cloud, built/updated via the n8n MCP. Triggers: Manual ("Run Batch") + **Webhook** (POST, path `maitre-run`, Respond
 Immediately) → production URL `https://YOUR-N8N-INSTANCE.app.n8n.cloud/webhook/maitre-run`. Hard allowlist
-in "Build Call Payloads" = **+972585121998 only** (the stage button dials only Tomer; fake-number
+in "Build Call Payloads" = **+972500000000 only** (the stage button dials only Tomer; fake-number
 pending rows are skipped/display-only). `update_workflow` WIPES node credentials — so the webhook
 trigger was added BY HAND in the UI (not via MCP); for any structural change, prefer a manual UI
 edit or expect to re-pick the 6 HTTP-node creds.
@@ -26,7 +26,7 @@ python supabase/demo_reset.py                  # ONE-COMMAND demo slate: full re
 python supabase/reseed.py --clean              # lower-level reseed. SUPABASE_DB_URL set (Session pooler) ⇒ true full reset; else REST date-shift fallback
 python agent/provision_elevenlabs.py           # idempotent: apply any prompt/tool/config change. --model <id> swaps the in-call LLM (default gemini-3-flash-preview; --model gpt-4o = fallback). LLM eval: docs/next-session-test-plan.md
 python agent/outbound_elevenlabs.py --list     # today's pending reservations
-python agent/call_and_verify.py --reservation <uuid> --to +972585121998   # call + transcript + ⚙tool calls + per-call LLM $ (EL charging) + DB
+python agent/call_and_verify.py --reservation <uuid> --to +972500000000   # call + transcript + ⚙tool calls + per-call LLM $ (EL charging) + DB
 python agent/cancellation_insights.py          # gpt-4o derive script: cancellations log → /insights themes (needs OPENAI_API_KEY; demo page is seeded, so optional)
 python agent/scheduler.py                      # executes pending scheduled_calls (callbacks)
 cd stage && npm run dev                        # live demo dashboard «מיקה — במה» → localhost:3000
@@ -56,7 +56,7 @@ single source for the demo slate; `seed.sql` + `demo_reset.py` just call it.
 - v3 TTS: stability **0.75 is a hard floor**; pronunciation via **alias respellings only**.
 - `first_message` non-empty ⇄ `disable_first_message_interruptions=True` move together —
   empty + True = silent agent.
-- Test dials go to **+972585121998**. The 21:00 slot is intentionally FULL (negotiation prop).
+- Test dials go to **+972500000000**. The 21:00 slot is intentionally FULL (negotiation prop).
 - `dashboard/` is a scrapped prototype — do not build on it.
 
 ## Secrets

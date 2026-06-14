@@ -3,10 +3,10 @@
 -- the local supabase/demo_reset.py, supabase/seed.sql, and any REST caller:
 --   POST /rest/v1/rpc/demo_reset
 -- Produces a VARIED "tonight" board for realism: most rows pending, some confirmed / needs_human /
--- cancelled. Tomer's row (+972585121998, full name "תומר אלזם" — board shows the full name; the
--- call greets the FIRST name only, via todays_pending_reservations → split_part) is the ONLY one
--- with a real, allowlisted number — so although several rows are pending, the n8n batch's allowlist
--- ("Build Call Payloads") dials only Tomer, once; the fake-number pending rows are display-only.
+-- cancelled. All rows use FAKE demo phone numbers (post-demo: no real number is ever seeded). The
+-- board shows the full name; the call greets the FIRST name only, via
+-- todays_pending_reservations → split_part. (During the live demo a single allowlisted real number
+-- was seeded in one row; it has since been removed.)
 -- Negotiation props baked in:
 -- 20:00 has room (change-to-eight), 21:00 FULL, 21:30 is the alternative she offers.
 create or replace function public.demo_reset()
@@ -38,7 +38,7 @@ begin
      set name = excluded.name, phone = excluded.phone,
          timezone = excluded.timezone, opening_hours = excluded.opening_hours;
 
-  -- ── customers: 15 mock guests + Tomer (the only number we actually dial) ──
+  -- ── customers: 16 mock guests (all fake demo numbers) ──
   insert into customers (id, restaurant_id, name, phone, notes) values
     ('22222222-0000-0000-0000-000000000001', v_rid, 'נועה פרידמן','+972505550001','קבועה'),
     ('22222222-0000-0000-0000-000000000002', v_rid, 'איתי כהן','+972505550002',null),
@@ -55,9 +55,9 @@ begin
     ('22222222-0000-0000-0000-000000000013', v_rid, 'הדר נחום','+972505550013',null),
     ('22222222-0000-0000-0000-000000000014', v_rid, 'אסף קפלן','+972505550014',null),
     ('22222222-0000-0000-0000-000000000015', v_rid, 'יעל אברהם','+972505550015',null),
-    (v_tomer,                                v_rid, 'תומר אלזם','+972585121998',null);
+    (v_tomer,                                v_rid, 'דור פלד','+972505550099',null);
 
-  -- ── reservations for TODAY: everyone non-pending EXCEPT Tomer (the only call) ──
+  -- ── reservations for TODAY: a varied board (pending / confirmed / needs_human / cancelled) ──
   insert into reservations (restaurant_id, customer_id, reserved_for, party_size, status, source)
   select v_rid, c.customer_id,
          ((now() at time zone 'Asia/Jerusalem')::date + c.t) at time zone 'Asia/Jerusalem',

@@ -22,7 +22,7 @@ export default function CallButton(props: {
       disabled={disabled || state !== "idle"}
       onClick={onCall}
     >
-      {state === "idle" ? `📞 ${LABEL.idle}` : LABEL[state]}
+      {state === "idle" ? (disabled ? "תצוגה בלבד" : `📞 ${LABEL.idle}`) : LABEL[state]}
     </button>
   );
 }

@@ -15,7 +15,7 @@ const serif = Frank_Ruhl_Libre({
   variable: "--font-serif",
 });
 
-export const metadata: Metadata = { title: "מיקה - המארחת הדיגיטלית" };
+export const metadata: Metadata = { title: "Mika Voice Agent" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

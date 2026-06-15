@@ -35,7 +35,7 @@ export default function Insights() {
     <div className="shell">
       <header className="header">
         <div className="brand">
-          <span className="restaurant">קיסו</span>
+          <span className="restaurant">מיקה</span>
           <span className="tagline">תובנות ביטולים</span>
         </div>
         <div className="headerEnd">

@@ -15,7 +15,7 @@ const serif = Frank_Ruhl_Libre({
   variable: "--font-serif",
 });
 
-export const metadata: Metadata = { title: "מיקה — במה · קיסו" };
+export const metadata: Metadata = { title: "מיקה - במה" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

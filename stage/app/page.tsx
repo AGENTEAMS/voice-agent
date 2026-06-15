@@ -259,8 +259,8 @@ export default function Home() {
     <div className="shell">
       <header className="header">
         <div className="brand">
-          <span className="restaurant">קיסו</span>
-          <span className="tagline">מיקה — המארחת הדיגיטלית</span>
+          <span className="restaurant">מיקה</span>
+          <span className="tagline">המארחת הדיגיטלית</span>
         </div>
         <div className="headerEnd">
           <a className="navlink" href="/insights">
